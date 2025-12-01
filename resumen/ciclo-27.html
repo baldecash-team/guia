@@ -4,9 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte Ciclo 27 - BaldeCash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                fontFamily: {
+                    'sans': ['Roboto', 'sans-serif'],
+                }
+            }
+        }
+    </script>
     <style>
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
         :root {
             --baldecash-primary: #262877;
             --baldecash-secondary: #acadbf;
@@ -52,6 +67,9 @@
             transform: rotate(180deg);
         }
         .p-tag { background-color: #6366f1; color: white; }
+        .apexcharts-tooltip {
+            font-family: 'Roboto', sans-serif !important;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
@@ -192,13 +210,13 @@
             <!-- Progress Chart -->
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Progreso del Ciclo</h3>
-                <canvas id="progressChart"></canvas>
+                <div id="progressChart"></div>
             </div>
 
             <!-- Distribution by Owner -->
             <div class="bg-white rounded-xl p-6 card-shadow">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Issues Completados por Owner</h3>
-                <canvas id="ownerChart"></canvas>
+                <div id="ownerChart"></div>
             </div>
         </section>
 
@@ -271,7 +289,7 @@
 
             <!-- Chart por Solicitante -->
             <div class="mt-6">
-                <canvas id="solicitanteChart" height="100"></canvas>
+                <div id="solicitanteChart"></div>
             </div>
         </section>
 
@@ -680,94 +698,265 @@
             chevron.classList.toggle('rotated');
         }
 
-        // Progress Chart
-        const progressCtx = document.getElementById('progressChart').getContext('2d');
-        new Chart(progressCtx, {
-            type: 'line',
-            data: {
-                labels: ['Día 1', 'Día 2', 'Día 3', 'Día 4', 'Día 5', 'Día 6', 'Día 7'],
-                datasets: [{
-                    label: 'Total Issues',
-                    data: [57, 57, 57, 63, 64, 64, 64],
-                    borderColor: '#262877',
-                    backgroundColor: 'rgba(38, 40, 119, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }, {
-                    label: 'Completados',
-                    data: [2, 2, 4, 6, 8, 10, 10],
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    fill: true,
-                    tension: 0.4
-                }]
+        // Progress Chart - Area Chart with ApexCharts
+        const progressOptions = {
+            series: [{
+                name: 'Total Issues',
+                data: [57, 57, 57, 63, 64, 64, 64]
+            }, {
+                name: 'Completados',
+                data: [2, 2, 4, 6, 8, 10, 10]
+            }],
+            chart: {
+                type: 'area',
+                height: 320,
+                fontFamily: 'Roboto, sans-serif',
+                toolbar: {
+                    show: false
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                },
+                dropShadow: {
+                    enabled: true,
+                    top: 3,
+                    left: 0,
+                    blur: 4,
+                    opacity: 0.1
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
+            colors: ['#262877', '#10b981'],
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0.1,
+                    stops: [0, 90, 100]
+                }
+            },
+            xaxis: {
+                categories: ['Lun 24', 'Mar 25', 'Mie 26', 'Jue 27', 'Vie 28', 'Sab 29', 'Dom 30'],
+                labels: {
+                    style: {
+                        fontFamily: 'Roboto, sans-serif',
+                        fontWeight: 500
+                    }
+                }
+            },
+            yaxis: {
+                min: 0,
+                max: 70,
+                labels: {
+                    style: {
+                        fontFamily: 'Roboto, sans-serif'
+                    }
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                fontFamily: 'Roboto, sans-serif',
+                fontWeight: 500,
+                markers: {
+                    radius: 12
+                }
+            },
+            tooltip: {
+                theme: 'light',
+                y: {
+                    formatter: function(val) {
+                        return val + ' issues'
+                    }
+                }
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                strokeDashArray: 4
+            }
+        };
+        new ApexCharts(document.querySelector("#progressChart"), progressOptions).render();
+
+        // Owner Chart - Radial Bar Chart
+        const ownerOptions = {
+            series: [40, 40, 20],
+            chart: {
+                type: 'donut',
+                height: 320,
+                fontFamily: 'Roboto, sans-serif',
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
                     }
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true
+                dropShadow: {
+                    enabled: true,
+                    top: 2,
+                    left: 0,
+                    blur: 8,
+                    opacity: 0.15
+                }
+            },
+            labels: ['Leonardo Medina', 'Anderson Palomino', 'Thiago Gutierrez'],
+            colors: ['#262877', '#4a4db0', '#818cf8'],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '65%',
+                        labels: {
+                            show: true,
+                            name: {
+                                show: true,
+                                fontFamily: 'Roboto, sans-serif',
+                                fontWeight: 600
+                            },
+                            value: {
+                                show: true,
+                                fontFamily: 'Roboto, sans-serif',
+                                fontWeight: 700,
+                                fontSize: '24px',
+                                formatter: function(val) {
+                                    return Math.round(val / 10) + ' issues'
+                                }
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                fontFamily: 'Roboto, sans-serif',
+                                fontWeight: 600,
+                                formatter: function(w) {
+                                    return '10 issues'
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            legend: {
+                position: 'bottom',
+                fontFamily: 'Roboto, sans-serif',
+                fontWeight: 500,
+                markers: {
+                    radius: 12
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                width: 0
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val) {
+                        return Math.round(val / 10) + ' issues completados'
                     }
                 }
             }
-        });
+        };
+        new ApexCharts(document.querySelector("#ownerChart"), ownerOptions).render();
 
-        // Owner Chart
-        const ownerCtx = document.getElementById('ownerChart').getContext('2d');
-        new Chart(ownerCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Leonardo Medina', 'Anderson Palomino', 'Thiago Gutierrez'],
-                datasets: [{
-                    data: [4, 4, 2],
-                    backgroundColor: ['#262877', '#4a4db0', '#acadbf'],
-                    borderWidth: 0
-                }]
+        // Solicitante Chart - Horizontal Bar Chart
+        const solicitanteOptions = {
+            series: [{
+                name: 'Issues Completados',
+                data: [6, 2, 1, 1]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200,
+                fontFamily: 'Roboto, sans-serif',
+                toolbar: {
+                    show: false
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    borderRadius: 8,
+                    borderRadiusApplication: 'end',
+                    distributed: true,
+                    barHeight: '70%',
+                    dataLabels: {
+                        position: 'top'
                     }
                 }
-            }
-        });
-
-        // Solicitante Chart
-        const solicitanteCtx = document.getElementById('solicitanteChart').getContext('2d');
-        new Chart(solicitanteCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Interno', 'Banco BBVA', 'Vania Hagel', 'Pamela Marketing'],
-                datasets: [{
-                    label: 'Issues Completados',
-                    data: [6, 2, 1, 1],
-                    backgroundColor: ['#6b7280', '#2563eb', '#ec4899', '#8b5cf6'],
-                    borderRadius: 4
-                }]
             },
-            options: {
-                responsive: true,
-                indexAxis: 'y',
-                plugins: {
-                    legend: {
-                        display: false
+            colors: ['#6b7280', '#2563eb', '#ec4899', '#8b5cf6'],
+            dataLabels: {
+                enabled: true,
+                textAnchor: 'start',
+                style: {
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 600,
+                    colors: ['#fff']
+                },
+                formatter: function(val) {
+                    return val + ' issues'
+                },
+                offsetX: 5
+            },
+            xaxis: {
+                categories: ['Interno', 'Banco BBVA', 'Vania Hagel', 'Pamela Marketing'],
+                max: 8,
+                labels: {
+                    style: {
+                        fontFamily: 'Roboto, sans-serif'
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontFamily: 'Roboto, sans-serif',
+                        fontWeight: 500
+                    }
+                }
+            },
+            legend: {
+                show: false
+            },
+            grid: {
+                borderColor: '#f1f1f1',
+                xaxis: {
+                    lines: {
+                        show: true
                     }
                 },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 8
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
+            },
+            tooltip: {
+                theme: 'light',
+                y: {
+                    formatter: function(val) {
+                        return val + ' issues completados'
                     }
                 }
             }
-        });
+        };
+        new ApexCharts(document.querySelector("#solicitanteChart"), solicitanteOptions).render();
     </script>
 </body>
 </html>

@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(copy \"D:\\repos\\manuales\\cycle-report-27.html\" \"D:\\repos\\manuales\\resumen\\ciclo-27.html\")",
+      "Bash(cp:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "mcp__github__get_file_contents"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
