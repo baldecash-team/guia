@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia BaldeCash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --baldecash-primary: #262877;
+            --baldecash-secondary: #acadbf;
+            --baldecash-dark: #1a1a4e;
+            --baldecash-light: #f5f6fa;
+            --baldecash-accent: #4a4db0;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #262877 0%, #1a1a4e 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 40px rgba(38, 40, 119, 0.15);
+        }
+        .text-baldecash { color: #262877; }
+        .bg-baldecash { background-color: #262877; }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(38, 40, 119, 0.2);
+        }
+        .hover-card {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl font-bold mb-4">Guia BaldeCash</h1>
+            <p class="text-xl opacity-90">Documentacion, reportes y recursos del equipo</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Resumen de Ciclos -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Resumen de Ciclos
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Ciclo 27 -->
+                <a href="resumen/ciclo-27.html" class="hover-card bg-white rounded-xl p-6 card-shadow block">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl font-bold text-baldecash">Ciclo 27</span>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Actual</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">24 Nov - 1 Dic 2025</p>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-gray-500">Issues Completados</p>
+                            <p class="text-2xl font-bold text-green-600">10</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-lg p-3">
+                            <p class="text-gray-500">Deploys</p>
+                            <p class="text-2xl font-bold text-indigo-600">23</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-baldecash">
+                        <span>Ver reporte completo</span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </div>
+                </a>
+
+                <!-- Placeholder para futuros ciclos -->
+                <div class="bg-gray-200 rounded-xl p-6 border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    <div class="text-center text-gray-500">
+                        <svg class="w-12 h-12 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        <p>Ciclo 28</p>
+                        <p class="text-sm">Proximamente</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secciones adicionales -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                </svg>
+                Recursos
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Documentacion</h3>
+                    <p class="text-gray-600 text-sm">Manuales y guias del sistema</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">API Reference</h3>
+                    <p class="text-gray-600 text-sm">Documentacion tecnica de APIs</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Procesos</h3>
+                    <p class="text-gray-600 text-sm">Flujos de trabajo del equipo</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enlaces rapidos -->
+        <section>
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                </svg>
+                Enlaces Rapidos
+            </h2>
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <a href="https://linear.app/baldecash" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700">Linear</span>
+                    </a>
+                    <a href="https://baldecash-gy.sentry.io" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700">Sentry</span>
+                    </a>
+                    <a href="https://github.com/baldecash-team" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700">GitHub</span>
+                    </a>
+                    <a href="https://baldecash.com" target="_blank" class="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700">BaldeCash</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white py-6 mt-12" style="background-color: #262877;">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-300">BaldeCash Team</p>
+            <p class="text-gray-400 text-sm mt-1">Guia de documentacion y recursos</p>
+        </div>
+    </footer>
+</body>
+</html>
