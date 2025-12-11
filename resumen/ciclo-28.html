@@ -3,1071 +3,484 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BaldeCash - Reporte Ciclo 28</title>
+    <title>Ciclo 28 - BaldeCash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #0099ff;
-            --dark: #000000;
-            --gray: #666666;
-            --white: #FFFFFF;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg-light: #f8fafc;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: var(--bg-light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, #0077cc 100%);
-            color: var(--white);
-            padding: 40px 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 153, 255, 0.3);
-        }
-        
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        
-        .header .cycle-info {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .header .date-range {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-        
-        /* KPI Cards */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .kpi-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-        
-        .kpi-card .value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .kpi-card .label {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-top: 8px;
-        }
-        
-        .kpi-card.success .value { color: var(--success); }
-        .kpi-card.warning .value { color: var(--warning); }
-        .kpi-card.danger .value { color: var(--danger); }
-        
-        /* Sections */
-        .section {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title .icon {
-            font-size: 1.5rem;
-        }
-        
-        /* Tables */
-        .table-responsive {
-            overflow-x: auto;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        
-        th, td {
-            padding: 12px 16px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        
-        th {
-            background: var(--bg-light);
-            font-weight: 600;
-            color: var(--gray);
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-        }
-        
-        tr:hover {
-            background: #f9fafb;
-        }
-        
-        /* Badges */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        .badge-urgent { background: #fef2f2; color: #dc2626; }
-        .badge-high { background: #fff7ed; color: #ea580c; }
-        .badge-medium { background: #fefce8; color: #ca8a04; }
-        .badge-low { background: #f0fdf4; color: #16a34a; }
-        .badge-done { background: #ecfdf5; color: #059669; }
-        .badge-todo { background: #fef3c7; color: #d97706; }
-        .badge-ai { background: #ede9fe; color: #7c3aed; }
-        
-        /* Status indicator */
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
-        }
-        
-        .status-done { background: var(--success); }
-        .status-pending { background: var(--warning); }
-        
-        /* Charts */
-        .chart-container {
-            display: flex;
-            justify-content: center;
-            padding: 20px 0;
-        }
-        
-        /* Post-mortem */
-        .postmortem-list {
-            display: grid;
-            gap: 12px;
-        }
-        
-        .postmortem-item {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            background: var(--bg-light);
-            border-radius: 8px;
-            gap: 12px;
-        }
-        
-        .postmortem-item .status-icon {
-            font-size: 1.5rem;
-        }
-        
-        .postmortem-item .pm-id {
-            font-weight: 600;
-            color: var(--primary);
-        }
-        
-        /* Solicitante cards */
-        .solicitante-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-        
-        .solicitante-card {
-            background: var(--bg-light);
-            border-radius: 10px;
-            padding: 20px;
-            border-left: 4px solid var(--primary);
-        }
-        
-        .solicitante-card h4 {
-            color: var(--dark);
-            margin-bottom: 12px;
-            font-size: 1rem;
-        }
-        
-        .solicitante-card .stat {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 0.85rem;
-        }
-        
-        .solicitante-card .stat-label {
-            color: var(--gray);
-        }
-        
-        .solicitante-card .stat-value {
-            font-weight: 600;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 30px;
-            color: var(--gray);
-            font-size: 0.85rem;
-        }
-        
-        .footer a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        
-        /* AI Badge */
-        .ai-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.75rem;
-            color: #7c3aed;
-        }
-        
-        /* Progress bar */
-        .progress-bar {
-            height: 8px;
-            background: #e5e7eb;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), #0077cc);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .kpi-card .value {
-                font-size: 1.8rem;
-            }
-        }
+        body { font-family: 'Roboto', sans-serif; }
+        .brand-bg { background-color: #262877; }
+        .brand-text { color: #262877; }
+        .brand-border { border-color: #262877; }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>📊 BaldeCash - Reporte Semanal</h1>
-            <div class="cycle-info">Ciclo 28</div>
-            <div class="date-range">📅 1 de Diciembre - 8 de Diciembre, 2025</div>
-        </header>
-
-        <!-- KPIs -->
-        <div class="kpi-grid">
-            <div class="kpi-card success">
-                <div class="value">95.8%</div>
-                <div class="label">Tasa de Completitud</div>
-            </div>
-            <div class="kpi-card">
-                <div class="value">24</div>
-                <div class="label">Issues Totales</div>
-            </div>
-            <div class="kpi-card success">
-                <div class="value">23</div>
-                <div class="label">Issues Completados</div>
-            </div>
-            <div class="kpi-card success">
-                <div class="value">0</div>
-                <div class="label">Hotfixes</div>
-            </div>
-            <div class="kpi-card">
-                <div class="value">87</div>
-                <div class="label">Commits Totales</div>
-            </div>
-            <div class="kpi-card" style="border-left: 3px solid #7c3aed;">
-                <div class="value" style="color: #7c3aed;">12</div>
-                <div class="label">🤖 Commits con IA</div>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="brand-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold">Ciclo 28</h1>
+                    <p class="text-blue-200">01 Dic - 08 Dic, 2025</p>
+                </div>
+                <div class="text-right">
+                    <span class="bg-white/20 px-4 py-2 rounded-full text-sm">BaldeCash Dev Team</span>
+                </div>
             </div>
         </div>
+    </header>
 
-        <!-- Burndown Chart -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📈</span> Burndown del Ciclo</h2>
-            <div class="chart-container">
-                <svg viewBox="0 0 600 250" width="100%" style="max-width: 600px;">
-                    <!-- Grid lines -->
-                    <defs>
-                        <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0099ff;stop-opacity:0.3" />
-                            <stop offset="100%" style="stop-color:#0099ff;stop-opacity:0.05" />
-                        </linearGradient>
-                    </defs>
-                    
-                    <!-- Axes -->
-                    <line x1="50" y1="200" x2="550" y2="200" stroke="#e5e7eb" stroke-width="2"/>
-                    <line x1="50" y1="30" x2="50" y2="200" stroke="#e5e7eb" stroke-width="2"/>
-                    
-                    <!-- Grid lines horizontal -->
-                    <line x1="50" y1="60" x2="550" y2="60" stroke="#f3f4f6" stroke-dasharray="4"/>
-                    <line x1="50" y1="100" x2="550" y2="100" stroke="#f3f4f6" stroke-dasharray="4"/>
-                    <line x1="50" y1="140" x2="550" y2="140" stroke="#f3f4f6" stroke-dasharray="4"/>
-                    
-                    <!-- Y-axis labels -->
-                    <text x="40" y="35" text-anchor="end" fill="#666" font-size="12">24</text>
-                    <text x="40" y="65" text-anchor="end" fill="#666" font-size="12">18</text>
-                    <text x="40" y="105" text-anchor="end" fill="#666" font-size="12">12</text>
-                    <text x="40" y="145" text-anchor="end" fill="#666" font-size="12">6</text>
-                    <text x="40" y="205" text-anchor="end" fill="#666" font-size="12">0</text>
-                    
-                    <!-- X-axis labels (days) -->
-                    <text x="50" y="220" text-anchor="middle" fill="#666" font-size="11">Lun</text>
-                    <text x="133" y="220" text-anchor="middle" fill="#666" font-size="11">Mar</text>
-                    <text x="216" y="220" text-anchor="middle" fill="#666" font-size="11">Mié</text>
-                    <text x="300" y="220" text-anchor="middle" fill="#666" font-size="11">Jue</text>
-                    <text x="383" y="220" text-anchor="middle" fill="#666" font-size="11">Vie</text>
-                    <text x="466" y="220" text-anchor="middle" fill="#666" font-size="11">Sáb</text>
-                    <text x="550" y="220" text-anchor="middle" fill="#666" font-size="11">Dom</text>
-                    
-                    <!-- Ideal line -->
-                    <line x1="50" y1="30" x2="550" y2="200" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="8,4"/>
-                    
-                    <!-- Area under actual line -->
-                    <path d="M50,30 L133,58 L216,93 L300,120 L383,155 L466,180 L550,193 L550,200 L50,200 Z" fill="url(#areaGradient)"/>
-                    
-                    <!-- Actual burndown line -->
-                    <polyline 
-                        points="50,30 133,58 216,93 300,120 383,155 466,180 550,193" 
-                        fill="none" 
-                        stroke="#0099ff" 
-                        stroke-width="3"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"/>
-                    
-                    <!-- Data points -->
-                    <circle cx="50" cy="30" r="5" fill="#0099ff"/>
-                    <circle cx="133" cy="58" r="5" fill="#0099ff"/>
-                    <circle cx="216" cy="93" r="5" fill="#0099ff"/>
-                    <circle cx="300" cy="120" r="5" fill="#0099ff"/>
-                    <circle cx="383" cy="155" r="5" fill="#0099ff"/>
-                    <circle cx="466" cy="180" r="5" fill="#0099ff"/>
-                    <circle cx="550" cy="193" r="5" fill="#0099ff"/>
-                    
-                    <!-- Legend -->
-                    <line x1="380" y1="240" x2="410" y2="240" stroke="#0099ff" stroke-width="3"/>
-                    <text x="415" y="243" fill="#666" font-size="11">Progreso real</text>
-                    <line x1="480" y1="240" x2="510" y2="240" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="4"/>
-                    <text x="515" y="243" fill="#666" font-size="11">Ideal</text>
-                </svg>
+    <main class="container mx-auto px-4 py-8">
+        <!-- KPIs -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Issues Inicio</p>
+                <p class="text-4xl font-bold brand-text">62</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Issues Agregados</p>
+                <p class="text-4xl font-bold text-orange-500">+23</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Completados</p>
+                <p class="text-4xl font-bold text-green-500">23</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Ratio Exito</p>
+                <p class="text-4xl font-bold text-blue-500">37%</p>
             </div>
         </section>
 
-        <!-- Issues Completados -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">✅</span> Issues Completados (23)</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
+        <!-- KPIs Row 2 -->
+        <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Hotfixes</p>
+                <p class="text-4xl font-bold text-green-500">0</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Deploys</p>
+                <p class="text-4xl font-bold brand-text">~50</p>
+            </div>
+            <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl shadow p-6 text-center text-white">
+                <p class="text-purple-200 text-sm">AI-Resolved (Claude)</p>
+                <p class="text-4xl font-bold">15+</p>
+            </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <p class="text-gray-500 text-sm">Issues Mal Registrados</p>
+                <p class="text-4xl font-bold text-yellow-500">4</p>
+            </div>
+        </section>
+
+        <!-- Charts Row -->
+        <section class="grid md:grid-cols-2 gap-6 mb-8">
+            <!-- Progress Chart -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-lg font-semibold mb-4 brand-text">Progreso del Ciclo (Burnup)</h3>
+                <div id="progressChart"></div>
+            </div>
+
+            <!-- Owner Chart -->
+            <div class="bg-white rounded-xl shadow p-6">
+                <h3 class="text-lg font-semibold mb-4 brand-text">Issues por Asignado</h3>
+                <div id="ownerChart"></div>
+            </div>
+        </section>
+
+        <!-- Deploys Chart -->
+        <section class="bg-white rounded-xl shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4 brand-text">Deploys por Dia</h3>
+            <div id="deploysChart"></div>
+        </section>
+
+        <!-- Issues Table -->
+        <section class="bg-white rounded-xl shadow overflow-hidden mb-8">
+            <div class="brand-bg text-white px-6 py-4">
+                <h3 class="text-lg font-semibold">Issues Completados (23)</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Prioridad</th>
-                            <th>Estimado</th>
-                            <th>Asignado</th>
-                            <th>Solicitante</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Issue</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Titulo</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prioridad</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asignado</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>BAL-687</strong></td>
-                            <td>Solicitar permisos para cámara y librería de fotos en DNI</td>
-                            <td><span class="badge badge-urgent">Urgente</span></td>
-                            <td>S</td>
-                            <td>Marlon Alvarez</td>
-                            <td>-</td>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-681" target="_blank" class="text-indigo-600 hover:underline">BAL-681</a></td>
+                            <td class="px-6 py-4">Autogestion Morosos/Proactivos <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs ml-1">AI</span></td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-686</strong></td>
-                            <td>Express: limitar operaciones de Pago de Envío</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>M</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Marco Del Rio</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-687" target="_blank" class="text-indigo-600 hover:underline">BAL-687</a></td>
+                            <td class="px-6 py-4">Vania Condiciones Sep/Oct/Nov Campana Pre aprobados</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-685</strong></td>
-                            <td>Agregar campo "Agencia" en Excel Reporteador</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>S</td>
-                            <td>anderson.palomino</td>
-                            <td>Yadira Yovera</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-685" target="_blank" class="text-indigo-600 hover:underline">BAL-685</a></td>
+                            <td class="px-6 py-4">Reporte EECC / Reporte Pasa La Voz</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-684</strong></td>
-                            <td>Express Envío a Balde: Agregar botón "Registrar sin voucher"</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>S</td>
-                            <td>thiago.gutierrez</td>
-                            <td>Marco Del Rio</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-680" target="_blank" class="text-indigo-600 hover:underline">BAL-680</a></td>
+                            <td class="px-6 py-4">Kash.io Finalizar Implementacion Parte #1</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-683</strong></td>
-                            <td>Express: mostrar modal de alerta cuando hayan observaciones</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>M</td>
-                            <td>thiago.gutierrez</td>
-                            <td>Marco Del Rio</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-669" target="_blank" class="text-indigo-600 hover:underline">BAL-669</a></td>
+                            <td class="px-6 py-4">Pidetuprestamo - Reordenar formulario solicitud Colegios</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-681</strong></td>
-                            <td>Agregar soporte para campaña "Paga en Febrero"</td>
-                            <td><span class="badge badge-urgent">Urgente</span></td>
-                            <td>M</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Cecilia Aliaga</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-665" target="_blank" class="text-indigo-600 hover:underline">BAL-665</a></td>
+                            <td class="px-6 py-4">VoxImplant - Cambiar mensaje del escenario</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-680</strong></td>
-                            <td>Ajustar modelo de datos de promotores</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>thiago.gutierrez</td>
-                            <td>Emilio Gonzales</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-654" target="_blank" class="text-indigo-600 hover:underline">BAL-654</a></td>
+                            <td class="px-6 py-4">Cambios landings y filtros para Campana de marketing</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Leonardo Medina</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-672</strong></td>
-                            <td>Permitir agregar el código de estudios</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>S</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-672" target="_blank" class="text-indigo-600 hover:underline">BAL-672</a></td>
+                            <td class="px-6 py-4">WS - Admin / Crear nuevo gestor GECOCAL</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Thiago Gutierrez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-671</strong></td>
-                            <td>Mover secciones de la configuración del perfil</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>S</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-671" target="_blank" class="text-indigo-600 hover:underline">BAL-671</a></td>
+                            <td class="px-6 py-4">BD - Agregar tabla canal_adquisicion</td>
+                            <td class="px-6 py-4"><span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-669</strong></td>
-                            <td>Crear flujo de desbloqueo de perfil si el usuario estudia</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>XL</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-686" target="_blank" class="text-indigo-600 hover:underline">BAL-686</a></td>
+                            <td class="px-6 py-4">Inversionista validacion a nivel de inversor EECC envio</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-668</strong></td>
-                            <td>Integrar Zendesk con app móvil</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Juan Chavez</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-684" target="_blank" class="text-indigo-600 hover:underline">BAL-684</a></td>
+                            <td class="px-6 py-4">Boton Dinamico Cartera - GECOCALL RRR</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-667</strong></td>
-                            <td>Mostrar notificación cuando el usuario no tiene código</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>S</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-683" target="_blank" class="text-indigo-600 hover:underline">BAL-683</a></td>
+                            <td class="px-6 py-4">Terminados Filtros Avance / Bienvenida Gestion</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-665</strong></td>
-                            <td>Crear campañas para público específico</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>L</td>
-                            <td>thiago.gutierrez</td>
-                            <td>Consuelo Mariscal</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-652" target="_blank" class="text-indigo-600 hover:underline">BAL-652</a></td>
+                            <td class="px-6 py-4">Modificar - Web de colegios</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-664</strong></td>
-                            <td>BaldeCash Mobile: Solo mostrar código si está validado</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>S</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-623" target="_blank" class="text-indigo-600 hover:underline">BAL-623</a></td>
+                            <td class="px-6 py-4">Collage rostros contratos septiembre 2025</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-654</strong></td>
-                            <td>Permitir ver leads express desde panel</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>anderson.palomino</td>
-                            <td>Marco Del Rio</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-651" target="_blank" class="text-indigo-600 hover:underline">BAL-651</a></td>
+                            <td class="px-6 py-4">Emitir carta de no adeudo solicitud</td>
+                            <td class="px-6 py-4"><span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-6 py-4 text-gray-600">Anderson Palomino</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-652</strong></td>
-                            <td>Permitir generar reporte de estudiantes</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>anderson.palomino</td>
-                            <td>Yadira Yovera</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-518" target="_blank" class="text-indigo-600 hover:underline">BAL-518</a></td>
+                            <td class="px-6 py-4">Filtro Avance/Edades Replicar bienvenida a morosos</td>
+                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Medium</span></td>
+                            <td class="px-6 py-4 text-gray-600">Marlon Alvarez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-651</strong></td>
-                            <td>Crear landing para estudiantes</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>L</td>
-                            <td>emilio.gonzales</td>
-                            <td>Patio Digital</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-650" target="_blank" class="text-indigo-600 hover:underline">BAL-650</a></td>
+                            <td class="px-6 py-4">Anadir filtro al boton de voximplant en moroso historico</td>
+                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Medium</span></td>
+                            <td class="px-6 py-4 text-gray-600">-</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-650</strong></td>
-                            <td>Ajustar formulario de zona estudiantes</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>S</td>
-                            <td>emilio.gonzales</td>
-                            <td>Patio Digital</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-564" target="_blank" class="text-indigo-600 hover:underline">BAL-564</a></td>
+                            <td class="px-6 py-4">Revisar Sincronizacion con Jamf <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs ml-1">AI</span></td>
+                            <td class="px-6 py-4"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Medium</span></td>
+                            <td class="px-6 py-4 text-gray-600">Emilio Gonzales</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-644</strong></td>
-                            <td>Actualizar flujo de primera solicitud</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-667" target="_blank" class="text-indigo-600 hover:underline">BAL-667</a></td>
+                            <td class="px-6 py-4">Levantamiento observaciones Concar (Renta 2DA)</td>
+                            <td class="px-6 py-4"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Low</span></td>
+                            <td class="px-6 py-4 text-gray-600">Emilio Gonzales</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-623</strong></td>
-                            <td>Agregar soporte de configuración global</td>
-                            <td><span class="badge badge-medium">Media</span></td>
-                            <td>M</td>
-                            <td>Marlon Alvarez</td>
-                            <td>-</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-668" target="_blank" class="text-indigo-600 hover:underline">BAL-668</a></td>
+                            <td class="px-6 py-4">Levantamiento observaciones Concar (Arrendamiento)</td>
+                            <td class="px-6 py-4"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Low</span></td>
+                            <td class="px-6 py-4 text-gray-600">Emilio Gonzales</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-564</strong></td>
-                            <td>Agregar zona de estudiantes</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>XL</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-644" target="_blank" class="text-indigo-600 hover:underline">BAL-644</a></td>
+                            <td class="px-6 py-4">Revisar bug caso de sueldo por solicitud</td>
+                            <td class="px-6 py-4"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">-</span></td>
+                            <td class="px-6 py-4 text-gray-600">Thiago Gutierrez</td>
                         </tr>
-                        <tr>
-                            <td><strong>BAL-518</strong></td>
-                            <td>Agregar nueva pantalla de perfil</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>L</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Vania Hagel</td>
-                        </tr>
-                        <tr>
-                            <td><strong>BAL-548</strong> <span class="badge badge-ai">🤖 IA</span></td>
-                            <td>Validaciones Express - Endpoint de validación</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td>L</td>
-                            <td>Marlon Alvarez</td>
-                            <td>Marco Del Rio</td>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-mono text-sm"><a href="https://linear.app/baldecash/issue/BAL-664" target="_blank" class="text-indigo-600 hover:underline">BAL-664</a></td>
+                            <td class="px-6 py-4">Fix: Error AWS SDK PHP deprecation <span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded text-xs ml-1">AI</span></td>
+                            <td class="px-6 py-4"><span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">-</span></td>
+                            <td class="px-6 py-4 text-gray-600">Leonardo Medina</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Issues Pendientes -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">⏳</span> Issues Pendientes (1)</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
+        <!-- Post-Mortems Section -->
+        <section class="bg-white rounded-xl shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4 brand-text flex items-center gap-2">
+                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                Post-Mortems
+            </h3>
+            <p class="text-gray-600 mb-4">Incidentes identificados durante el ciclo que requirieron analisis y resolucion.</p>
+
+            <div class="grid gap-4">
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800">Problemas de Performance en Moroso Historico</h4>
+                    <p class="text-sm text-red-700 mt-1">Se detectaron problemas de rendimiento en el modulo de Moroso Historico que afectaban la experiencia de usuario.</p>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800">Problemas de Bloqueos con JAMF</h4>
+                    <p class="text-sm text-red-700 mt-1">Incidentes de sincronizacion y bloqueos relacionados con la integracion de JAMF que requirieron intervencion.</p>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800">SDK de AWS</h4>
+                    <p class="text-sm text-red-700 mt-1">Problemas relacionados con el SDK de AWS PHP que generaron errores de deprecacion y requerian actualizacion.</p>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800">Problema de Ramas y Versiones en Produccion</h4>
+                    <p class="text-sm text-red-700 mt-1">Conflictos identificados con el manejo de ramas y versiones que afectaban los despliegues a produccion.</p>
+                </div>
+
+                <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                    <h4 class="font-semibold text-red-800">Problema de Kernel de Cronjobs</h4>
+                    <p class="text-sm text-red-700 mt-1">Incidentes relacionados con la ejecucion del kernel de cronjobs que afectaban tareas programadas del sistema.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issues Mal Registrados -->
+        <section class="bg-white rounded-xl shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4 brand-text">Issues Mal Registrados</h3>
+            <div class="grid md:grid-cols-4 gap-4 mb-4">
+                <div class="bg-yellow-50 rounded-lg p-4 text-center">
+                    <p class="text-3xl font-bold text-yellow-600">4</p>
+                    <p class="text-sm text-yellow-800">Total (4.7%)</p>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
                         <tr>
-                            <th>ID</th>
-                            <th>Título</th>
-                            <th>Prioridad</th>
-                            <th>Estado</th>
-                            <th>Asignado</th>
-                            <th>Notas</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Issue</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Problema</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y divide-gray-200">
                         <tr>
-                            <td><strong>BAL-548</strong></td>
-                            <td>Permitir que express haga validaciones al momento de registrar</td>
-                            <td><span class="badge badge-high">Alta</span></td>
-                            <td><span class="badge badge-todo">Archivado</span></td>
-                            <td>Marlon Alvarez</td>
-                            <td>Issue archivado - trabajo parcialmente migrado a nuevo endpoint</td>
+                            <td class="px-4 py-2 font-mono">BAL-650</td>
+                            <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Sin asignado</span></td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 font-mono">BAL-644</td>
+                            <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Sin prioridad</span></td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 font-mono">BAL-664</td>
+                            <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Sin prioridad</span></td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 font-mono">BAL-548</td>
+                            <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Sin descripcion / Sin actividad</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- Hotfixes -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🔥</span> Hotfixes del Ciclo</h2>
-            <div style="text-align: center; padding: 40px; color: var(--success);">
-                <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-                <div style="font-size: 1.2rem; font-weight: 600;">Sin hotfixes este ciclo</div>
-                <div style="color: var(--gray); font-size: 0.9rem; margin-top: 8px;">
-                    No se detectaron commits con la etiqueta "hotfix"
-                </div>
-            </div>
-        </section>
-
-        <!-- Post-Mortems -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📋</span> Estado de Post-Mortems</h2>
-            <div class="postmortem-list">
-                <div class="postmortem-item">
-                    <span class="status-icon">✅</span>
-                    <span class="pm-id">PM-001</span>
-                    <span>Caída de servicios AWS - Resuelto</span>
-                </div>
-                <div class="postmortem-item">
-                    <span class="status-icon">✅</span>
-                    <span class="pm-id">PM-002</span>
-                    <span>Fallo en pasarela de pagos - Resuelto</span>
-                </div>
-                <div class="postmortem-item">
-                    <span class="status-icon">✅</span>
-                    <span class="pm-id">PM-003</span>
-                    <span>Vulnerabilidad de seguridad - Resuelto</span>
-                </div>
-                <div class="postmortem-item">
-                    <span class="status-icon">✅</span>
-                    <span class="pm-id">PM-004</span>
-                    <span>Corrupción de base de datos - Resuelto</span>
-                </div>
-                <div class="postmortem-item">
-                    <span class="status-icon">✅</span>
-                    <span class="pm-id">PM-005</span>
-                    <span>Timeout en API externa - Resuelto</span>
-                </div>
-            </div>
-            <div style="text-align: center; padding: 20px; margin-top: 20px; background: #ecfdf5; border-radius: 8px; color: var(--success);">
-                <strong>✅ Sin incidencias nuevas este ciclo</strong>
-            </div>
-        </section>
-
-        <!-- Deploys por Día -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🚀</span> Deploys por Día</h2>
-            <div class="chart-container">
-                <svg viewBox="0 0 600 200" width="100%" style="max-width: 600px;">
-                    <!-- Axes -->
-                    <line x1="50" y1="150" x2="550" y2="150" stroke="#e5e7eb" stroke-width="2"/>
-                    
-                    <!-- Bars -->
-                    <rect x="70" y="90" width="50" height="60" fill="#0099ff" rx="4"/>
-                    <rect x="145" y="70" width="50" height="80" fill="#0099ff" rx="4"/>
-                    <rect x="220" y="50" width="50" height="100" fill="#0099ff" rx="4"/>
-                    <rect x="295" y="80" width="50" height="70" fill="#0099ff" rx="4"/>
-                    <rect x="370" y="60" width="50" height="90" fill="#0099ff" rx="4"/>
-                    <rect x="445" y="110" width="50" height="40" fill="#0099ff" rx="4"/>
-                    <rect x="520" y="130" width="50" height="20" fill="#0099ff" rx="4"/>
-                    
-                    <!-- Labels -->
-                    <text x="95" y="170" text-anchor="middle" fill="#666" font-size="12">Lun</text>
-                    <text x="170" y="170" text-anchor="middle" fill="#666" font-size="12">Mar</text>
-                    <text x="245" y="170" text-anchor="middle" fill="#666" font-size="12">Mié</text>
-                    <text x="320" y="170" text-anchor="middle" fill="#666" font-size="12">Jue</text>
-                    <text x="395" y="170" text-anchor="middle" fill="#666" font-size="12">Vie</text>
-                    <text x="470" y="170" text-anchor="middle" fill="#666" font-size="12">Sáb</text>
-                    <text x="545" y="170" text-anchor="middle" fill="#666" font-size="12">Dom</text>
-                    
-                    <!-- Values -->
-                    <text x="95" y="82" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">6</text>
-                    <text x="170" y="62" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">8</text>
-                    <text x="245" y="42" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">10</text>
-                    <text x="320" y="72" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">7</text>
-                    <text x="395" y="52" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">9</text>
-                    <text x="470" y="102" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">4</text>
-                    <text x="545" y="122" text-anchor="middle" fill="#0099ff" font-size="12" font-weight="600">2</text>
-                </svg>
-            </div>
-            <div style="text-align: center; color: var(--gray); font-size: 0.9rem;">
-                Total: <strong>46 deploys</strong> durante el ciclo
-            </div>
-        </section>
-
-        <!-- Issues por Prioridad -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">📊</span> Distribución por Prioridad</h2>
-            <div class="chart-container">
-                <svg viewBox="0 0 400 200" width="100%" style="max-width: 400px;">
-                    <!-- Pie chart simulation with bars -->
-                    <rect x="50" y="30" width="80" height="30" fill="#dc2626" rx="4"/>
-                    <text x="145" y="50" fill="#333" font-size="14">Urgente: 2 (8%)</text>
-                    
-                    <rect x="50" y="70" width="200" height="30" fill="#ea580c" rx="4"/>
-                    <text x="265" y="90" fill="#333" font-size="14">Alta: 11 (46%)</text>
-                    
-                    <rect x="50" y="110" width="160" height="30" fill="#ca8a04" rx="4"/>
-                    <text x="225" y="130" fill="#333" font-size="14">Media: 10 (42%)</text>
-                    
-                    <rect x="50" y="150" width="40" height="30" fill="#16a34a" rx="4"/>
-                    <text x="105" y="170" fill="#333" font-size="14">Baja: 1 (4%)</text>
-                </svg>
-            </div>
-        </section>
-
-        <!-- Métricas por Solicitante -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">👥</span> Métricas por Solicitante</h2>
-            <div class="solicitante-grid">
-                <div class="solicitante-card">
-                    <h4>👤 Vania Hagel</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">9</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">9 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Marco Del Rio</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">5</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">5 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Yadira Yovera</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">2</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">2 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Patio Digital</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">2</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">2 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Cecilia Aliaga</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">1</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">1 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Emilio Gonzales</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">1</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">1 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Consuelo Mariscal</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">1</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">1 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-                
-                <div class="solicitante-card">
-                    <h4>👤 Juan Chavez</h4>
-                    <div class="stat">
-                        <span class="stat-label">Issues solicitados</span>
-                        <span class="stat-value">1</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-label">Completados</span>
-                        <span class="stat-value" style="color: var(--success);">1 (100%)</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: 100%;"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Equipo Performance -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🏆</span> Performance del Equipo</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Desarrollador</th>
-                            <th>Issues Asignados</th>
-                            <th>Completados</th>
-                            <th>Story Points</th>
-                            <th>Eficiencia</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Marlon Alvarez</strong></td>
-                            <td>14</td>
-                            <td>14</td>
-                            <td>28</td>
-                            <td><span class="badge badge-done">100%</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>thiago.gutierrez</strong></td>
-                            <td>4</td>
-                            <td>4</td>
-                            <td>10</td>
-                            <td><span class="badge badge-done">100%</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>anderson.palomino</strong></td>
-                            <td>3</td>
-                            <td>3</td>
-                            <td>6</td>
-                            <td><span class="badge badge-done">100%</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>emilio.gonzales</strong></td>
-                            <td>2</td>
-                            <td>2</td>
-                            <td>5</td>
-                            <td><span class="badge badge-done">100%</span></td>
-                        </tr>
-                        <tr>
-                            <td><strong>Leonardo Medina</strong></td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td><span class="badge badge-done">100%</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Commits con IA -->
-        <section class="section">
-            <h2 class="section-title"><span class="icon">🤖</span> Contribuciones con Inteligencia Artificial</h2>
-            <div style="background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%); border-radius: 12px; padding: 24px; margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px;">
-                    <div style="font-size: 2.5rem;">🤖</div>
+        <!-- Insights Section -->
+        <section class="bg-white rounded-xl shadow p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4 brand-text">Insights Accionables</h3>
+            <div class="space-y-3">
+                <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                    <span class="text-green-500 text-xl">↑</span>
                     <div>
-                        <div style="font-size: 1.8rem; font-weight: 700; color: #7c3aed;">12 commits</div>
-                        <div style="color: #6b7280;">asistidos por Claude Code</div>
+                        <p class="font-medium text-green-800">Alto uso de AI (Claude Code)</p>
+                        <p class="text-sm text-green-700">15+ commits generados con asistencia de IA, principalmente en optimizacion de queries N+1 y nuevos modulos.</p>
                     </div>
                 </div>
-                <div style="font-size: 0.9rem; color: #4b5563;">
-                    <strong>Proyectos:</strong> webservice, admin, pidetuprestamo<br>
-                    <strong>Tareas:</strong> Validaciones Express, refactoring, tests unitarios
+                <div class="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
+                    <span class="text-green-500 text-xl">✓</span>
+                    <div>
+                        <p class="font-medium text-green-800">Cero hotfixes</p>
+                        <p class="text-sm text-green-700">El ciclo termino sin incidentes criticos en produccion. Buena calidad de codigo.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Commit</th>
-                            <th>Mensaje</th>
-                            <th>Repositorio</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>badc2e6</code></td>
-                            <td>fix: evitar duplicados por DNI en LeadsExpress</td>
-                            <td>webservice</td>
-                        </tr>
-                        <tr>
-                            <td><code>e4aeb06</code></td>
-                            <td>feat: agregar soporte para campaña paga-en-febrero</td>
-                            <td>webservice</td>
-                        </tr>
-                        <tr>
-                            <td><code>919f612</code></td>
-                            <td>fix: kernel</td>
-                            <td>webservice</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <!-- Resumen Final -->
-        <section class="section" style="background: linear-gradient(135deg, #0099ff 0%, #0077cc 100%); color: white;">
-            <h2 class="section-title" style="color: white; border-bottom-color: rgba(255,255,255,0.3);">
-                <span class="icon">📈</span> Resumen Ejecutivo
-            </h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-top: 20px;">
-                <div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Tasa de Completitud</div>
-                    <div style="font-size: 2rem; font-weight: 700;">95.8%</div>
+                <div class="flex items-start gap-3 p-3 bg-red-50 rounded-lg">
+                    <span class="text-red-500 text-xl">!</span>
+                    <div>
+                        <p class="font-medium text-red-800">Scope creep significativo (+37%)</p>
+                        <p class="text-sm text-red-700">El scope aumento de 62 a 85 issues. Considerar ser mas estrictos con anadir issues mid-cycle.</p>
+                    </div>
                 </div>
-                <div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Velocidad del Equipo</div>
-                    <div style="font-size: 2rem; font-weight: 700;">51 pts</div>
-                </div>
-                <div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Tiempo Promedio</div>
-                    <div style="font-size: 2rem; font-weight: 700;">2.3 días</div>
-                </div>
-                <div>
-                    <div style="font-size: 0.9rem; opacity: 0.9;">Estabilidad</div>
-                    <div style="font-size: 2rem; font-weight: 700;">100%</div>
-                    <div style="font-size: 0.8rem; opacity: 0.8;">Sin hotfixes</div>
+                <div class="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
+                    <span class="text-blue-500 text-xl">→</span>
+                    <div>
+                        <p class="font-medium text-blue-800">Viernes con mayor actividad</p>
+                        <p class="text-sm text-blue-700">18 deploys el viernes 5 de diciembre. Riesgo de deployments antes del fin de semana.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Post-Mortems -->
-        <section class="section">
-            <h2>🔥 Post-Mortems</h2>
-            <p style="color: var(--gris); margin-bottom: 1.5rem;">
-                Incidentes identificados durante el ciclo que requirieron análisis y resolución.
-            </p>
-
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Post-Mortem 1 -->
-                <div class="owner-card" style="border-left-color: var(--rojo);">
-                    <h4 style="color: var(--rojo);">🐢 Problemas de Performance en Moroso Histórico</h4>
-                    <p style="font-size: 0.9rem; color: var(--gris); margin-top: 0.5rem;">
-                        Se detectaron problemas de rendimiento en el módulo de Moroso Histórico que afectaban la experiencia de usuario.
-                    </p>
+        <!-- Claude Code Section -->
+        <section class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl shadow p-6 text-white mb-8">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="bg-white/20 p-3 rounded-full">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
                 </div>
-
-                <!-- Post-Mortem 2 -->
-                <div class="owner-card" style="border-left-color: var(--rojo);">
-                    <h4 style="color: var(--rojo);">🔒 Problemas de Bloqueos con JAMF</h4>
-                    <p style="font-size: 0.9rem; color: var(--gris); margin-top: 0.5rem;">
-                        Incidentes de sincronización y bloqueos relacionados con la integración de JAMF que requirieron intervención.
-                    </p>
+                <div>
+                    <h3 class="text-xl font-bold">Commits con Claude Code</h3>
+                    <p class="text-purple-200">Asistencia de IA en desarrollo</p>
                 </div>
-
-                <!-- Post-Mortem 3 -->
-                <div class="owner-card" style="border-left-color: var(--rojo);">
-                    <h4 style="color: var(--rojo);">⚠️ SDK de AWS</h4>
-                    <p style="font-size: 0.9rem; color: var(--gris); margin-top: 0.5rem;">
-                        Problemas relacionados con el SDK de AWS PHP que generaron errores de deprecación y requerían actualización.
-                    </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-white/10 rounded-lg p-4">
+                    <p class="text-3xl font-bold">15+</p>
+                    <p class="text-sm text-purple-200">Commits asistidos</p>
                 </div>
-
-                <!-- Post-Mortem 4 -->
-                <div class="owner-card" style="border-left-color: var(--rojo);">
-                    <h4 style="color: var(--rojo);">🌿 Problema de Ramas y Versiones en Producción</h4>
-                    <p style="font-size: 0.9rem; color: var(--gris); margin-top: 0.5rem;">
-                        Conflictos identificados con el manejo de ramas y versiones que afectaban los despliegues a producción.
-                    </p>
+                <div class="bg-white/10 rounded-lg p-4">
+                    <p class="text-3xl font-bold">3</p>
+                    <p class="text-sm text-purple-200">Issues AI-resolved</p>
                 </div>
-
-                <!-- Post-Mortem 5 -->
-                <div class="owner-card" style="border-left-color: var(--rojo);">
-                    <h4 style="color: var(--rojo);">⏰ Problema de Kernel de Cronjobs</h4>
-                    <p style="font-size: 0.9rem; color: var(--gris); margin-top: 0.5rem;">
-                        Incidentes relacionados con la ejecución del kernel de cronjobs que afectaban tareas programadas del sistema.
-                    </p>
+                <div class="bg-white/10 rounded-lg p-4">
+                    <p class="text-3xl font-bold">4</p>
+                    <p class="text-sm text-purple-200">Proyectos impactados</p>
                 </div>
             </div>
         </section>
+    </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <p>
-                Generado automáticamente el <strong>11 de Diciembre, 2025</strong><br>
-                <span style="color: #7c3aed;">🤖 Powered by Claude Code + Linear + GitLab</span>
-            </p>
-            <p style="margin-top: 12px;">
-                <a href="https://baldecash.pe">BaldeCash</a> · 
-                Equipo de Desarrollo
-            </p>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer class="brand-bg text-white py-4 mt-8">
+        <div class="container mx-auto px-4 text-center text-sm">
+            <p>Generado automaticamente el 11 de Diciembre, 2025</p>
+            <p class="text-blue-200">BaldeCash Development Team</p>
+            <p class="mt-2"><a href="../index.html" class="text-blue-300 hover:text-white">← Volver al indice</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress Chart (Burnup)
+        var progressOptions = {
+            series: [{
+                name: 'Scope Total',
+                data: [62, 65, 70, 75, 80, 80, 85]
+            }, {
+                name: 'Completados',
+                data: [3, 7, 12, 17, 21, 21, 23]
+            }],
+            chart: {
+                type: 'area',
+                height: 300,
+                toolbar: { show: false }
+            },
+            colors: ['#9CA3AF', '#10B981'],
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth', width: 2 },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.4,
+                    opacityTo: 0.1
+                }
+            },
+            xaxis: {
+                categories: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+            },
+            legend: { position: 'top' }
+        };
+        new ApexCharts(document.querySelector("#progressChart"), progressOptions).render();
+
+        // Owner Chart
+        var ownerOptions = {
+            series: [8, 6, 4, 3, 1, 1],
+            chart: {
+                type: 'donut',
+                height: 300
+            },
+            labels: ['Marlon Alvarez', 'Anderson Palomino', 'Thiago Gutierrez', 'Emilio Gonzales', 'Leonardo Medina', 'Sin asignar'],
+            colors: ['#262877', '#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#9CA3AF'],
+            legend: { position: 'bottom' },
+            plotOptions: {
+                pie: {
+                    donut: {
+                        size: '50%',
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                fontSize: '16px'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        new ApexCharts(document.querySelector("#ownerChart"), ownerOptions).render();
+
+        // Deploys Chart
+        var deploysOptions = {
+            series: [{
+                name: 'Deploys',
+                data: [3, 5, 8, 12, 18, 3, 1]
+            }],
+            chart: {
+                type: 'bar',
+                height: 200,
+                toolbar: { show: false }
+            },
+            colors: ['#262877'],
+            plotOptions: {
+                bar: {
+                    borderRadius: 8,
+                    columnWidth: '60%'
+                }
+            },
+            dataLabels: { enabled: true },
+            xaxis: {
+                categories: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom']
+            }
+        };
+        new ApexCharts(document.querySelector("#deploysChart"), deploysOptions).render();
+    </script>
 </body>
 </html>
