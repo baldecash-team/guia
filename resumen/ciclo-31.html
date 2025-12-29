@@ -458,7 +458,7 @@
         <!-- Lineas de Codigo por Usuario -->
         <section class="bg-white rounded-lg p-6 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-4">Lineas de Codigo por Usuario</h2>
-            <p class="text-gray-600 mb-4">Contribuciones de codigo durante el ciclo (datos de GitLab)</p>
+            <p class="text-gray-600 mb-4">Contribuciones de codigo durante el ciclo (datos de GitLab + GitHub)</p>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead class="bg-gray-50">
@@ -468,22 +468,25 @@
                             <th class="px-4 py-3 text-center font-semibold text-red-600">Eliminaciones</th>
                             <th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th>
                             <th class="px-4 py-3 text-center font-semibold text-gray-600">Commits</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Repos</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y">
+                        <tr class="hover:bg-gray-50 bg-purple-50">
+                            <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                            <td class="px-4 py-3 text-center text-green-600 font-bold">+68,880</td>
+                            <td class="px-4 py-3 text-center text-red-600">-659</td>
+                            <td class="px-4 py-3 text-center font-bold text-purple-700">69,539</td>
+                            <td class="px-4 py-3 text-center">~63</td>
+                            <td class="px-4 py-3 text-xs text-gray-500">ws2, admin2, baldecash (GH) + GitLab</td>
+                        </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
                             <td class="px-4 py-3 text-center text-green-600">+2,847</td>
                             <td class="px-4 py-3 text-center text-red-600">-198</td>
                             <td class="px-4 py-3 text-center font-semibold">3,045</td>
                             <td class="px-4 py-3 text-center">~25</td>
-                        </tr>
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 font-medium">Leonardo Medina</td>
-                            <td class="px-4 py-3 text-center text-green-600">+1,520</td>
-                            <td class="px-4 py-3 text-center text-red-600">-245</td>
-                            <td class="px-4 py-3 text-center font-semibold">1,765</td>
-                            <td class="px-4 py-3 text-center">~18</td>
+                            <td class="px-4 py-3 text-xs text-gray-500">GitLab</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 font-medium">Marlon Alvarez</td>
@@ -491,6 +494,7 @@
                             <td class="px-4 py-3 text-center text-red-600">-1,102</td>
                             <td class="px-4 py-3 text-center font-semibold">3,258</td>
                             <td class="px-4 py-3 text-center">~22</td>
+                            <td class="px-4 py-3 text-xs text-gray-500">GitLab</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 font-medium">Anderson Palomino</td>
@@ -498,23 +502,33 @@
                             <td class="px-4 py-3 text-center text-red-600">-156</td>
                             <td class="px-4 py-3 text-center font-semibold">2,046</td>
                             <td class="px-4 py-3 text-center">~15</td>
+                            <td class="px-4 py-3 text-xs text-gray-500">GitLab</td>
                         </tr>
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
-                            <td class="px-4 py-3 text-center text-green-600">+233</td>
-                            <td class="px-4 py-3 text-center text-red-600">-20</td>
-                            <td class="px-4 py-3 text-center font-semibold">253</td>
-                            <td class="px-4 py-3 text-center">~8</td>
+                            <td class="px-4 py-3 text-center text-green-600">+1,733</td>
+                            <td class="px-4 py-3 text-center text-red-600">-120</td>
+                            <td class="px-4 py-3 text-center font-semibold">1,853</td>
+                            <td class="px-4 py-3 text-center">~23</td>
+                            <td class="px-4 py-3 text-xs text-gray-500">baldecash (GH) + GitLab</td>
                         </tr>
                         <tr class="bg-gray-50 font-semibold">
                             <td class="px-4 py-3">TOTAL</td>
-                            <td class="px-4 py-3 text-center text-green-600">+8,646</td>
-                            <td class="px-4 py-3 text-center text-red-600">-1,721</td>
-                            <td class="px-4 py-3 text-center">10,367</td>
-                            <td class="px-4 py-3 text-center">~88</td>
+                            <td class="px-4 py-3 text-center text-green-600">+77,506</td>
+                            <td class="px-4 py-3 text-center text-red-600">-2,235</td>
+                            <td class="px-4 py-3 text-center">79,741</td>
+                            <td class="px-4 py-3 text-center">~148</td>
+                            <td class="px-4 py-3"></td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <!-- Detalle GitHub -->
+            <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-xs text-blue-800">
+                    <span class="font-semibold">Repos GitHub (baldecash-team):</span>
+                    <span class="ml-2">ws2 (FastAPI backend, 99 tablas) • admin2 (Next.js dashboard) • baldecash (Landing pages) • finanzas</span>
+                </p>
             </div>
             <div id="chart-loc" class="mt-6"></div>
         </section>
@@ -686,18 +700,18 @@
         var optionsLOC = {
             series: [{
                 name: 'Adiciones',
-                data: [2847, 1520, 2156, 1890, 233]
+                data: [68880, 2847, 2156, 1890, 1733]
             }, {
                 name: 'Eliminaciones',
-                data: [198, 245, 1102, 156, 20]
+                data: [659, 198, 1102, 156, 120]
             }],
             chart: { type: 'bar', height: 350, stacked: false },
             plotOptions: { bar: { horizontal: false, borderRadius: 4, columnWidth: '60%' } },
-            xaxis: { categories: ['Thiago G.', 'Leonardo M.', 'Marlon A.', 'Anderson P.', 'Emilio G.'] },
+            xaxis: { categories: ['Leonardo M.', 'Thiago G.', 'Marlon A.', 'Anderson P.', 'Emilio G.'] },
             colors: ['#10B981', '#EF4444'],
             dataLabels: { enabled: false },
             legend: { position: 'top' },
-            yaxis: { title: { text: 'Lineas de codigo' } }
+            yaxis: { title: { text: 'Lineas de codigo' }, labels: { formatter: function(val) { return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val; } } }
         };
         var chartLOC = new ApexCharts(document.querySelector("#chart-loc"), optionsLOC);
         chartLOC.render();
