@@ -507,7 +507,7 @@
 
         <!-- Issues Mal Taggeados -->
         <section class="bg-white rounded-lg p-6 card-shadow mb-8">
-            <h2 class="text-2xl font-bold text-red-600 mb-4">Issues Mal Taggeados (5)</h2>
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Mal Taggeados (5)</h2>
             <p class="text-gray-600 mb-4">Issues completados que no tienen el tag de solicitante (nombre de dos palabras)</p>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
@@ -532,7 +532,7 @@
 
         <!-- MRs sin Summary/Review -->
         <section class="bg-white rounded-lg p-6 card-shadow mb-8">
-            <h2 class="text-2xl font-bold text-orange-600 mb-4">MRs/PRs sin Comandos de Summary/Review</h2>
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">MRs/PRs sin Comandos de Summary/Review</h2>
             <p class="text-gray-600 mb-4">Merge Requests (GitLab) y Pull Requests (GitHub) que fueron mergeados sin descripcion adecuada</p>
             <div class="grid md:grid-cols-2 gap-6">
                 <div>
@@ -791,7 +791,7 @@
                     dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
                 }
             },
-            colors: ['#1a1a5c', '#262877', '#3d3d99', '#5252aa', '#6b6bbb', '#8585cc', '#acadbf'],
+            colors: ['#dc2626', '#f97316', '#eab308', '#262877', '#acadbf'],
             series: [{
                 name: 'Issues',
                 data: [
@@ -812,7 +812,7 @@
             xAxis: { categories: ['Thiago Gutierrez', 'Marlon Alvarez', 'Anderson Palomino', 'Leonardo Medina'] },
             yAxis: { title: { text: null } },
             plotOptions: { bar: { dataLabels: { enabled: true }, borderRadius: 4 } },
-            colors: ['#262877', '#3d3d99', '#5252aa', '#6b6bbb'],
+            colors: ['#262877', '#22c55e', '#f97316', '#3b82f6'],
             series: [{ name: 'Completados', data: [14, 8, 6, 1], colorByPoint: true }],
             legend: { enabled: false },
             credits: { enabled: false }
@@ -825,7 +825,7 @@
             xAxis: { categories: ['Lun 22', 'Mar 23', 'Mie 24', 'Jue 25', 'Vie 26', 'Sab 27', 'Dom 28'] },
             yAxis: { title: { text: null } },
             plotOptions: { line: { marker: { radius: 5 } } },
-            colors: ['#262877', '#5252aa'],
+            colors: ['#22c55e', '#262877'],
             series: [
                 { name: 'Issues Completados', data: [13, 14, 14, 14, 18, 18, 29] },
                 { name: 'Total Issues', data: [74, 75, 75, 76, 81, 81, 80] }
@@ -844,7 +844,7 @@
                     dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
                 }
             },
-            colors: ['#262877', '#3d3d99', '#5252aa', '#6b6bbb', '#8585cc', '#acadbf', '#1a1a5c'],
+            colors: ['#262877', '#22c55e', '#f97316', '#3b82f6', '#a855f7', '#acadbf', '#dc2626'],
             series: [{
                 name: 'Issues',
                 data: [
@@ -869,7 +869,7 @@
                 labels: { formatter: function() { return this.value >= 1000 ? (this.value/1000).toFixed(0) + 'k' : this.value; } }
             },
             plotOptions: { column: { borderRadius: 4 } },
-            colors: ['#262877', '#8585cc'],
+            colors: ['#22c55e', '#dc2626'],
             series: [
                 { name: 'Adiciones', data: [68880, 2847, 2156, 1890, 1733] },
                 { name: 'Eliminaciones', data: [659, 198, 1102, 156, 120] }
