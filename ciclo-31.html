@@ -812,8 +812,8 @@
             xAxis: { categories: ['Thiago Gutierrez', 'Marlon Alvarez', 'Anderson Palomino', 'Leonardo Medina'] },
             yAxis: { title: { text: null } },
             plotOptions: { bar: { dataLabels: { enabled: true }, borderRadius: 4 } },
-            colors: ['#262877'],
-            series: [{ name: 'Completados', data: [14, 8, 6, 1] }],
+            colors: ['#262877', '#3d3d99', '#5252aa', '#6b6bbb'],
+            series: [{ name: 'Completados', data: [14, 8, 6, 1], colorByPoint: true }],
             legend: { enabled: false },
             credits: { enabled: false }
         });
@@ -825,7 +825,7 @@
             xAxis: { categories: ['Lun 22', 'Mar 23', 'Mie 24', 'Jue 25', 'Vie 26', 'Sab 27', 'Dom 28'] },
             yAxis: { title: { text: null } },
             plotOptions: { line: { marker: { radius: 5 } } },
-            colors: ['#3d3d99', '#262877'],
+            colors: ['#262877', '#5252aa'],
             series: [
                 { name: 'Issues Completados', data: [13, 14, 14, 14, 18, 18, 29] },
                 { name: 'Total Issues', data: [74, 75, 75, 76, 81, 81, 80] }
@@ -869,7 +869,7 @@
                 labels: { formatter: function() { return this.value >= 1000 ? (this.value/1000).toFixed(0) + 'k' : this.value; } }
             },
             plotOptions: { column: { borderRadius: 4 } },
-            colors: ['#262877', '#7070cc'],
+            colors: ['#262877', '#8585cc'],
             series: [
                 { name: 'Adiciones', data: [68880, 2847, 2156, 1890, 1733] },
                 { name: 'Eliminaciones', data: [659, 198, 1102, 156, 120] }
