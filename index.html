@@ -168,6 +168,113 @@
             </div>
         </section>
 
+        <!-- Hotfixes Historicos -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                Hotfixes Historicos
+            </h2>
+            <div class="bg-white rounded-xl card-shadow overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-red-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Ciclo</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Fecha</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-red-800">Hotfixes</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr class="hover:bg-red-50/50">
+                                <td class="px-6 py-4">
+                                    <a href="resumen/ciclo-31.html#hotfixes" class="font-semibold text-baldecash hover:underline">Ciclo 31</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">22-29 Dic 2025</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full font-bold">5</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 text-sm">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>BAL-750: Stock revision Bug - Duplicacion de equipo</li>
+                                        <li>BAL-662: Error al actualizar datos de estudiantes</li>
+                                        <li>BAL-739: Fix bug seleccion cuotas y plazos</li>
+                                        <li>Fix RecomendadorModal productos del store</li>
+                                        <li>Fix doble peticion a /productos/{id}</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-red-50/50">
+                                <td class="px-6 py-4">
+                                    <a href="resumen/ciclo-30.html#post-mortems" class="font-semibold text-baldecash hover:underline">Ciclo 30</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">15-22 Dic 2025</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-bold">3</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 text-sm">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Fix Event Primer Apertura Owner</li>
+                                        <li>Fix de Campanas en Voximplant</li>
+                                        <li>Fix de Merge de Cambios Landing Celular</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-green-50/50">
+                                <td class="px-6 py-4">
+                                    <a href="resumen/ciclo-28.html" class="font-semibold text-baldecash hover:underline">Ciclo 28</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">01-08 Dic 2025</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-bold">0</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 text-sm italic">
+                                    Cero hotfixes - Ciclo estable sin incidentes criticos en produccion
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-red-50/50">
+                                <td class="px-6 py-4">
+                                    <a href="resumen/ciclo-27.html" class="font-semibold text-baldecash hover:underline">Ciclo 27</a>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600">24 Nov - 01 Dic 2025</td>
+                                <td class="px-6 py-4 text-center">
+                                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full font-bold">2</span>
+                                </td>
+                                <td class="px-6 py-4 text-gray-600 text-sm">
+                                    <ul class="list-disc list-inside space-y-1">
+                                        <li>Bug direccion ubigeo</li>
+                                        <li>Bug solicitud 86230</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Resumen estadistico -->
+                <div class="bg-gray-50 px-6 py-4 border-t">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div class="flex items-center gap-6">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-red-600">10</p>
+                                <p class="text-xs text-gray-500">Total Hotfixes</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-orange-600">2.5</p>
+                                <p class="text-xs text-gray-500">Promedio/Ciclo</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-600">1</p>
+                                <p class="text-xs text-gray-500">Ciclos sin Hotfixes</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400">Datos extraidos de GitLab y reportes de ciclo</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Secciones adicionales -->
         <section class="mb-12">
             <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
