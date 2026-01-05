@@ -26,11 +26,38 @@
         .nav-link { display: block; padding: 6px 12px; color: #4b5563; border-radius: 6px; transition: all 0.2s; }
         .nav-link:hover { background: #eef2ff; color: #262877; }
         .nav-link.active { background: #262877; color: white; }
+
+        /* Sidebar hover effect */
+        #sidebar-nav {
+            transform: translateX(-90%);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0.6;
+        }
+        #sidebar-nav:hover {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        #sidebar-nav::after {
+            content: '☰';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #262877;
+            color: white;
+            padding: 8px 6px;
+            border-radius: 0 8px 8px 0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        #sidebar-nav:hover::after {
+            opacity: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <!-- Sidebar Navigation -->
-    <nav id="sidebar-nav" class="fixed left-0 top-1/4 bg-white shadow-lg rounded-r-xl p-3 z-40 hidden lg:block">
+    <nav id="sidebar-nav" class="fixed left-0 top-1/4 bg-white shadow-xl rounded-r-xl p-3 z-40 hidden lg:block border-r-4 border-[#262877]">
         <ul class="space-y-1 text-xs">
             <li><a href="#kpis" class="nav-link">📊 KPIs</a></li>
             <li><a href="#resumen" class="nav-link">📋 Resumen</a></li>

@@ -32,16 +32,45 @@
             background-color: #262877;
         }
         .card-shadow {
-            box-shadow: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
         .text-baldecash { color: #262877; }
         .bg-baldecash { background-color: #262877; }
-        .hover-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(38, 40, 119, 0.3);
-        }
         .hover-card {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        .hover-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #262877, #4a4db0);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .hover-card:hover::before {
+            transform: scaleX(1);
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(38, 40, 119, 0.15);
+            border-color: rgba(38, 40, 119, 0.2);
+        }
+        .cycle-card-current {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f1ff 100%);
+            border: 2px solid #262877 !important;
+        }
+        .cycle-card-current::before {
+            transform: scaleX(1);
+        }
+        .stat-badge {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid rgba(0,0,0,0.05);
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -196,28 +225,31 @@
                 </a>
 
                 <!-- Ciclo 32 -->
-                <a href="resumen/ciclo-32.html" class="hover-card bg-white rounded-xl p-6 card-shadow block border-2 border-green-200">
+                <a href="resumen/ciclo-32.html" class="hover-card cycle-card-current rounded-xl p-6 card-shadow block">
                     <div class="flex items-center justify-between mb-4">
                         <span class="text-3xl font-bold text-baldecash">Ciclo 32</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Actual</span>
+                        <span class="px-3 py-1 bg-[#262877] text-white rounded-full text-sm font-medium animate-pulse">Actual</span>
                     </div>
-                    <p class="text-gray-600 mb-4">29 Dic 2025 - 05 Ene 2026</p>
-                    <div class="grid grid-cols-4 gap-3 text-sm">
-                        <div class="bg-gray-50 rounded-lg p-3 text-center">
+                    <p class="text-gray-600 mb-4 flex items-center">
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        29 Dic 2025 - 05 Ene 2026
+                    </p>
+                    <div class="grid grid-cols-4 gap-2 text-sm">
+                        <div class="stat-badge rounded-lg p-2 text-center">
                             <p class="text-gray-500 text-xs">Issues</p>
-                            <p class="text-xl font-bold text-green-600">25</p>
+                            <p class="text-lg font-bold text-green-600">25</p>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-3 text-center">
-                            <p class="text-gray-500 text-xs">Commits GL</p>
-                            <p class="text-xl font-bold text-orange-600">61</p>
+                        <div class="stat-badge rounded-lg p-2 text-center">
+                            <p class="text-gray-500 text-xs">GL</p>
+                            <p class="text-lg font-bold text-orange-500">61</p>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-3 text-center">
-                            <p class="text-gray-500 text-xs">Commits GH</p>
-                            <p class="text-xl font-bold text-gray-700">38</p>
+                        <div class="stat-badge rounded-lg p-2 text-center">
+                            <p class="text-gray-500 text-xs">GH</p>
+                            <p class="text-lg font-bold text-gray-700">38</p>
                         </div>
-                        <div class="bg-gray-50 rounded-lg p-3 text-center">
-                            <p class="text-gray-500 text-xs">Puntos</p>
-                            <p class="text-xl font-bold text-indigo-600">42</p>
+                        <div class="stat-badge rounded-lg p-2 text-center">
+                            <p class="text-gray-500 text-xs">Pts</p>
+                            <p class="text-lg font-bold text-[#262877]">42</p>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center text-baldecash">
