@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis de Hotfixes - BaldeCash</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                fontFamily: {
+                    'sans': ['Asap', 'sans-serif'],
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Asap', sans-serif; }
+        :root {
+            --baldecash-primary: #262877;
+        }
+        .bg-baldecash { background-color: #262877; }
+        .text-baldecash { color: #262877; }
+        .hover-card {
+            transition: all 0.3s ease;
+            border-top: 3px solid transparent;
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(38, 40, 119, 0.15);
+            border-top-color: #262877;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeIn 0.5s ease forwards; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-baldecash text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="animate-fade-in">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm mb-4">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    Metricas de Calidad
+                </div>
+                <h1 class="text-5xl font-bold mb-4 tracking-tight">Analisis de Hotfixes</h1>
+                <p class="text-xl opacity-90">Historico de incidentes en produccion por ciclo</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- KPIs Globales -->
+        <section class="mb-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl p-6 text-center">
+                    <p class="text-4xl font-bold text-red-600" id="total-hotfixes">--</p>
+                    <p class="text-gray-500 text-sm mt-1">Total Hotfixes</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 text-center">
+                    <p class="text-4xl font-bold text-orange-600" id="promedio-ciclo">--</p>
+                    <p class="text-gray-500 text-sm mt-1">Promedio/Ciclo</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 text-center">
+                    <p class="text-4xl font-bold text-green-600" id="ciclos-estables">--</p>
+                    <p class="text-gray-500 text-sm mt-1">Ciclos Estables</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 text-center">
+                    <p class="text-4xl font-bold text-baldecash" id="total-ciclos">--</p>
+                    <p class="text-gray-500 text-sm mt-1">Ciclos Analizados</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ciclos Analizados -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                </svg>
+                Reportes por Ciclo
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="ciclos-grid">
+                <!-- Los ciclos se agregan aqui dinamicamente -->
+                <div class="bg-gray-50 rounded-xl p-6 text-center border-2 border-dashed border-gray-300">
+                    <p class="text-gray-400">Ejecuta /hotfixes-analysis para generar reportes</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabla Historica -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6 flex items-center">
+                <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+                Historico de Hotfixes
+            </h2>
+            <div class="bg-white rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-red-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Ciclo</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Fecha</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-red-800">Hotfixes</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-red-800">Estado</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-red-800">Descripcion</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100" id="historico-tbody">
+                            <!-- Datos se agregan dinamicamente -->
+                            <tr>
+                                <td colspan="5" class="px-6 py-8 text-center text-gray-400">
+                                    Sin datos. Ejecuta /hotfixes-analysis {ciclo} para generar.
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bg-gray-100 font-bold">
+                            <tr>
+                                <td class="px-6 py-4">TOTAL</td>
+                                <td class="px-6 py-4">-</td>
+                                <td class="px-6 py-4 text-center text-red-600" id="footer-total">0</td>
+                                <td class="px-6 py-4 text-center">-</td>
+                                <td class="px-6 py-4">-</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <!-- Resumen estadistico -->
+                <div class="bg-gray-50 px-6 py-4 border-t">
+                    <div class="flex items-center justify-between flex-wrap gap-4">
+                        <div class="flex items-center gap-6">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-red-600" id="stat-total">0</p>
+                                <p class="text-xs text-gray-500">Total Hotfixes</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-orange-600" id="stat-promedio">0</p>
+                                <p class="text-xs text-gray-500">Promedio/Ciclo</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-green-600" id="stat-estables">0</p>
+                                <p class="text-xs text-gray-500">Ciclos sin Hotfixes</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-400">Datos extraidos de GitLab, GitHub y Linear</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grafico de Tendencia -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6">Tendencia de Hotfixes</h2>
+            <div class="bg-white rounded-xl p-6">
+                <div id="chart-tendencia" style="height: 400px;"></div>
+            </div>
+        </section>
+
+        <!-- Proyectos mas Afectados -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-baldecash mb-6">Proyectos mas Afectados</h2>
+            <div class="bg-white rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Proyecto</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Hotfixes</th>
+                                <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">%</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Ultimo Hotfix</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100" id="proyectos-tbody">
+                            <tr>
+                                <td colspan="4" class="px-6 py-8 text-center text-gray-400">
+                                    Sin datos disponibles
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-baldecash text-white py-8 mt-12 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full translate-y-1/2 translate-x-1/2"></div>
+        </div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <a href="../index.html" class="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Volver a Guia BaldeCash
+            </a>
+            <p class="text-white/60 text-sm mt-4">BaldeCash Team - Analisis de Hotfixes</p>
+        </div>
+    </footer>
+
+    <script>
+        // Datos de ejemplo - se actualizan con /hotfixes-analysis
+        const datosHistoricos = [];
+
+        // Inicializar grafico vacio
+        if (datosHistoricos.length > 0) {
+            Highcharts.chart('chart-tendencia', {
+                chart: { type: 'column' },
+                title: { text: null },
+                xAxis: {
+                    categories: datosHistoricos.map(d => 'Ciclo ' + d.ciclo),
+                },
+                yAxis: {
+                    title: { text: 'Hotfixes' },
+                    allowDecimals: false
+                },
+                plotOptions: {
+                    column: {
+                        colorByPoint: true,
+                        colors: datosHistoricos.map(d => d.hotfixes === 0 ? '#10b981' : (d.hotfixes <= 2 ? '#f59e0b' : '#ef4444'))
+                    }
+                },
+                series: [{
+                    name: 'Hotfixes',
+                    data: datosHistoricos.map(d => d.hotfixes)
+                }],
+                legend: { enabled: false },
+                credits: { enabled: false }
+            });
+        }
+    </script>
+</body>
+</html>
