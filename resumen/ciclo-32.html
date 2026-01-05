@@ -71,6 +71,7 @@
             <li class="text-[10px] text-gray-400 uppercase tracking-wider mt-2 mb-1 px-2">Commits</li>
             <li><a href="#commits-proyecto" class="nav-link">Por Proyecto</a></li>
             <li><a href="#commits-autor" class="nav-link">Por Autor</a></li>
+            <li><a href="#loc" class="nav-link">LOC</a></li>
             <li><a href="#claude" class="nav-link">Claude Code</a></li>
             <li class="text-[10px] text-gray-400 uppercase tracking-wider mt-2 mb-1 px-2">Issues</li>
             <li><a href="#completados" class="nav-link">Completados</a></li>
@@ -446,6 +447,46 @@
                     <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">61</td><td class="px-4 py-3 text-center">19</td><td class="px-4 py-3 text-center">80</td><td class="px-4 py-3 text-center">100%</td></tr>
                 </tbody>
             </table>
+        </section>
+
+        <!-- Lineas de Codigo Totales -->
+        <section id="loc" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Lineas de Codigo (GitHub)</h2>
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200">
+                    <p class="text-4xl font-bold text-green-600">+7,082</p>
+                    <p class="text-sm text-gray-600 mt-1">Lineas Agregadas</p>
+                </div>
+                <div class="bg-red-50 rounded-xl p-6 text-center border border-red-200">
+                    <p class="text-4xl font-bold text-red-500">-4,153</p>
+                    <p class="text-sm text-gray-600 mt-1">Lineas Eliminadas</p>
+                </div>
+                <div class="bg-indigo-50 rounded-xl p-6 text-center border border-indigo-200">
+                    <p class="text-4xl font-bold stat-number">+2,929</p>
+                    <p class="text-sm text-gray-600 mt-1">Lineas Netas</p>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold mb-4">Desglose por Repositorio</h3>
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-gray-600">Repositorio</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Commits</th>
+                        <th class="px-4 py-3 text-center font-semibold text-green-600">+ Agregadas</th>
+                        <th class="px-4 py-3 text-center font-semibold text-red-500">- Eliminadas</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Neto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">admin2</td><td class="px-4 py-3 text-center">5</td><td class="px-4 py-3 text-center text-green-600">+3,314</td><td class="px-4 py-3 text-center text-red-500">-2,640</td><td class="px-4 py-3 text-center font-bold">+674</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">whatsapp-bot</td><td class="px-4 py-3 text-center">2</td><td class="px-4 py-3 text-center text-green-600">+2,024</td><td class="px-4 py-3 text-center text-red-500">-28</td><td class="px-4 py-3 text-center font-bold">+1,996</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">ws2</td><td class="px-4 py-3 text-center">10</td><td class="px-4 py-3 text-center text-green-600">+1,518</td><td class="px-4 py-3 text-center text-red-500">-1,460</td><td class="px-4 py-3 text-center font-bold">+58</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">reconocimiento-facial</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center text-green-600">+201</td><td class="px-4 py-3 text-center text-red-500">-0</td><td class="px-4 py-3 text-center font-bold">+201</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">guia <span class="text-xs text-gray-400">(solo ultimo)</span></td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center text-green-600">+25</td><td class="px-4 py-3 text-center text-red-500">-25</td><td class="px-4 py-3 text-center font-bold">0</td></tr>
+                    <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">19</td><td class="px-4 py-3 text-center text-green-600">+7,082</td><td class="px-4 py-3 text-center text-red-500">-4,153</td><td class="px-4 py-3 text-center">+2,929</td></tr>
+                </tbody>
+            </table>
+            <p class="text-xs text-gray-500 mt-3">Nota: Solo se muestran lineas de codigo de repositorios GitHub. Para guia (documentacion) solo se cuenta el ultimo commit.</p>
         </section>
 
         <!-- Commits con Claude Code -->
