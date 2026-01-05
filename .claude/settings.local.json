@@ -31,7 +31,18 @@
       "mcp__github__search_repositories",
       "mcp__github__get_commit",
       "mcp__github__list_pull_requests",
-      "WebFetch(domain:baldecash.com)"
+      "WebFetch(domain:baldecash.com)",
+      "Bash(claude mcp add:*)",
+      "Bash(claude mcp remove:*)",
+      "Skill(cycle-report)",
+      "Bash(powershell:*)",
+      "Bash(node:*)",
+      "Bash(git -C D:\\\\repos\\\\guia status:*)",
+      "Bash(powershell.exe -Command \"Get-Content ''C:\\\\Users\\\\USER\\\\.claude\\\\projects\\\\D--repos-guia\\\\4ee1b35b-cb25-4a1e-951d-588d665609e2\\\\tool-results\\\\mcp-gitlab-list_merge_requests-1767580492200.txt''\")",
+      "Bash(findstr:*)",
+      "Bash(python3:*)",
+      "Bash(del \"D:\\\\repos\\\\guia\\\\resumen\\\\ciclo-32.html\")",
+      "mcp__github__get_me"
     ],
     "deny": [],
     "ask": []
