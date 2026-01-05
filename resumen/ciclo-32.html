@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Ciclo 32 - BaldeCash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Asap', sans-serif; }
+        .brand-primary { color: #262877; }
+        .brand-bg { background-color: #262877; }
+        .brand-bg-light { background-color: #3d3d99; }
+        .card-shadow {
+            box-shadow: none;
+            transition: all 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-2px);
+            border-color: rgba(38, 40, 119, 0.3);
+        }
+        .brand-header { background-color: #262877; }
+        .kpi-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid rgba(38, 40, 119, 0.08);
+        }
+        .kpi-card:hover {
+            border-color: rgba(38, 40, 119, 0.2);
+        }
+        .table-row-hover:hover {
+            background-color: rgba(38, 40, 119, 0.04);
+        }
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: #262877;
+            border-radius: 2px;
+        }
+        .badge-animate {
+            transition: all 0.2s ease;
+        }
+        .badge-animate:hover {
+            transform: scale(1.05);
+        }
+        .chart-container {
+            background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .stat-number {
+            background: linear-gradient(135deg, #262877 0%, #3d3d99 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="brand-header text-white py-10 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full translate-y-1/2 -translate-x-1/2"></div>
+        </div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="flex justify-between items-center">
+                <div class="animate-fade-in">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="px-3 py-1 bg-white/20 rounded-full text-sm font-medium backdrop-blur-sm">Sprint</span>
+                    </div>
+                    <h1 class="text-5xl font-bold tracking-tight">Ciclo 32</h1>
+                    <p class="text-xl mt-3 opacity-90 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        29 Dic 2025 - 05 Ene 2026
+                    </p>
+                </div>
+                <div class="text-right animate-fade-in" style="animation-delay: 0.2s;">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                        <p class="text-2xl font-bold">BaldeCash</p>
+                        <p class="opacity-75 text-sm mt-1">Reporte de Desarrollo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- KPIs Cards -->
+        <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10 mt-4 relative z-20">
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Issues al Inicio</p>
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold stat-number">63</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.15s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Issues Agregados</p>
+                    <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-blue-600">+13</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Completados</p>
+                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-green-600">25</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.25s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Ratio de Exito</p>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-emerald-600">39.7%</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Scope Completado</p>
+                    <div class="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold stat-number">42 pts</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.35s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">AI-Assisted</p>
+                    <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-purple-600">23</p>
+            </div>
+        </section>
+
+        <!-- Resumen Ejecutivo -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Resumen Ejecutivo</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Issues al inicio del ciclo</td><td class="py-2 font-semibold text-right">63</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Issues agregados durante el ciclo</td><td class="py-2 font-semibold text-right text-blue-600">+13</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total issues en el ciclo</td><td class="py-2 font-semibold text-right">76</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Issues completados</td><td class="py-2 font-semibold text-right text-green-600">25</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Issues no completados</td><td class="py-2 font-semibold text-right text-orange-500">51</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Ratio de exito</td><td class="py-2 font-semibold text-right">39.7%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Scope al inicio</td><td class="py-2 font-semibold text-right">138 pts</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Scope final</td><td class="py-2 font-semibold text-right">158 pts</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Scope completado</td><td class="py-2 font-semibold text-right text-green-600">42 pts</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">% Scope completado</td><td class="py-2 font-semibold text-right">26.6%</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Commits con Claude Code</td><td class="py-2 font-semibold text-right text-purple-600">23</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits (GitLab)</td><td class="py-2 font-semibold text-right">44</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Leyenda de Puntos -->
+            <div class="mt-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <p class="text-xs text-gray-600">
+                    <span class="font-semibold">Leyenda pts (puntos):</span>
+                    Estimacion de esfuerzo en escala Fibonacci de Linear.
+                    <span class="inline-flex items-center gap-2 ml-2">
+                        <span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">1-2 pts = Simple</span>
+                        <span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded">3-5 pts = Moderado</span>
+                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 rounded">8+ pts = Complejo</span>
+                    </span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Observaciones y Recomendaciones -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-8 section-title">Observaciones y Recomendaciones</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Aspectos Positivos -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200 hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-bold text-green-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        Aspectos Positivos
+                    </h3>
+                    <ul class="space-y-2 text-sm text-green-800">
+                        <li class="flex items-start"><span class="mr-2">•</span>Alto uso de Claude Code (23 commits, 52%) - productividad aumentada significativamente</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Integraciones Knox Guard completadas exitosamente</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Cero hotfixes durante el ciclo - estabilidad de produccion</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Todos los issues completados tienen prioridad asignada</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Activacion exitosa de BBVA recaudo en Zona Estudiantes</li>
+                    </ul>
+                </div>
+
+                <!-- Areas de Mejora -->
+                <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-200 hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-bold text-orange-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        Areas de Mejora
+                    </h3>
+                    <ul class="space-y-2 text-sm text-orange-800">
+                        <li class="flex items-start"><span class="mr-2">•</span>Ratio de exito global del ciclo: 39.7% - scope inicial muy ambicioso</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>51 issues no completados quedaron pendientes</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>13 issues agregados mid-ciclo afectan la planificacion</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>1 issue sin estimate (BAL-780)</li>
+                    </ul>
+                </div>
+
+                <!-- Acciones Sugeridas -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-bold text-blue-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        </div>
+                        Acciones Sugeridas
+                    </h3>
+                    <ul class="space-y-2 text-sm text-blue-800">
+                        <li class="flex items-start"><span class="mr-2">•</span>Reducir scope inicial del proximo ciclo a 50 issues max</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Continuar impulsando uso de Claude Code</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Implementar estimacion obligatoria en planning</li>
+                        <li class="flex items-start"><span class="mr-2">•</span>Filtro mas estricto para issues mid-ciclo</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Graficos -->
+        <section class="grid md:grid-cols-2 gap-6 mb-8">
+            <!-- Distribucion por Prioridad -->
+            <div class="bg-white rounded-2xl p-6 card-shadow chart-container">
+                <h3 class="text-lg font-bold brand-primary mb-4 flex items-center">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center mr-3">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
+                    </div>
+                    Distribucion por Prioridad
+                </h3>
+                <div id="chart-priority"></div>
+            </div>
+
+            <!-- Issues por Owner -->
+            <div class="bg-white rounded-2xl p-6 card-shadow chart-container">
+                <h3 class="text-lg font-bold brand-primary mb-4 flex items-center">
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center mr-3">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    Issues Completados por Owner
+                </h3>
+                <div id="chart-owner"></div>
+            </div>
+        </section>
+
+        <!-- Burndown -->
+        <section class="bg-white rounded-2xl p-6 card-shadow mb-8 chart-container">
+            <h3 class="text-lg font-bold brand-primary mb-4 flex items-center">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center mr-3">
+                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+                </div>
+                Burndown del Ciclo (Issues Completados)
+            </h3>
+            <div id="chart-burndown"></div>
+        </section>
+
+        <!-- Issues Completados -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Completados (25)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Issue</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Titulo</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Owner</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Prioridad</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Estimate</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <!-- URGENT (4) -->
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-778" target="_blank">BAL-778</a></td><td class="px-4 py-2">Filtros equipos bloqueo</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Urgent</span></td><td class="px-4 py-2">3</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-693" target="_blank">BAL-693</a></td><td class="px-4 py-2">Cuotas Semanales</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Urgent</span></td><td class="px-4 py-2">3</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-761" target="_blank">BAL-761</a></td><td class="px-4 py-2">ZE Activar BBVA recaudo</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Urgent</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-757" target="_blank">BAL-757</a></td><td class="px-4 py-2">Yadira Envio recordatorio</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Urgent</span></td><td class="px-4 py-2">2</td></tr>
+                        <!-- HIGH (9) -->
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-783" target="_blank">BAL-783</a></td><td class="px-4 py-2">Excluir soporte tecnico</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-773" target="_blank">BAL-773</a></td><td class="px-4 py-2">WS - Debug de challenge code Knox en produccion</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-776" target="_blank">BAL-776</a></td><td class="px-4 py-2">Bloquear equipos Jamf y Absolute (omitir reglas de negocio)</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-777" target="_blank">BAL-777</a></td><td class="px-4 py-2">Formulario cecila</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-723" target="_blank">BAL-723</a></td><td class="px-4 py-2">Avance de Colegios</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-771" target="_blank">BAL-771</a></td><td class="px-4 py-2">WS - Cambiar numero de telefono de contacto en bloqueos</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-758" target="_blank">BAL-758</a></td><td class="px-4 py-2">Vania Celulares</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">3</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-770" target="_blank">BAL-770</a></td><td class="px-4 py-2">WS - Suscripcion a Knox notification webhook en prod</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">3</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-764" target="_blank">BAL-764</a></td><td class="px-4 py-2">Modificar regla de negocio: dias de bloqueo para equipos</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2">1</td></tr>
+                        <!-- MEDIUM (8) -->
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-767" target="_blank">BAL-767</a></td><td class="px-4 py-2">Mejoras Baldecash Web Scraping</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">3</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-766" target="_blank">BAL-766</a></td><td class="px-4 py-2">Agregar nuevo gestor de cobranzas: Yadira Yobera</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-781" target="_blank">BAL-781</a></td><td class="px-4 py-2">WS - Quitar solicitud de lista para el dia viernes</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-780" target="_blank">BAL-780</a></td><td class="px-4 py-2">WS - Agregar filtro de moroso historico nuevo para VoxImplant</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">-</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-774" target="_blank">BAL-774</a></td><td class="px-4 py-2">Modificar formato boton "Descargar CSV"</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-695" target="_blank">BAL-695</a></td><td class="px-4 py-2">BCP Kash.io</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-765" target="_blank">BAL-765</a></td><td class="px-4 py-2">Agregar logica Botmaker Mensaje Preventivo</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">2</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-749" target="_blank">BAL-749</a></td><td class="px-4 py-2">WS - En bloqueo mostrar serial del equipo</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2">1</td></tr>
+                        <!-- LOW (4) -->
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-785" target="_blank">BAL-785</a></td><td class="px-4 py-2">Revisar BUG envio de correos Contabilidad Concar</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Low</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-769" target="_blank">BAL-769</a></td><td class="px-4 py-2">Despliegue a Prod - Zona Estudiantes APP (Google Play)</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Low</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-763" target="_blank">BAL-763</a></td><td class="px-4 py-2">Registrar items historicos de cobranza-botmaker</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Low</span></td><td class="px-4 py-2">1</td></tr>
+                        <tr class="hover:bg-gray-50"><td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-747" target="_blank">BAL-747</a></td><td class="px-4 py-2">ADMIN - Bug de diseno en seguimiento de validaciones</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Low</span></td><td class="px-4 py-2">1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Desglose por Owner -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Desglose por Owner</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Owner</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Completados</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold">9</span></td>
+                            <td class="px-4 py-3 text-center font-semibold">13 pts</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Marlon Alvarez</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold">8</span></td>
+                            <td class="px-4 py-3 text-center font-semibold">18 pts</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Anderson Palomino</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold">8</span></td>
+                            <td class="px-4 py-3 text-center font-semibold">11 pts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Commits por Proyecto -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Actividad en GitLab</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-3">Commits por Proyecto</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left">Proyecto</th>
+                                <th class="px-4 py-2 text-right">Commits</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr><td class="px-4 py-2">webservice</td><td class="px-4 py-2 text-right font-semibold">44</td></tr>
+                            <tr><td class="px-4 py-2">admin</td><td class="px-4 py-2 text-right font-semibold">-</td></tr>
+                            <tr><td class="px-4 py-2">pidetuprestamo</td><td class="px-4 py-2 text-right font-semibold">-</td></tr>
+                            <tr><td class="px-4 py-2">zonaclientes</td><td class="px-4 py-2 text-right font-semibold">-</td></tr>
+                            <tr class="bg-gray-50 font-semibold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-right">44</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-3">Commits con Claude Code (AI)</h3>
+                    <div class="bg-purple-50 rounded-lg p-4">
+                        <div class="text-4xl font-bold text-purple-600 mb-2">23</div>
+                        <p class="text-purple-700">commits asistidos por IA</p>
+                        <p class="text-sm text-purple-600 mt-2">~52% del total de commits</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commits por Autor -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Commits por Autor (GitLab)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Commits</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">% del Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-semibold">21</span></td>
+                            <td class="px-4 py-3 text-center">48%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Marlon Alvarez</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold">11</span></td>
+                            <td class="px-4 py-3 text-center">25%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-orange-100 text-orange-700 rounded-full font-semibold">7</span></td>
+                            <td class="px-4 py-3 text-center">16%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                            <td class="px-4 py-3 text-center"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">5</span></td>
+                            <td class="px-4 py-3 text-center">11%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="chart-commits-autor" class="mt-6"></div>
+        </section>
+
+        <!-- Hotfixes / Bugs -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Hotfixes y Bugfixes</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-red-700">0</p>
+                            <p class="text-sm text-red-600">Hotfixes (rama hotfix)</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-500 mt-2">Excelente: No hubo correcciones urgentes de produccion</p>
+                </div>
+                <div class="bg-orange-50 rounded-lg p-4 border border-orange-200">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-orange-700">10</p>
+                            <p class="text-sm text-orange-600">Bugfixes (commits con "fix")</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-orange-500 mt-2">Correcciones de bugs durante desarrollo normal</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Issues Mal Registrados -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Mal Registrados (1)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-yellow-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-yellow-700">Issue</th>
+                            <th class="px-4 py-3 text-left font-semibold text-yellow-700">Titulo</th>
+                            <th class="px-4 py-3 text-left font-semibold text-yellow-700">Problema</th>
+                            <th class="px-4 py-3 text-left font-semibold text-yellow-700">Accion</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr class="hover:bg-yellow-50">
+                            <td class="px-4 py-2 font-mono text-blue-600"><a href="https://linear.app/baldecash/issue/BAL-780" target="_blank">BAL-780</a></td>
+                            <td class="px-4 py-2">WS - Agregar filtro de moroso historico nuevo para VoxImplant</td>
+                            <td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">Sin estimate</span></td>
+                            <td class="px-4 py-2 text-gray-600">Estimar en planning</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                <p class="text-sm text-green-700 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    <span><strong>Excelente:</strong> Todos los issues completados tienen prioridad asignada (0 issues sin prioridad)</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Distribucion por Prioridad -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Distribucion por Prioridad</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Prioridad</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Cantidad</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">% del Total</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        <tr><td class="px-4 py-2"><span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs">Urgent</span></td><td class="px-4 py-2 text-center font-semibold">4</td><td class="px-4 py-2 text-center">16%</td></tr>
+                        <tr><td class="px-4 py-2"><span class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs">High</span></td><td class="px-4 py-2 text-center font-semibold">9</td><td class="px-4 py-2 text-center">36%</td></tr>
+                        <tr><td class="px-4 py-2"><span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Medium</span></td><td class="px-4 py-2 text-center font-semibold">8</td><td class="px-4 py-2 text-center">32%</td></tr>
+                        <tr><td class="px-4 py-2"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs">Low</span></td><td class="px-4 py-2 text-center font-semibold">4</td><td class="px-4 py-2 text-center">16%</td></tr>
+                        <tr><td class="px-4 py-2"><span class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs">No Priority</span></td><td class="px-4 py-2 text-center font-semibold">0</td><td class="px-4 py-2 text-center">0%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Trabajo Destacado -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Trabajo Destacado del Ciclo</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <span class="text-xl">🏆</span> Features Principales
+                    </h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                            <span class="font-semibold text-indigo-800">Knox Guard Integration</span>
+                            <p class="text-indigo-600 text-xs mt-1">Debug, webhook subscription y bloqueo de equipos</p>
+                        </li>
+                        <li class="p-3 bg-green-50 rounded-lg border border-green-200">
+                            <span class="font-semibold text-green-800">BBVA Recaudo Activacion</span>
+                            <p class="text-green-600 text-xs mt-1">Activacion en Zona Estudiantes</p>
+                        </li>
+                        <li class="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                            <span class="font-semibold text-purple-800">Cuotas Semanales</span>
+                            <p class="text-purple-600 text-xs mt-1">Nueva funcionalidad de pagos</p>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                        <span class="text-xl">🌟</span> Reconocimientos
+                    </h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="p-3 bg-blue-50 rounded-lg border border-blue-200 flex justify-between items-center">
+                            <span class="text-blue-800">Mayor cantidad de commits</span>
+                            <span class="font-semibold text-blue-700">Leonardo M. (21)</span>
+                        </li>
+                        <li class="p-3 bg-green-50 rounded-lg border border-green-200 flex justify-between items-center">
+                            <span class="text-green-800">Mayor puntos completados</span>
+                            <span class="font-semibold text-green-700">Marlon A. (18 pts)</span>
+                        </li>
+                        <li class="p-3 bg-orange-50 rounded-lg border border-orange-200 flex justify-between items-center">
+                            <span class="text-orange-800">Mas issues completados</span>
+                            <span class="font-semibold text-orange-700">Emilio G. (9)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="brand-header text-white py-8 px-6 mt-8 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute bottom-0 right-0 w-64 h-64 bg-white rounded-full translate-y-1/2 translate-x-1/2"></div>
+        </div>
+        <div class="max-w-7xl mx-auto text-center relative z-10">
+            <div class="flex items-center justify-center gap-2 mb-2">
+                <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <p class="opacity-90">Reporte generado automaticamente por Claude Code</p>
+            </div>
+            <p class="text-sm opacity-60">BaldeCash - Ciclo 32 (29 Dic 2025 - 05 Ene 2026)</p>
+            <p class="mt-3">
+                <a href="../index.html" class="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors text-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Volver al indice
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Charts -->
+    <script>
+        // Grafico de Prioridad (Pie)
+        Highcharts.chart('chart-priority', {
+            chart: { type: 'pie', height: 300, backgroundColor: 'transparent' },
+            title: { text: null },
+            plotOptions: {
+                pie: {
+                    innerSize: '50%',
+                    dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
+                }
+            },
+            colors: ['#dc2626', '#f97316', '#eab308', '#262877', '#acadbf'],
+            series: [{
+                name: 'Issues',
+                data: [
+                    { name: 'Urgent', y: 4 },
+                    { name: 'High', y: 9 },
+                    { name: 'Medium', y: 8 },
+                    { name: 'Low', y: 4 },
+                    { name: 'No Priority', y: 0 }
+                ]
+            }],
+            credits: { enabled: false }
+        });
+
+        // Grafico de Owner (Bar)
+        Highcharts.chart('chart-owner', {
+            chart: { type: 'bar', height: 300, backgroundColor: 'transparent' },
+            title: { text: null },
+            xAxis: { categories: ['Emilio Gonzales', 'Marlon Alvarez', 'Anderson Palomino'] },
+            yAxis: { title: { text: null } },
+            plotOptions: { bar: { dataLabels: { enabled: true }, borderRadius: 4 } },
+            colors: ['#262877', '#22c55e', '#f97316'],
+            series: [{ name: 'Completados', data: [9, 8, 8], colorByPoint: true }],
+            legend: { enabled: false },
+            credits: { enabled: false }
+        });
+
+        // Grafico Burndown
+        Highcharts.chart('chart-burndown', {
+            chart: { type: 'line', height: 300, backgroundColor: 'transparent' },
+            title: { text: null },
+            xAxis: { categories: ['Lun 29', 'Mar 30', 'Mie 31', 'Jue 01', 'Vie 02', 'Sab 03'] },
+            yAxis: { title: { text: null } },
+            plotOptions: { line: { marker: { radius: 5 } } },
+            colors: ['#22c55e', '#262877'],
+            series: [
+                { name: 'Issues Completados', data: [10, 12, 19, 19, 23, 24] },
+                { name: 'Total Issues', data: [63, 66, 71, 71, 75, 76] }
+            ],
+            legend: { align: 'center', verticalAlign: 'top' },
+            credits: { enabled: false }
+        });
+
+        // Grafico de Commits por Autor
+        Highcharts.chart('chart-commits-autor', {
+            chart: { type: 'bar', height: 250, backgroundColor: 'transparent' },
+            title: { text: null },
+            xAxis: { categories: ['Leonardo M.', 'Marlon A.', 'Thiago G.', 'Emilio G.'] },
+            yAxis: { title: { text: 'Commits' } },
+            plotOptions: { bar: { dataLabels: { enabled: true }, borderRadius: 4 } },
+            colors: ['#262877', '#22c55e', '#f97316', '#3b82f6'],
+            series: [{ name: 'Commits', data: [21, 11, 7, 5], colorByPoint: true }],
+            legend: { enabled: false },
+            credits: { enabled: false }
+        });
+    </script>
+</body>
+</html>
