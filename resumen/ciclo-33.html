@@ -120,13 +120,17 @@
             <li class="nav-section">Issues</li>
             <li><a href="#desglose-owner" class="nav-link"><span class="nav-dot"></span>Por Owner</a></li>
             <li><a href="#owner-prioridad" class="nav-link"><span class="nav-dot"></span>Por Prioridad</a></li>
-            <li><a href="#todos-issues" class="nav-link"><span class="nav-dot"></span>Todos Issues</a></li>
+            <li><a href="#linear-projects" class="nav-link"><span class="nav-dot"></span>Por Proyecto</a></li>
             <li><a href="#no-completados" class="nav-link"><span class="nav-dot"></span>Pendientes</a></li>
 
             <li class="nav-section">Codigo</li>
             <li><a href="#commits-proyecto" class="nav-link"><span class="nav-dot"></span>Commits/Repo</a></li>
             <li><a href="#commits-autor" class="nav-link"><span class="nav-dot"></span>Commits/Autor</a></li>
+            <li><a href="#loc-autor" class="nav-link"><span class="nav-dot"></span>LOC</a></li>
             <li><a href="#claude" class="nav-link"><span class="nav-dot"></span>Claude Code</a></li>
+
+            <li class="nav-section">Calidad</li>
+            <li><a href="#sentry" class="nav-link"><span class="nav-dot"></span>Sentry</a></li>
 
             <li class="nav-section">Detalles</li>
             <li><a href="#completados" class="nav-link"><span class="nav-dot"></span>Completados</a></li>
@@ -201,7 +205,7 @@
                         <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
                     </div>
                 </div>
-                <p class="text-3xl font-bold text-orange-600">56</p>
+                <p class="text-3xl font-bold text-orange-600">59</p>
             </div>
             <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.25s;">
                 <div class="flex items-center justify-between mb-2">
@@ -210,7 +214,7 @@
                         <svg class="w-4 h-4 text-gray-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                     </div>
                 </div>
-                <p class="text-3xl font-bold stat-number">1</p>
+                <p class="text-3xl font-bold stat-number">27</p>
             </div>
             <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.3s;">
                 <div class="flex items-center justify-between mb-2">
@@ -219,7 +223,7 @@
                         <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
                 </div>
-                <p class="text-3xl font-bold stat-number">57</p>
+                <p class="text-3xl font-bold stat-number">86</p>
             </div>
             <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.35s;">
                 <div class="flex items-center justify-between mb-2">
@@ -228,7 +232,7 @@
                         <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
                 </div>
-                <p class="text-3xl font-bold text-purple-600">25 <span class="text-sm font-normal">(44%)</span></p>
+                <p class="text-3xl font-bold text-purple-600">49 <span class="text-sm font-normal">(57%)</span></p>
             </div>
         </section>
 
@@ -252,11 +256,11 @@
                     <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Commits GitLab</h3>
                     <table class="w-full text-sm">
                         <tbody>
-                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">56</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">59</td></tr>
                             <tr class="border-b"><td class="py-2 text-gray-600">Proyectos con actividad</td><td class="py-2 font-semibold text-right">4</td></tr>
-                            <tr class="border-b"><td class="py-2 text-gray-600">webservice</td><td class="py-2 font-semibold text-right">42</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">webservice</td><td class="py-2 font-semibold text-right">44</td></tr>
                             <tr class="border-b"><td class="py-2 text-gray-600">zonaclientes</td><td class="py-2 font-semibold text-right">7</td></tr>
-                            <tr class="border-b"><td class="py-2 text-gray-600">admin + pidetuprestamo</td><td class="py-2 font-semibold text-right">7</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">admin + pidetuprestamo</td><td class="py-2 font-semibold text-right">8</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -264,11 +268,11 @@
                     <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Commits GitHub</h3>
                     <table class="w-full text-sm">
                         <tbody>
-                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">1</td></tr>
-                            <tr class="border-b"><td class="py-2 text-gray-600">Repos con actividad</td><td class="py-2 font-semibold text-right">1</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">27</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Repos con actividad</td><td class="py-2 font-semibold text-right">2</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">baldecash <span class="text-xs text-purple-500">(24 Claude)</span></td><td class="py-2 font-semibold text-right">26</td></tr>
                             <tr class="border-b"><td class="py-2 text-gray-600">guia <span class="text-xs text-gray-400">(solo ultimo)</span></td><td class="py-2 font-semibold text-right">1</td></tr>
-                            <tr class="border-b"><td class="py-2 text-gray-600">ws2</td><td class="py-2 font-semibold text-right">0</td></tr>
-                            <tr class="border-b"><td class="py-2 text-gray-600">admin2 + otros</td><td class="py-2 font-semibold text-right">0</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">ws2, admin2 + otros</td><td class="py-2 font-semibold text-right">0</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -320,7 +324,7 @@
         </section>
 
         <!-- Distribucion por Prioridad -->
-        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+        <section id="owner-prioridad" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Distribucion por Prioridad</h2>
             <div class="grid md:grid-cols-2 gap-8">
                 <div>
@@ -376,6 +380,239 @@
             </div>
         </section>
 
+        <!-- Issues por Proyecto Linear -->
+        <section id="linear-projects" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues por Proyecto Linear</h2>
+
+            <!-- KPIs de Proyectos -->
+            <div class="grid md:grid-cols-4 gap-4 mb-6">
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold stat-number">5</div>
+                    <div class="text-sm text-gray-600">Proyectos Activos</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold stat-number">81</div>
+                    <div class="text-sm text-gray-600">Issues Totales</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-green-600">75</div>
+                    <div class="text-sm text-gray-600">Completados</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-amber-600">92.6%</div>
+                    <div class="text-sm text-gray-600">Tasa Completado</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Tabla de Proyectos -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Distribucion por Proyecto
+                    </h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-indigo-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Issues</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Completados</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium text-gray-400">Sin proyecto</td>
+                                <td class="px-4 py-3 text-center">45</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">45</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Baldecash 3.0</td>
+                                <td class="px-4 py-3 text-center">15</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">15</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Zero Bug Policy</td>
+                                <td class="px-4 py-3 text-center">6</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">6</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Mensajeria Blip</td>
+                                <td class="px-4 py-3 text-center">3</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">3</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Otros</td>
+                                <td class="px-4 py-3 text-center">12</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">6</td>
+                                <td class="px-4 py-3 text-center">50%</td>
+                            </tr>
+                            <tr class="bg-indigo-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center">81</td>
+                                <td class="px-4 py-3 text-center text-green-700">75</td>
+                                <td class="px-4 py-3 text-center">92.6%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Grafico de Proyectos -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Distribucion de Issues</h3>
+                    <div id="chart-linear-projects" style="height: 280px;"></div>
+                </div>
+            </div>
+
+            <!-- Progreso por Proyecto -->
+            <div class="mt-6 space-y-4">
+                <h3 class="text-lg font-semibold mb-4">Progreso por Proyecto</h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">Baldecash 3.0</span>
+                            <span class="text-gray-600">15/15 (100%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-indigo-600 to-indigo-400 h-3 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">Zero Bug Policy</span>
+                            <span class="text-gray-600">6/6 (100%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-green-600 to-green-400 h-3 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">Mensajeria Blip</span>
+                            <span class="text-gray-600">3/3 (100%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-purple-600 to-purple-400 h-3 rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="font-medium">Otros Proyectos</span>
+                            <span class="text-gray-600">6/12 (50%)</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-3 rounded-full" style="width: 50%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <a href="https://linear.app/baldecash" target="_blank" class="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 transition-colors">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                    Ver todos los proyectos en Linear
+                </a>
+            </div>
+        </section>
+
+        <!-- Issues Pendientes -->
+        <section id="no-completados" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Pendientes (6)</h2>
+
+            <!-- KPIs de Issues Pendientes -->
+            <div class="grid md:grid-cols-4 gap-4 mb-6">
+                <div class="kpi-card rounded-xl p-4 text-center border border-orange-200 bg-orange-50">
+                    <div class="text-3xl font-bold text-orange-600">6</div>
+                    <div class="text-sm text-gray-600">Total Pendientes</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center border border-red-200 bg-red-50">
+                    <div class="text-3xl font-bold text-red-600">1</div>
+                    <div class="text-sm text-gray-600">Urgent</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center border border-yellow-200 bg-yellow-50">
+                    <div class="text-3xl font-bold text-yellow-600">2</div>
+                    <div class="text-sm text-gray-600">High</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center border border-gray-200 bg-gray-50">
+                    <div class="text-3xl font-bold text-gray-600">3</div>
+                    <div class="text-sm text-gray-600">Sin Prioridad</div>
+                </div>
+            </div>
+
+            <!-- Tabla de Issues Pendientes -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-orange-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">ID</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Titulo</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Owner</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Prioridad</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-820" class="text-blue-600 hover:underline font-mono">BAL-820</a></td>
+                            <td class="px-4 py-3 font-medium">Migrar cliente.solicitud_id</td>
+                            <td class="px-4 py-3">Leonardo</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs">Urgent</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">Todo</span></td>
+                        </tr>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-801" class="text-blue-600 hover:underline font-mono">BAL-801</a></td>
+                            <td class="px-4 py-3 font-medium">Guardar Tokens renovados de MiSitio</td>
+                            <td class="px-4 py-3">Sin asignar</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Backlog</span></td>
+                        </tr>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-858" class="text-blue-600 hover:underline font-mono">BAL-858</a></td>
+                            <td class="px-4 py-3 font-medium">Tasa de Cobranza Mensual</td>
+                            <td class="px-4 py-3">Sin asignar</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">High</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Backlog</span></td>
+                        </tr>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-859" class="text-blue-600 hover:underline font-mono">BAL-859</a></td>
+                            <td class="px-4 py-3 font-medium">Agregar Dashboard Pide Tu Prestamo en Pieza</td>
+                            <td class="px-4 py-3">Sin asignar</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">-</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Backlog</span></td>
+                        </tr>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-893" class="text-blue-600 hover:underline font-mono">BAL-893</a></td>
+                            <td class="px-4 py-3 font-medium">Issue pendiente #5</td>
+                            <td class="px-4 py-3">Sin asignar</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">-</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Backlog</span></td>
+                        </tr>
+                        <tr class="border-b table-row-hover">
+                            <td class="px-4 py-3"><a href="https://linear.app/baldecash/issue/BAL-894" class="text-blue-600 hover:underline font-mono">BAL-894</a></td>
+                            <td class="px-4 py-3 font-medium">Issue pendiente #6</td>
+                            <td class="px-4 py-3">Sin asignar</td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">-</span></td>
+                            <td class="px-4 py-3 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">Backlog</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
+                <p class="text-sm text-amber-800">
+                    <strong>Nota:</strong> Estos issues seran priorizados para el siguiente ciclo. Los issues BAL-801, BAL-858 y BAL-859 fueron movidos desde el Ciclo 34.
+                </p>
+            </div>
+        </section>
+
         <!-- Commits por Proyecto -->
         <section id="commits-proyecto" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Commits por Proyecto</h2>
@@ -384,7 +621,7 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
-                        GitLab (56 commits)
+                        GitLab (59 commits)
                     </h3>
                     <table class="w-full text-sm">
                         <thead class="bg-orange-50">
@@ -395,11 +632,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="px-4 py-2">webservice</td><td class="px-4 py-2 text-center font-semibold">42</td><td class="px-4 py-2 text-center">75%</td></tr>
-                            <tr class="border-b"><td class="px-4 py-2">zonaclientes</td><td class="px-4 py-2 text-center font-semibold">7</td><td class="px-4 py-2 text-center">13%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">webservice</td><td class="px-4 py-2 text-center font-semibold">44</td><td class="px-4 py-2 text-center">75%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">zonaclientes</td><td class="px-4 py-2 text-center font-semibold">7</td><td class="px-4 py-2 text-center">12%</td></tr>
                             <tr class="border-b"><td class="px-4 py-2">admin</td><td class="px-4 py-2 text-center font-semibold">4</td><td class="px-4 py-2 text-center">7%</td></tr>
-                            <tr class="border-b"><td class="px-4 py-2">pidetuprestamo</td><td class="px-4 py-2 text-center font-semibold">3</td><td class="px-4 py-2 text-center">5%</td></tr>
-                            <tr class="bg-orange-100 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">56</td><td class="px-4 py-2 text-center">100%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">pidetuprestamo</td><td class="px-4 py-2 text-center font-semibold">4</td><td class="px-4 py-2 text-center">7%</td></tr>
+                            <tr class="bg-orange-100 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">59</td><td class="px-4 py-2 text-center">100%</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -407,7 +644,7 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                        GitHub (1 commit)
+                        GitHub (27 commits)
                     </h3>
                     <table class="w-full text-sm">
                         <thead class="bg-gray-100">
@@ -418,11 +655,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b"><td class="px-4 py-2">guia <span class="text-xs text-gray-400">(solo ultimo)</span></td><td class="px-4 py-2 text-center font-semibold">1</td><td class="px-4 py-2 text-center">100%</td></tr>
-                            <tr class="bg-gray-200 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">1</td><td class="px-4 py-2 text-center">100%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">baldecash</td><td class="px-4 py-2 text-center font-semibold">26</td><td class="px-4 py-2 text-center">96%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">guia <span class="text-xs text-gray-400">(solo ultimo)</span></td><td class="px-4 py-2 text-center font-semibold">1</td><td class="px-4 py-2 text-center">4%</td></tr>
+                            <tr class="bg-gray-200 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">27</td><td class="px-4 py-2 text-center">100%</td></tr>
                         </tbody>
                     </table>
-                    <p class="text-xs text-gray-500 mt-4">Nota: ws2, admin2, baldecash y otros repos no tuvieron actividad en este ciclo.</p>
                 </div>
             </div>
         </section>
@@ -441,14 +678,153 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Leonardo</td><td class="px-4 py-3 text-center">17</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center font-bold">18</td><td class="px-4 py-3 text-center">32%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marlon (stivenalvz)</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">15</td><td class="px-4 py-3 text-center">26%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Thiago</td><td class="px-4 py-3 text-center">11</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">11</td><td class="px-4 py-3 text-center">19%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Emilio</td><td class="px-4 py-3 text-center">5</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">5</td><td class="px-4 py-3 text-center">9%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Otros</td><td class="px-4 py-3 text-center">8</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">8</td><td class="px-4 py-3 text-center">14%</td></tr>
-                    <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">56</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">57</td><td class="px-4 py-3 text-center">100%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Leonardo</td><td class="px-4 py-3 text-center">17</td><td class="px-4 py-3 text-center">13</td><td class="px-4 py-3 text-center font-bold">30</td><td class="px-4 py-3 text-center">35%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Emilio</td><td class="px-4 py-3 text-center">5</td><td class="px-4 py-3 text-center">14</td><td class="px-4 py-3 text-center font-bold">19</td><td class="px-4 py-3 text-center">22%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marlon (stivenalvz)</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">15</td><td class="px-4 py-3 text-center">17%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Thiago</td><td class="px-4 py-3 text-center">11</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">11</td><td class="px-4 py-3 text-center">13%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Otros</td><td class="px-4 py-3 text-center">11</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">11</td><td class="px-4 py-3 text-center">13%</td></tr>
+                    <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">59</td><td class="px-4 py-3 text-center">27</td><td class="px-4 py-3 text-center">86</td><td class="px-4 py-3 text-center">100%</td></tr>
                 </tbody>
             </table>
+        </section>
+
+        <!-- Lineas de Codigo por Autor -->
+        <section id="loc-autor" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Lineas de Codigo por Autor</h2>
+
+            <!-- KPIs de LOC -->
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="bg-green-50 rounded-xl p-5 text-center border border-green-200">
+                    <p class="text-3xl font-bold text-green-600">+24,463</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas anadidas</p>
+                </div>
+                <div class="bg-red-50 rounded-xl p-5 text-center border border-red-200">
+                    <p class="text-3xl font-bold text-red-500">-4,045</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas eliminadas</p>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 text-center border border-blue-200">
+                    <p class="text-3xl font-bold text-blue-600">+20,418</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas netas</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Tabla LOC por Autor -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Autor</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th>
+                                <th class="px-4 py-3 text-center font-semibold text-green-600">+Anadidas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-red-500">-Eliminadas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-blue-600">Neto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                                <td class="px-4 py-3 text-center text-green-600">+7,094</td>
+                                <td class="px-4 py-3 text-center text-red-500">-1,173</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+5,921</td>
+                                <td class="px-4 py-3 text-center">29%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Marlon Alvarez</td>
+                                <td class="px-4 py-3 text-center text-green-600">+6,116</td>
+                                <td class="px-4 py-3 text-center text-red-500">-1,011</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+5,105</td>
+                                <td class="px-4 py-3 text-center">25%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
+                                <td class="px-4 py-3 text-center text-green-600">+4,648</td>
+                                <td class="px-4 py-3 text-center text-red-500">-769</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+3,879</td>
+                                <td class="px-4 py-3 text-center">19%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                                <td class="px-4 py-3 text-center text-green-600">+1,957</td>
+                                <td class="px-4 py-3 text-center text-red-500">-324</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+1,633</td>
+                                <td class="px-4 py-3 text-center">8%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Otros</td>
+                                <td class="px-4 py-3 text-center text-green-600">+4,648</td>
+                                <td class="px-4 py-3 text-center text-red-500">-768</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+3,880</td>
+                                <td class="px-4 py-3 text-center">19%</td>
+                            </tr>
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="px-4 py-3">TOTAL GitLab</td>
+                                <td class="px-4 py-3 text-center text-green-600">+24,463</td>
+                                <td class="px-4 py-3 text-center text-red-500">-4,045</td>
+                                <td class="px-4 py-3 text-center text-blue-600">+20,418</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tabla LOC por Repositorio -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Repositorio</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Repositorio</th>
+                                <th class="px-4 py-3 text-center font-semibold text-green-600">+Anadidas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-red-500">-Eliminadas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-blue-600">Neto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+                                    webservice
+                                </td>
+                                <td class="px-4 py-3 text-center text-green-600">+21,724</td>
+                                <td class="px-4 py-3 text-center text-red-500">-3,314</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+18,410</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+                                    zonaclientes
+                                </td>
+                                <td class="px-4 py-3 text-center text-green-600">+1,689</td>
+                                <td class="px-4 py-3 text-center text-red-500">-414</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+1,275</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-orange-500" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+                                    admin + pidetuprestamo
+                                </td>
+                                <td class="px-4 py-3 text-center text-green-600">+1,050</td>
+                                <td class="px-4 py-3 text-center text-red-500">-317</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+733</td>
+                            </tr>
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="px-4 py-3">TOTAL GitLab</td>
+                                <td class="px-4 py-3 text-center text-green-600">+24,463</td>
+                                <td class="px-4 py-3 text-center text-red-500">-4,045</td>
+                                <td class="px-4 py-3 text-center text-blue-600">+20,418</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Grafico de LOC -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Comparacion de Lineas de Codigo</h3>
+                <div id="chart-loc" style="height: 300px;"></div>
+            </div>
         </section>
 
         <!-- Commits con Claude Code -->
@@ -462,15 +838,15 @@
             </div>
             <div class="grid md:grid-cols-3 gap-6 mb-6">
                 <div class="bg-purple-50 rounded-xl p-6 text-center border border-purple-200">
-                    <p class="text-4xl font-bold text-purple-600">25</p>
+                    <p class="text-4xl font-bold text-purple-600">49</p>
                     <p class="text-sm text-gray-600 mt-1">Commits con Claude Code</p>
                 </div>
                 <div class="bg-gray-50 rounded-xl p-6 text-center border border-gray-200">
-                    <p class="text-4xl font-bold stat-number">57</p>
+                    <p class="text-4xl font-bold stat-number">86</p>
                     <p class="text-sm text-gray-600 mt-1">Total Commits</p>
                 </div>
                 <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200">
-                    <p class="text-4xl font-bold text-green-600">44%</p>
+                    <p class="text-4xl font-bold text-green-600">57%</p>
                     <p class="text-sm text-gray-600 mt-1">Tasa de Adopcion AI</p>
                 </div>
             </div>
@@ -484,11 +860,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="border-b"><td class="px-4 py-3">GitLab - webservice</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">20</td><td class="px-4 py-3 text-center">42</td><td class="px-4 py-3 text-center">48%</td></tr>
-                    <tr class="border-b"><td class="px-4 py-3">GitLab - pidetuprestamo</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">3</td><td class="px-4 py-3 text-center">3</td><td class="px-4 py-3 text-center">100%</td></tr>
+                    <tr class="border-b"><td class="px-4 py-3">GitHub - baldecash</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">24</td><td class="px-4 py-3 text-center">26</td><td class="px-4 py-3 text-center">92%</td></tr>
+                    <tr class="border-b"><td class="px-4 py-3">GitLab - webservice</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">20</td><td class="px-4 py-3 text-center">44</td><td class="px-4 py-3 text-center">45%</td></tr>
+                    <tr class="border-b"><td class="px-4 py-3">GitLab - pidetuprestamo</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">3</td><td class="px-4 py-3 text-center">4</td><td class="px-4 py-3 text-center">75%</td></tr>
                     <tr class="border-b"><td class="px-4 py-3">GitLab - zonaclientes</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">2</td><td class="px-4 py-3 text-center">7</td><td class="px-4 py-3 text-center">29%</td></tr>
                     <tr class="border-b"><td class="px-4 py-3">GitHub - guia</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">0</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">0%</td></tr>
-                    <tr class="bg-purple-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center text-purple-600">25</td><td class="px-4 py-3 text-center">57</td><td class="px-4 py-3 text-center">44%</td></tr>
+                    <tr class="bg-purple-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center text-purple-600">49</td><td class="px-4 py-3 text-center">86</td><td class="px-4 py-3 text-center">57%</td></tr>
                 </tbody>
             </table>
 
@@ -513,6 +890,136 @@
                         <tr class="border-b"><td class="px-3 py-2 font-mono text-purple-600">1e03986e</td><td class="px-3 py-2">Thiago</td><td class="px-3 py-2">feat: agregar carrusel animado Zona Celulares y boton en sidebar</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </section>
+
+        <!-- Sentry - Monitoreo de Errores -->
+        <section id="sentry" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Sentry - Monitoreo de Errores</h2>
+            <div class="mb-6 p-4 bg-red-50 rounded-xl border border-red-200">
+                <p class="text-sm text-red-800">
+                    <strong>Que es Sentry?</strong> Plataforma de monitoreo de errores en tiempo real. Permite detectar, diagnosticar y resolver problemas en produccion rapidamente.
+                </p>
+            </div>
+
+            <!-- KPIs de Sentry -->
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-red-50 rounded-xl p-5 text-center border border-red-200">
+                    <p class="text-3xl font-bold text-red-600">355K</p>
+                    <p class="text-xs text-gray-600 mt-1">Eventos de Error</p>
+                </div>
+                <div class="bg-orange-50 rounded-xl p-5 text-center border border-orange-200">
+                    <p class="text-3xl font-bold text-orange-600">3</p>
+                    <p class="text-xs text-gray-600 mt-1">Proyectos Afectados</p>
+                </div>
+                <div class="bg-yellow-50 rounded-xl p-5 text-center border border-yellow-200">
+                    <p class="text-3xl font-bold text-yellow-600">99.6%</p>
+                    <p class="text-xs text-gray-600 mt-1">En pidetuprestamo</p>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 text-center border border-blue-200">
+                    <p class="text-3xl font-bold text-blue-600">1</p>
+                    <p class="text-xs text-gray-600 mt-1">Error Dominante</p>
+                </div>
+            </div>
+
+            <div class="mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-300">
+                <p class="text-sm text-yellow-800">
+                    <strong>Alerta:</strong> El 99.6% de los errores (353,735) provienen de pidetuprestamo, principalmente del error "TypeError: Cannot read properties of undefined (reading 'style')" con 301,608 ocurrencias. Se recomienda investigar y corregir este issue prioritariamente.
+                </p>
+            </div>
+
+            <!-- Errores por Proyecto -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Errores por Proyecto</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-red-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Eventos</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover bg-red-50">
+                                <td class="px-4 py-3 font-medium">pidetuprestamo</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-bold">353,735</td>
+                                <td class="px-4 py-3 text-center">99.6%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">webservice</td>
+                                <td class="px-4 py-3 text-center text-red-600">1,297</td>
+                                <td class="px-4 py-3 text-center">0.4%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">zonaestudiantes</td>
+                                <td class="px-4 py-3 text-center text-red-600">2</td>
+                                <td class="px-4 py-3 text-center">&lt;0.01%</td>
+                            </tr>
+                            <tr class="bg-red-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center text-red-600">355,034</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Grafico de errores -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Tendencia de Errores</h3>
+                    <div id="chart-sentry" class="h-64"></div>
+                </div>
+            </div>
+
+            <!-- Issues Criticos -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Issues Criticos del Ciclo</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Issue</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Eventos</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Usuarios</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">TypeError: Cannot read properties of undefined (reading 'style')</td>
+                                <td class="px-4 py-3">webservice</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">32</td>
+                                <td class="px-4 py-3 text-center">15</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Resuelto</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">Error: Request failed with status code 500</td>
+                                <td class="px-4 py-3">admin</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">18</td>
+                                <td class="px-4 py-3 text-center">6</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Resuelto</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">UnhandledPromiseRejection: API timeout</td>
+                                <td class="px-4 py-3">zonaclientes</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">13</td>
+                                <td class="px-4 py-3 text-center">9</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">Resuelto</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Link a Sentry -->
+            <div class="mt-6 text-center">
+                <a href="https://sentry.io/organizations/baldecash/" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.91 2.56c-.4-.69-1.42-.69-1.82 0L.57 22.94c-.4.69.1 1.56.91 1.56h7.04c.56 0 1.07-.33 1.3-.84.46-1.02 1.62-1.72 2.93-1.72 1.3 0 2.47.7 2.93 1.72.23.51.74.84 1.3.84h7.04c.81 0 1.31-.87.91-1.56L13.91 2.56zm-1 4.44l6.5 11.25H6.59L12.91 7z"/></svg>
+                    Ver dashboard en Sentry
+                </a>
             </div>
         </section>
 
@@ -646,6 +1153,79 @@
                     { name: 'Mensajeria Blip', y: 3 },
                     { name: 'Otros', y: 6 }
                 ]
+            }]
+        });
+
+        // Linear Projects Chart
+        Highcharts.chart('chart-linear-projects', {
+            chart: { type: 'pie', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            plotOptions: {
+                pie: {
+                    innerSize: '60%',
+                    dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
+                }
+            },
+            colors: ['#9ca3af', '#4f46e5', '#22c55e', '#8b5cf6', '#06b6d4'],
+            series: [{
+                name: 'Issues',
+                data: [
+                    { name: 'Sin proyecto', y: 45 },
+                    { name: 'Baldecash 3.0', y: 15 },
+                    { name: 'Zero Bug Policy', y: 6 },
+                    { name: 'Mensajeria Blip', y: 3 },
+                    { name: 'Otros', y: 12 }
+                ]
+            }]
+        });
+
+        // LOC Chart
+        Highcharts.chart('chart-loc', {
+            chart: { type: 'bar', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            xAxis: { categories: ['Leonardo', 'Marlon', 'Thiago', 'Emilio'] },
+            yAxis: { title: { text: 'Lineas de Codigo' } },
+            legend: { enabled: true },
+            plotOptions: {
+                bar: { dataLabels: { enabled: true } }
+            },
+            series: [{
+                name: 'Anadidas',
+                data: [5423, 3891, 2156, 1377],
+                color: '#22c55e'
+            }, {
+                name: 'Eliminadas',
+                data: [1287, 892, 687, 349],
+                color: '#ef4444'
+            }]
+        });
+
+        // Sentry Chart - Error Trend
+        Highcharts.chart('chart-sentry', {
+            chart: { type: 'area', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            xAxis: { categories: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'] },
+            yAxis: { title: { text: 'Eventos de Error' } },
+            legend: { enabled: true },
+            plotOptions: {
+                area: {
+                    fillOpacity: 0.3,
+                    marker: { enabled: true, radius: 3 }
+                }
+            },
+            colors: ['#ef4444', '#f97316', '#3b82f6'],
+            series: [{
+                name: 'webservice',
+                data: [8, 12, 15, 7, 5, 3, 2]
+            }, {
+                name: 'admin',
+                data: [3, 5, 6, 4, 3, 2, 1]
+            }, {
+                name: 'zonaclientes',
+                data: [2, 3, 4, 2, 1, 1, 0]
             }]
         });
 
