@@ -1,0 +1,2729 @@
+# Comando: Análisis de Ciclo de Desarrollo
+
+Genera un reporte completo del ciclo usando **Linear** (issues), **GitLab** (commits/MRs), **GitHub** (commits/líneas) y **Sentry** (errores).
+
+---
+
+## ⚠️ REGLAS FUNDAMENTALES (LEER PRIMERO)
+
+```yaml
+Plantilla:
+  archivo: "modelo.html"
+  ubicacion: "D:/repos/guia/modelo.html"
+  regla: "Usar SIEMPRE como base, NO modificar estructura"
+
+Generación_HTML:
+  - Leer modelo.html
+  - Llenar datos de MCP en CADA sección (ver checklist abajo)
+  - NO agregar secciones nuevas
+  - NO quitar secciones existentes
+  - Solo actualizar valores y gráficos
+
+Commit_Push:
+  obligatorio: true
+  automatico: true
+  preguntar_usuario: false
+  mensaje: "El comando NO está completo hasta que se haga git push"
+```
+
+---
+
+## 📋 CHECKLIST OBLIGATORIO DE SECCIONES (modelo.html)
+
+**⚠️ CRÍTICO: TODAS estas secciones DEBEN ser actualizadas con datos reales. NO puede haber placeholder data.**
+
+| # | Section ID | Nombre | Fuente de Datos | Verificar |
+|---|------------|--------|-----------------|-----------|
+| 1 | `#kpis` | KPIs Cards (6 tarjetas) | Linear + GitLab + GitHub | ☐ |
+| 2 | `#resumen` | Resumen Ejecutivo | Linear + GitLab + GitHub | ☐ |
+| 3 | `#desglose-owner` | Desglose por Owner | Linear (issues por assignee) | ☐ |
+| 4 | `#owner-prioridad` | Owner × Prioridad | Linear (matriz owner/priority) | ☐ |
+| 5 | `#linear-projects` | Proyectos Linear | Linear (issues por project) | ☐ |
+| 6 | `#commits-proyecto` | Commits por Proyecto | GitLab + GitHub commits | ☐ |
+| 7 | `#commits-autor` | Commits por Autor | GitLab + GitHub commits | ☐ |
+| 8 | `#loc-autor` | LOC por Autor | GitLab commit stats | ☐ |
+| 9 | `#claude` | Claude Code (AI-Assisted) | GitLab + GitHub commits | ☐ |
+| 10 | `#sentry` | Sentry - Monitoreo de Errores | Sentry API | ☐ |
+| 11 | `#completados` | Issues Completados | Linear (state=completed) | ☐ |
+| 12 | `#solicitante` | Por Solicitante | Linear (creator/requester) | ☐ |
+| 13 | `#no-completados` | Issues No Completados/Pendientes | Linear (state!=completed) | ☐ |
+
+### Detalle de cada sección:
+
+```yaml
+1_KPIs:
+  id: "#kpis"
+  datos:
+    - issues_completados: Linear issues con state.type == "completed"
+    - ratio_exito: (completados / total) * 100
+    - commits_gitlab: Total commits productivos de GitLab
+    - commits_github: Total commits productivos de GitHub (incluir baldecash y otros repos con actividad)
+    - total_commits: gitlab + github
+    - claude_code: Commits con marcadores "Co-Authored-By: Claude" o "Claude Code"
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId)
+    - mcp__gitlab__list_commits (since, until)
+    - mcp__github__list_commits (since, until)
+
+2_Resumen:
+  id: "#resumen"
+  datos:
+    - Tabla Issues (inicio, agregados, completados, ratio, puntos)
+    - Tabla Commits GitLab (total, proyectos con actividad)
+    - Tabla Commits GitHub (total, repos con actividad)
+    - Tabla LOC (añadidas, eliminadas, neto)
+  mcp_tools:
+    - Todos los anteriores + get_commit para stats
+
+3_Desglose_Owner:
+  id: "#desglose-owner"
+  datos:
+    - Por cada owner: Done, Todo, Blocked, Total
+    - Gráfico chart-owner (Highcharts)
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId)
+    - Agrupar por issue.assignee.name
+
+4_Owner_Prioridad:
+  id: "#owner-prioridad"
+  datos:
+    - Matriz: filas = owners, columnas = prioridades (Urgent, High, Medium, Low, None)
+    - Solo issues completados
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId, state=completed)
+    - Cruzar issue.assignee.name con issue.priority
+
+5_Linear_Projects:
+  id: "#linear-projects"
+  datos:
+    - KPIs: Total issues, completados, puntos, % completado
+    - Tabla por proyecto: issues, completados, %, puntos
+    - Gráfico chart-linear-projects
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId)
+    - Agrupar por issue.project.name
+
+6_Commits_Proyecto:
+  id: "#commits-proyecto"
+  datos:
+    - Tabla GitLab: proyecto, commits, %
+    - Tabla GitHub: repo, commits, %
+    - ⚠️ INCLUIR TODOS los repos con actividad (baldecash, guia, etc.)
+  mcp_tools:
+    - mcp__gitlab__list_commits por proyecto
+    - mcp__github__list_commits por repo
+
+7_Commits_Autor:
+  id: "#commits-autor"
+  datos:
+    - Tabla: Autor, GitLab, GitHub, Total, %
+    - ⚠️ Sumar commits de TODOS los repos (GitLab + GitHub)
+  mcp_tools:
+    - Agrupar commits por autor
+
+8_LOC_Autor:
+  id: "#loc-autor"
+  datos:
+    - KPIs: +añadidas, -eliminadas, neto
+    - Tabla por autor: +añadidas, -eliminadas, neto, %
+    - Tabla por repo: +añadidas, -eliminadas, neto
+    - Gráfico chart-loc
+  mcp_tools:
+    - mcp__gitlab__get_commit (sha, stats=true) para cada commit
+    - Sumar additions/deletions por autor
+
+9_Claude_Code:
+  id: "#claude"
+  datos:
+    - KPIs: commits con Claude, total, % adopción
+    - Tabla por fuente: GitLab proyectos, GitHub repos
+    - ⚠️ INCLUIR baldecash y otros repos de GitHub
+  mcp_tools:
+    - Filtrar commits donde mensaje contiene:
+      - "Co-Authored-By: Claude"
+      - "Claude Code"
+      - "Generated by Claude"
+      - "🤖"
+
+10_Sentry:
+  id: "#sentry"
+  datos:
+    - KPIs: eventos error, issues nuevos, resueltos, tasa resolución
+    - Tabla por proyecto: eventos, issues, usuarios
+    - Issues críticos (top 5)
+    - Gráfico chart-sentry (tendencia diaria)
+  mcp_tools:
+    - mcp__sentry__find_organizations
+    - mcp__sentry__find_projects
+    - mcp__sentry__search_events (naturalLanguageQuery con fechas)
+    - mcp__sentry__search_issues
+
+11_Completados:
+  id: "#completados"
+  datos:
+    - KPIs: completados, %, puntos
+    - Link a Linear filtrado
+    - Lista de issues completados
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId, state=completed)
+
+12_Solicitante:
+  id: "#solicitante"
+  datos:
+    - Tabla: Solicitante, issues, %
+    - Gráfico chart-solicitante
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId)
+    - Agrupar por issue.creator.name o labels de solicitud
+
+13_No_Completados:
+  id: "#no-completados"
+  datos:
+    - KPIs: pendientes, en progreso, bloqueados
+    - Tabla de issues pendientes con estado actual
+  mcp_tools:
+    - mcp__linear__list_issues (cycle=cycleId, state!=completed)
+```
+
+### ⚠️ VALIDACIÓN FINAL OBLIGATORIA
+
+Antes de guardar el HTML, verificar que TODAS las secciones tienen datos reales:
+
+```python
+def validar_secciones(html_content):
+    secciones_requeridas = [
+        "#kpis", "#resumen", "#desglose-owner", "#owner-prioridad",
+        "#linear-projects", "#commits-proyecto", "#commits-autor",
+        "#loc-autor", "#claude", "#sentry", "#completados",
+        "#solicitante", "#no-completados"
+    ]
+
+    errores = []
+    for seccion in secciones_requeridas:
+        if seccion not in html_content:
+            errores.append(f"❌ Sección {seccion} no encontrada")
+        # Verificar que no tiene datos placeholder del modelo
+        # (números específicos del ciclo 32 que no deberían estar)
+
+    if errores:
+        raise Exception("VALIDACIÓN FALLIDA: " + "\n".join(errores))
+
+    return True
+```
+
+---
+
+## PARÁMETROS
+
+```
+/cycle-report {NUMERO}    ← Número de ciclo desde $ARGUMENTS
+```
+
+Fechas se obtienen automáticamente de Linear.
+
+---
+
+## CONFIGURACIÓN
+
+```yaml
+Linear:
+  team: "BaldeCash"
+  team_key: "BAL"
+
+GitLab:
+  # ⚠️ DINÁMICO: Obtener TODOS los proyectos con mcp__gitlab__list_projects
+  # Solo incluir en reporte los repos que tengan commits en el rango de fechas
+  obtener_dinamicamente: true
+
+GitHub:
+  owner: "baldecash-team"
+  # ⚠️ DINÁMICO: Obtener TODOS los repos con mcp__github__search_repositories
+  # Solo incluir en reporte los repos que tengan commits en el rango de fechas
+  obtener_dinamicamente: true
+
+  repos_documentacion:  # Solo último commit para LOC (no inflar métricas)
+    - guia
+
+GitHub_Reportes:
+  owner: "baldecash-team"
+  repo: "guia"
+  carpeta: "resumen"
+
+Sentry:
+  organizacion: "baldecash"  # Obtener con mcp__sentry__find_organizations
+  proyectos:  # Obtener dinamicamente con mcp__sentry__find_projects
+    - webservice
+    - admin
+    - pidetuprestamo
+  metricas:
+    - eventos_error: "Total de eventos de error en el periodo"
+    - issues_nuevos: "Issues creados durante el ciclo"
+    - issues_resueltos: "Issues marcados como resueltos"
+    - usuarios_afectados: "Usuarios unicos que experimentaron errores"
+
+Autores:
+  identificacion_por_mensaje:
+    - { nombre: "Leonardo", patrones: ["Leonardo", "Leo"] }
+    - { nombre: "Anderson", patrones: ["Anderson"] }
+    - { nombre: "Thiago", patrones: ["Thiago"] }
+    - { nombre: "Emilio", patrones: ["Emilio"] }
+    - { nombre: "Marlon", patrones: ["Marlon"] }
+```
+
+---
+
+## 🔓 AUTORIZACIÓN (SIN PERMISOS REQUERIDOS)
+
+**Este comando NO requiere autorización para ninguna operación:**
+
+```yaml
+MCP_Tools:
+  # Todas las herramientas MCP se ejecutan sin confirmación
+  Linear:
+    - mcp__linear__list_teams: auto
+    - mcp__linear__list_cycles: auto
+    - mcp__linear__list_issues: auto
+    - mcp__linear__get_issue: auto
+    - mcp__linear__get_team: auto
+
+  GitLab:
+    - mcp__gitlab__list_projects: auto
+    - mcp__gitlab__list_commits: auto
+    - mcp__gitlab__get_commit: auto
+    - mcp__gitlab__get_commit_diff: auto
+    - mcp__gitlab__list_merge_requests: auto
+
+  GitHub:
+    - mcp__github__search_repositories: auto
+    - mcp__github__list_commits: auto
+    - mcp__github__get_commit: auto
+    - mcp__github__get_file_contents: auto
+    - mcp__github__get_me: auto
+
+  Sentry:
+    - mcp__sentry__find_organizations: auto
+    - mcp__sentry__find_projects: auto
+    - mcp__sentry__search_issues: auto
+    - mcp__sentry__search_events: auto
+    - mcp__sentry__get_issue_details: auto
+
+Local_Operations:
+  # Operaciones locales sin confirmación
+  - Read: auto      # Leer archivos HTML existentes
+  - Write: auto     # Escribir reportes HTML
+  - Glob: auto      # Buscar archivos
+  - Grep: auto      # Buscar en contenido
+  - Bash(ls): auto  # Listar directorios
+
+Git_Operations:
+  # Git sin confirmación
+  - Bash(git status): auto
+  - Bash(git add): auto
+  - Bash(git commit): auto
+  - Bash(git push): auto
+  - Bash(git log): auto
+  - Bash(git diff): auto
+
+Modo_Ejecucion:
+  confirmaciones: false
+  pausas: false
+  aprobacion_usuario: false
+```
+
+**⚠️ El comando debe ejecutarse de forma continua sin interrupciones hasta completar el reporte.**
+
+---
+
+## ⚠️ EXCLUSIÓN DE COMMITS DE MERGE (OBLIGATORIO)
+
+**Solo contar commits PRODUCTIVOS.** Excluir TODOS los commits de merge intermedios:
+
+```
+EXCLUIR commits donde el mensaje:
+  - Empieza con "Merge branch"
+  - Empieza con "Merge pull request"
+  - Empieza con "Merge remote-tracking"
+  - Contiene "Merge branch 'feature" → feature a develop
+  - Contiene "Merge branch 'develop' into 'master'" → develop a master
+  - Contiene "Merge branch 'dev'"
+  - Contiene "into 'develop'" o "into 'master'" o "into 'main'"
+  - Es exactamente "Develop" o "Master" o "Main"
+
+INCLUIR commits donde el mensaje:
+  - Empieza con "feat:", "fix:", "chore:", "refactor:", "docs:", "style:", "test:"
+  - Tiene contenido descriptivo del cambio realizado
+  - Es trabajo productivo real (código nuevo o modificado)
+```
+
+**Pseudocódigo de filtrado:**
+```python
+def es_commit_productivo(mensaje):
+    mensaje_lower = mensaje.lower().strip()
+
+    # EXCLUIR - commits de merge
+    patrones_excluir = [
+        "merge branch",
+        "merge pull request",
+        "merge remote-tracking",
+        "into 'develop'",
+        "into 'master'",
+        "into 'main'",
+        "into develop",
+        "into master",
+        "into main",
+    ]
+
+    for patron in patrones_excluir:
+        if patron in mensaje_lower:
+            return False
+
+    # EXCLUIR - mensajes genéricos de merge
+    if mensaje_lower in ["develop", "master", "main", "dev"]:
+        return False
+
+    # INCLUIR - todo lo demás es productivo
+    return True
+```
+
+---
+
+## ⏱️ TIEMPO DE EJECUCIÓN (OBLIGATORIO)
+
+Registrar timestamp al inicio, calcular duración al final.
+Mostrar en footer: `⏱️ Generado en {X} min {Y} seg`
+
+---
+
+## FASE 1: RECOLECCIÓN DE DATOS
+
+### 1.1 Linear - Issues
+
+```
+mcp__linear__list_teams → team ID
+mcp__linear__list_cycles (teamId) → fechas del ciclo
+mcp__linear__list_issues (cycle: cycleId)
+```
+
+### 1.2 GitLab - Proyectos (DINÁMICO)
+
+```
+⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos
+
+PASO 1: Obtener TODOS los proyectos
+  mcp__gitlab__list_projects (membership: true)
+
+PASO 2: Para CADA proyecto, verificar si tiene commits en el rango
+  mcp__gitlab__list_commits (since, until)
+
+PASO 3: Solo incluir en el reporte los proyectos CON commits productivos
+  - Aplicar filtro de exclusión de merge commits
+  - Si commits_productivos > 0 → incluir en reporte
+  - Si commits_productivos == 0 → NO incluir
+
+PASO 4: Para proyectos con commits, obtener:
+  mcp__gitlab__list_pipelines
+  mcp__gitlab__list_merge_requests (state: "merged")
+```
+
+### 1.3 GitHub - Repos (DINÁMICO)
+
+```
+⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos
+
+PASO 1: Obtener TODOS los repos de la organización
+  mcp__github__search_repositories (owner: "baldecash-team")
+
+PASO 2: Para CADA repo, verificar si tiene commits en el rango
+  mcp__github__list_commits (since, until)
+
+PASO 3: Solo incluir en el reporte los repos CON commits productivos
+  - Aplicar filtro de exclusión de merge commits
+  - Si commits_productivos > 0 → incluir en reporte
+  - Si commits_productivos == 0 → NO incluir
+
+PASO 4: Para repos con commits, obtener líneas de código:
+  mcp__github__get_commit (sha) → additions, deletions
+```
+
+**Regla especial para repo `guia`:**
+- Solo contar el ÚLTIMO commit para líneas de código (LOC)
+- Solo contar el ÚLTIMO commit en análisis de commits por autor
+- Es repo de documentación/reportes, no inflar métricas de código ni commits
+- Esto significa: 1 commit de guia cuenta para Leonardo (o quien sea el autor del último commit)
+- NO sumar los 20 commits individuales, solo 1
+
+**Resultado esperado:**
+```
+Repos analizados: X
+Repos con actividad: Y
+Repos sin actividad (excluidos): Z
+```
+
+### 1.4 Sentry - Monitoreo de Errores
+
+```
+⚠️ ANÁLISIS DE ERRORES EN PRODUCCIÓN
+
+PASO 1: Obtener organización
+  mcp__sentry__find_organizations()
+  → Usar organizationSlug para las siguientes llamadas
+
+PASO 2: Obtener proyectos
+  mcp__sentry__find_projects(organizationSlug)
+  → Lista de proyectos monitoreados
+
+PASO 3: Buscar eventos de error en el rango del ciclo
+  mcp__sentry__search_events(
+    organizationSlug,
+    naturalLanguageQuery: "errors from {fecha_inicio} to {fecha_fin}"
+  )
+  → Total de eventos de error
+
+PASO 4: Buscar issues (errores agrupados)
+  mcp__sentry__search_issues(
+    organizationSlug,
+    naturalLanguageQuery: "issues from {fecha_inicio} to {fecha_fin}"
+  )
+  → Issues nuevos, resueltos, pendientes
+
+PASO 5: Para issues críticos, obtener detalles
+  mcp__sentry__get_issue_details(issueId)
+  → Stacktrace, usuarios afectados, frecuencia
+```
+
+**Métricas a extraer:**
+```python
+sentry_data = {
+    'eventos_error': total_error_events,
+    'issues_nuevos': len([i for i in issues if i.firstSeen >= fecha_inicio]),
+    'issues_resueltos': len([i for i in issues if i.status == 'resolved']),
+    'usuarios_afectados': unique_users_count,
+    'tasa_resolucion': (issues_resueltos / issues_nuevos) * 100,
+    'por_proyecto': {
+        'webservice': {'eventos': X, 'issues': Y, 'usuarios': Z},
+        'admin': {'eventos': X, 'issues': Y, 'usuarios': Z},
+        ...
+    },
+    'issues_criticos': [  # Top 5 por eventos
+        {'titulo': 'TypeError: ...', 'proyecto': 'webservice', 'eventos': 45, 'usuarios': 23, 'estado': 'resolved'},
+        ...
+    ],
+    'tendencia_diaria': [18, 22, 15, 28, 24, 10, 7]  # Errores por día de la semana
+}
+```
+
+**Pseudocódigo de recolección:**
+```python
+def obtener_metricas_sentry(fecha_inicio, fecha_fin):
+    # 1. Obtener organización
+    orgs = mcp__sentry__find_organizations()
+    org_slug = orgs[0].slug  # "baldecash"
+
+    # 2. Obtener proyectos
+    projects = mcp__sentry__find_projects(organizationSlug=org_slug)
+
+    # 3. Buscar eventos de error
+    eventos = mcp__sentry__search_events(
+        organizationSlug=org_slug,
+        naturalLanguageQuery=f"errors from {fecha_inicio} to {fecha_fin}"
+    )
+
+    # 4. Buscar issues
+    issues = mcp__sentry__search_issues(
+        organizationSlug=org_slug,
+        naturalLanguageQuery=f"all issues from {fecha_inicio} to {fecha_fin}"
+    )
+
+    # 5. Calcular métricas
+    issues_nuevos = [i for i in issues if i.firstSeen >= fecha_inicio]
+    issues_resueltos = [i for i in issues if i.status == 'resolved']
+
+    # 6. Agrupar por proyecto
+    por_proyecto = {}
+    for project in projects:
+        eventos_proyecto = mcp__sentry__search_events(
+            organizationSlug=org_slug,
+            projectSlug=project.slug,
+            naturalLanguageQuery=f"count of errors from {fecha_inicio} to {fecha_fin}"
+        )
+        por_proyecto[project.slug] = {
+            'eventos': eventos_proyecto.count,
+            'issues': len([i for i in issues if i.project == project.slug]),
+            'usuarios': eventos_proyecto.unique_users
+        }
+
+    return {
+        'eventos_error': len(eventos),
+        'issues_nuevos': len(issues_nuevos),
+        'issues_resueltos': len(issues_resueltos),
+        'tasa_resolucion': (len(issues_resueltos) / len(issues_nuevos)) * 100 if issues_nuevos else 0,
+        'por_proyecto': por_proyecto,
+        'issues_criticos': sorted(issues, key=lambda x: x.count, reverse=True)[:5]
+    }
+```
+
+---
+
+## FASE 1.5: VALIDACIÓN DE DATOS (OBLIGATORIO)
+
+**⚠️ EJECUTAR ANTES DE GENERAR EL HTML**
+
+### Validación de Issues del Ciclo
+
+```python
+def validar_datos_ciclo(issues_ciclo, cycleId):
+    errores = []
+
+    # 1. Verificar que no hay duplicados
+    issue_ids = [i.id for i in issues_ciclo]
+    if len(issue_ids) != len(set(issue_ids)):
+        duplicados = [id for id in issue_ids if issue_ids.count(id) > 1]
+        errores.append(f"❌ DUPLICADOS encontrados: {set(duplicados)}")
+
+    # 2. Verificar que todos los issues son del ciclo correcto
+    for issue in issues_ciclo:
+        if issue.cycle and issue.cycle.id != cycleId:
+            errores.append(f"❌ Issue {issue.identifier} no es del ciclo {cycleId}")
+
+    # 3. Calcular y validar owner_breakdown
+    asignados_por_owner = {}
+    completados_por_owner = {}
+
+    for issue in issues_ciclo:
+        owner = issue.assignee.name if issue.assignee else "Sin Asignar"
+        asignados_por_owner[owner] = asignados_por_owner.get(owner, 0) + 1
+        if issue.state.type == "completed":
+            completados_por_owner[owner] = completados_por_owner.get(owner, 0) + 1
+
+    # 4. Verificar suma de asignados == total issues
+    suma_asignados = sum(asignados_por_owner.values())
+    if suma_asignados != len(issues_ciclo):
+        errores.append(f"❌ Suma asignados ({suma_asignados}) != Total issues ({len(issues_ciclo)})")
+
+    # 5. Mostrar resumen de validación
+    if errores:
+        print("=" * 50)
+        print("❌ VALIDACIÓN FALLIDA - NO GENERAR REPORTE")
+        print("=" * 50)
+        for error in errores:
+            print(error)
+        return False
+    else:
+        print("=" * 50)
+        print("✅ VALIDACIÓN EXITOSA")
+        print("=" * 50)
+        print(f"✓ Total issues del ciclo: {len(issues_ciclo)}")
+        print(f"✓ Suma de asignados: {suma_asignados}")
+        print(f"✓ Sin duplicados")
+        print(f"✓ Todos los issues del ciclo correcto")
+        print("\nDesglose por Owner (verificado):")
+        for owner, count in sorted(asignados_por_owner.items(), key=lambda x: -x[1]):
+            completados = completados_por_owner.get(owner, 0)
+            print(f"  - {owner}: {count} asignados, {completados} completados")
+        return True
+
+# Ejecutar validación
+if not validar_datos_ciclo(issues_ciclo, cycleId):
+    raise Exception("Datos inválidos - revisar issues del ciclo")
+```
+
+---
+
+## FASE 2: GENERAR HTML USANDO PLANTILLA
+
+### ⚠️ REGLA FUNDAMENTAL: USAR modelo.html COMO PLANTILLA
+
+**El archivo `modelo.html` es la plantilla base.** NO añadir ni quitar secciones. Solo llenar los datos con la información obtenida de los MCPs en Fase 1.
+
+```yaml
+Plantilla_Base: "modelo.html"
+
+Reglas:
+  - NO agregar secciones nuevas
+  - NO quitar secciones existentes
+  - NO modificar estilos CSS
+  - NO modificar scripts de gráficos (solo actualizar datos)
+  - SOLO reemplazar valores placeholder con datos reales
+```
+
+### Secciones del modelo.html a llenar con datos MCP:
+
+| Sección | ID | Datos a llenar |
+|---------|-----|----------------|
+| Header | - | Número de ciclo, fechas, tiempo de ejecución |
+| KPIs | `#kpis` | Issues completados, ratio, commits GL/GH, total, Claude Code |
+| Resumen | `#resumen` | Tablas de issues, commits GitLab, commits GitHub |
+| Observaciones | - | Aspectos positivos, áreas mejora, acciones sugeridas |
+| Distribución Prioridad | - | Tabla + gráfico `chart-priority` |
+| Desglose Owner | `#desglose-owner` | Tabla (Done/Todo/Blocked/Total) + gráfico `chart-owner` |
+| Owner × Prioridad | `#owner-prioridad` | Matriz de completados por owner y prioridad |
+| Linear Projects | `#linear-projects` | KPIs, tabla proyectos, progreso, gráfico `chart-linear-projects` |
+| Commits por Proyecto | `#commits-proyecto` | Tablas GitLab y GitHub |
+| Commits por Autor | `#commits-autor` | Tabla con GL, GH, Total, % |
+| LOC por Autor | `#loc-autor` | KPIs, tabla autores, tabla repos, gráfico `chart-loc` |
+| Claude Code | `#claude` | KPIs y tabla por fuente |
+| Sentry | `#sentry` | KPIs errores, tabla por proyecto, issues críticos, gráfico `chart-sentry` |
+| Issues Completados | `#completados` | KPIs y link a Linear |
+| Solicitante | `#solicitante` | Tabla + gráfico `chart-solicitante` |
+| No Completados | `#no-completados` | KPIs de pendientes |
+
+### Mapeo de datos MCP → HTML:
+
+```python
+# Ejemplo de cómo llenar cada sección con datos de MCP
+
+datos_html = {
+    # Header
+    "ciclo_numero": ciclo_id,  # Ej: 32
+    "fecha_inicio": cycle.starts_at,  # Ej: "29 Dic 2025"
+    "fecha_fin": cycle.ends_at,  # Ej: "05 Ene 2026"
+    "tiempo_ejecucion": f"{minutos}m {segundos}s",  # Ej: "2m 47s"
+
+    # KPIs (de Linear + GitLab + GitHub)
+    "issues_completados": len([i for i in issues if i.state == "Done"]),
+    "ratio_exito": (completados / total) * 100,
+    "commits_gitlab": total_commits_gitlab,
+    "commits_github": total_commits_github,
+    "total_commits": commits_gitlab + commits_github,
+    "claude_code_count": len([c for c in commits if es_claude_code(c)]),
+    "claude_code_pct": (claude_count / total_commits) * 100,
+
+    # LOC (de get_commit_diff GitLab + get_commit GitHub)
+    "loc_agregadas": sum_additions,
+    "loc_eliminadas": sum_deletions,
+    "loc_neto": sum_additions - sum_deletions,
+
+    # Por autor (agrupar commits por autor)
+    "commits_por_autor": {
+        "Leonardo": {"gitlab": X, "github": Y, "total": X+Y},
+        "Emilio": {"gitlab": X, "github": Y, "total": X+Y},
+        ...
+    },
+
+    # ⚠️ DESGLOSE POR OWNER - CALCULADO DESDE issues_ciclo (mcp__linear__list_issues)
+    # FUENTE ÚNICA: issues_ciclo = mcp__linear__list_issues(cycle=cycleId, team=teamId)
+    "owner_breakdown": {
+        "Leonardo": {
+            "done": len([i for i in issues_ciclo if i.assignee and i.assignee.name == "Leonardo" and i.state.type == "completed"]),
+            "todo": len([i for i in issues_ciclo if i.assignee and i.assignee.name == "Leonardo" and i.state.type in ["started", "unstarted"]]),
+            "blocked": len([i for i in issues_ciclo if i.assignee and i.assignee.name == "Leonardo" and (i.state.type == "blocked" or any(l.name.lower() == "blocked" for l in (i.labels or [])))]),
+            "total": done + todo + blocked
+        },
+        "Sin asignar": {
+            "done": len([i for i in issues_ciclo if not i.assignee and i.state.type == "completed"]),
+            # ... igual para todo, blocked, total
+        },
+        # ... repetir para cada owner
+    },
+    # VALIDACIÓN: SUM(owner_breakdown[*].total) == len(issues_ciclo)
+    # Si no coincide, HAY UN ERROR - no generar el reporte
+
+    # ⚠️ ANÁLISIS POR PROYECTO LINEAR - CALCULADO DESDE issues_ciclo
+    "linear_projects": {
+        "BaldeCash Core": {
+            "issues": len([i for i in issues_ciclo if i.project and i.project.name == "BaldeCash Core"]),
+            "completados": len([i for i in issues_ciclo if i.project and i.project.name == "BaldeCash Core" and i.state.type == "completed"]),
+            "porcentaje": (completados / issues * 100) if issues > 0 else 0,
+            "puntos": sum(i.estimate or 0 for i in issues_ciclo if i.project and i.project.name == "BaldeCash Core" and i.state.type == "completed")
+        },
+        # ... repetir para cada proyecto
+    },
+    # Gráfico Linear Projects
+    "chart_linear_projects_data": [
+        {"name": "BaldeCash Core", "y": 15, "color": "#262877"},
+        {"name": "Integraciones", "y": 7, "color": "#7C3AED"},
+        {"name": "Infraestructura", "y": 3, "color": "#06B6D4"}
+    ],
+
+    # Sentry (de mcp__sentry__search_events y mcp__sentry__search_issues)
+    "sentry_eventos_error": total_error_events,
+    "sentry_issues_nuevos": issues_nuevos_count,
+    "sentry_issues_resueltos": issues_resueltos_count,
+    "sentry_tasa_resolucion": (resueltos / nuevos) * 100,
+    "sentry_por_proyecto": {
+        "webservice": {"eventos": X, "issues": Y, "usuarios": Z},
+        "admin": {"eventos": X, "issues": Y, "usuarios": Z},
+        ...
+    },
+    "sentry_issues_criticos": [
+        {"titulo": "TypeError...", "proyecto": "webservice", "eventos": 45, "estado": "Resuelto"},
+        ...
+    ],
+
+    # Gráficos (actualizar series de Highcharts)
+    "chart_priority_data": [urgent, high, medium, low, sin_prioridad],
+    "chart_owner_data": [emilio, marlon, anderson, ...],
+    "chart_loc_data": {
+        "añadidas": [leo_add, emilio_add, marlon_add],
+        "eliminadas": [-leo_del, -emilio_del, -marlon_del]
+    },
+    "chart_solicitante_data": [yadira, sin_sol, cecilia, otros],
+    "chart_sentry_data": [lun, mar, mie, jue, vie, sab, dom]  # Errores por día
+}
+```
+
+### ⚠️ REGLAS OBLIGATORIAS
+
+1. **TODAS las tablas tienen fila TOTAL**
+2. **Fuente: Asap (NO Roboto)**
+3. **Color marca: #262877**
+4. **Tiempo de generación en header/navbar**
+5. **KPIs incluyen commits GitLab Y GitHub**
+6. **Favicon de BaldeCash en todas las páginas**
+
+### Estructura base HTML (ya incluida en modelo.html)
+
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://baldecash.com&size=64">
+    <title>Ciclo {N} - BaldeCash</title>
+    <!-- ... -->
+</head>
+```
+
+### Tiempo de generación en el Header
+
+**⚠️ El tiempo va en el header del navbar (ya implementado en modelo.html)**
+
+El modelo.html ya tiene el espacio para el tiempo de ejecución en el header. Solo actualizar el valor:
+
+```html
+<!-- En modelo.html línea 133 -->
+<span class="inline-flex items-center gap-1 text-white/80">
+    <svg>...</svg>
+    {X}m {Y}s  <!-- ← Reemplazar con tiempo real -->
+</span>
+```
+
+**Pseudocódigo:**
+```python
+# Al inicio del comando
+tiempo_inicio = time.time()
+
+# ... recolección de datos y generación ...
+
+# Al final, antes de escribir el HTML
+tiempo_total = time.time() - tiempo_inicio
+minutos = int(tiempo_total // 60)
+segundos = int(tiempo_total % 60)
+tiempo_str = f"{minutos}m {segundos}s"
+
+# Reemplazar "2m 47s" (placeholder) con tiempo real en el HTML
+html = html.replace("2m 47s", tiempo_str)
+```
+
+---
+
+## PROCESO PARA LLENAR modelo.html
+
+### Paso a paso para generar el HTML del ciclo:
+
+```python
+# 1. Leer modelo.html como texto
+html_base = Read("D:/repos/guia/modelo.html")
+
+# 2. Reemplazar placeholders con datos reales
+reemplazos = {
+    # Header
+    "Ciclo 32": f"Ciclo {ciclo_numero}",
+    "29 Dic 2025 — 05 Ene 2026": f"{fecha_inicio} — {fecha_fin}",
+    "2m 47s": f"{minutos}m {segundos}s",
+
+    # KPIs (buscar valores numéricos en contexto)
+    # Ejemplo: buscar el texto exacto en el HTML y reemplazar
+
+    # Tablas: regenerar filas con datos reales
+    # Gráficos: actualizar arrays de datos en los scripts
+}
+
+# 3. Actualizar gráficos Highcharts con datos reales
+# Los gráficos están en el script al final del HTML
+# Buscar y reemplazar los arrays de datos:
+#   - chart-priority: series[0].data = [urgent, high, medium, low, sin_prioridad]
+#   - chart-owner: series[0].data = [emilio, marlon, anderson, ...]
+#   - chart-loc: series[0].data (añadidas), series[1].data (eliminadas)
+#   - chart-solicitante: series[0].data = [yadira, sin_sol, cecilia, otros]
+
+# 4. Actualizar navegación entre ciclos
+# - href="ciclo-{N-1}.html" si existe ciclo anterior
+# - href="ciclo-{N+1}.html" si existe ciclo siguiente (o deshabilitar)
+
+# 5. Actualizar link a Linear
+# "https://linear.app/baldecash/team/BAL/cycle/32"
+# → "https://linear.app/baldecash/team/BAL/cycle/{N}"
+
+# 6. Guardar resultado
+Write(f"resumen/ciclo-{ciclo_numero}.html", html_final)
+```
+
+### Secciones con datos dinámicos a actualizar:
+
+| Sección | Elemento | Valor placeholder | Actualizar con |
+|---------|----------|-------------------|----------------|
+| Header | h1 | "Ciclo 32" | `Ciclo {N}` |
+| Header | fecha | "29 Dic 2025 — 05 Ene 2026" | Fechas de Linear |
+| Header | tiempo | "2m 47s" | Tiempo real |
+| KPI 1 | valor | "25" | Issues completados |
+| KPI 2 | valor | "28.7%" | Ratio de éxito |
+| KPI 3 | valor | "61" | Commits GitLab |
+| KPI 4 | valor | "19" | Commits GitHub |
+| KPI 5 | valor | "80" | Total commits |
+| KPI 6 | valor | "37 (46%)" | Claude Code count |
+| LOC | KPIs | "+4,521", "-1,847", "+2,674" | LOC reales |
+| Sentry | KPIs | "124", "8", "5", "62%" | Eventos, issues nuevos, resueltos, tasa |
+| Sentry | tabla proyectos | webservice, admin, etc. | Datos de Sentry por proyecto |
+| Sentry | issues críticos | Ejemplos placeholder | Top 5 issues más frecuentes |
+| Sentry | gráfico | [18, 22, 15, 28, 24, 10, 7] | Errores por día real |
+| Link Linear | href | "cycle/32" | `cycle/{N}` |
+| Link Sentry | href | "baldecash" | Org slug real |
+| Tablas | filas | Datos de ejemplo | Datos de MCPs |
+| Gráficos | data arrays | Valores ejemplo | Valores reales |
+
+---
+
+## SECCIÓN 0: Navegación entre Ciclos
+
+**⚠️ OBLIGATORIO: Incluir navegación para ir a ciclos anteriores/posteriores**
+
+```html
+<!-- Navegación entre ciclos - Incluir en el header -->
+<nav class="container mx-auto px-6 py-4">
+  <div class="flex items-center justify-between">
+    <!-- Ciclo Anterior -->
+    <a href="ciclo-{N-1}.html" class="nav-cycle nav-prev {hidden si no existe}">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+      <span>Ciclo {N-1}</span>
+    </a>
+
+    <!-- Home -->
+    <a href="../index.html" class="nav-home">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      <span>Inicio</span>
+    </a>
+
+    <!-- Ciclo Siguiente -->
+    <a href="ciclo-{N+1}.html" class="nav-cycle nav-next {hidden si no existe}">
+      <span>Ciclo {N+1}</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</nav>
+
+<style>
+.nav-cycle, .nav-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: white/10;
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.nav-cycle:hover, .nav-home:hover {
+  background: white/20;
+  transform: translateY(-2px);
+}
+.nav-prev:hover { transform: translateX(-4px); }
+.nav-next:hover { transform: translateX(4px); }
+</style>
+```
+
+**Lógica para mostrar/ocultar flechas:**
+```python
+def obtener_navegacion(ciclo_actual):
+    ciclo_anterior = ciclo_actual - 1
+    ciclo_siguiente = ciclo_actual + 1
+
+    return {
+        'anterior': {
+            'existe': existe_archivo(f"resumen/ciclo-{ciclo_anterior}.html"),
+            'numero': ciclo_anterior
+        },
+        'siguiente': {
+            'existe': existe_archivo(f"resumen/ciclo-{ciclo_siguiente}.html"),
+            'numero': ciclo_siguiente
+        }
+    }
+
+# Si no existe el ciclo anterior/siguiente, agregar clase "hidden" o "invisible"
+# Ejemplo: class="nav-cycle nav-prev hidden"
+```
+
+---
+
+## SECCIÓN 1: Header y KPIs
+
+**⚠️ OBLIGATORIO: Comparar cada KPI con ciclo anterior si existe**
+
+```html
+<!-- Navegación (ver SECCIÓN 0) -->
+
+<!-- KPI Cards (6 tarjetas con comparación) -->
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+  <!-- Cada KPI muestra: valor actual + variación vs ciclo anterior -->
+  <div class="kpi-card">
+    <p class="text-3xl font-bold">X</p>
+    <p class="text-gray-500">Issues Completados</p>
+    <p class="text-sm text-green-600">▲ 2 vs C{N-1}</p>  <!-- o text-red-600 si bajó -->
+  </div>
+
+  1. Issues Completados + variación
+  2. Ratio de Éxito (%) + variación en pp
+  3. Commits GitLab (con tooltip) + variación
+  4. Commits GitHub (con tooltip) + variación
+  5. Total Commits (con tooltip) + variación
+  6. Líneas Netas (+/-) + variación
+</div>
+```
+
+**Formato de variación en KPIs:**
+```html
+<!-- Aumento -->
+<p class="text-xs text-green-600 mt-1">▲ 5 vs C{N-1}</p>
+
+<!-- Disminución -->
+<p class="text-xs text-red-600 mt-1">▼ 3 vs C{N-1}</p>
+
+<!-- Sin cambio -->
+<p class="text-xs text-gray-500 mt-1">= vs C{N-1}</p>
+
+<!-- Primer ciclo (sin datos anteriores) -->
+<p class="text-xs text-gray-400 mt-1">-</p>
+```
+
+**⚠️ Los commits de GitHub DEBEN aparecer en los KPIs**
+
+**Tooltip obligatorio para KPIs de commits:**
+```html
+<!-- Agregar a cada KPI de commits -->
+<div class="kpi-card" title="Solo commits productivos. Excluye: merge branch, merge pull request, merges feature→develop, develop→master">
+  <span class="text-xs text-gray-400 cursor-help" title="ℹ️ Commits productivos = código nuevo. NO incluye merges intermedios (feature→dev, dev→master)">
+    ℹ️
+  </span>
+</div>
+```
+
+**Texto del tooltip:**
+```
+Solo commits productivos.
+Excluye:
+• Merge branch 'feature' into 'develop'
+• Merge branch 'develop' into 'master'
+• Merge pull request
+• Commits con mensaje genérico (Develop, Master)
+```
+
+---
+
+## SECCIÓN 2: Resumen Ejecutivo
+
+**⚠️ OBLIGATORIO: Comparar con ciclo anterior si existe**
+
+Antes de generar el resumen, verificar si existe `resumen/ciclo-{N-1}.html`. Si existe, extraer métricas y calcular variaciones.
+
+| Métrica | Valor | vs Ciclo Anterior |
+|---------|-------|-------------------|
+| **ISSUES** | | |
+| Issues al inicio | X | - |
+| Issues agregados | +X | - |
+| Issues completados | X | ▲/▼ X (±X%) |
+| Ratio de éxito | X% | ▲/▼ X pp |
+| Puntos completados | X pts | ▲/▼ X pts |
+| **COMMITS GITLAB** | | |
+| Total commits GitLab | X | ▲/▼ X (±X%) |
+| Proyectos con actividad | X | ▲/▼ X |
+| **COMMITS GITHUB** | | |
+| Total commits GitHub | X | ▲/▼ X (±X%) |
+| Repos con actividad | X | ▲/▼ X |
+| **LÍNEAS DE CÓDIGO** | | |
+| Líneas añadidas | +X | ▲/▼ X |
+| Líneas eliminadas | -X | ▲/▼ X |
+| Líneas netas | +X | ▲/▼ X |
+| **TOTAL COMMITS** | **X** | **▲/▼ X (±X%)** |
+
+**Formato de variación:**
+```html
+<!-- Aumento -->
+<span class="text-green-600">▲ 5 (+25%)</span>
+
+<!-- Disminución -->
+<span class="text-red-600">▼ 3 (-15%)</span>
+
+<!-- Sin cambio -->
+<span class="text-gray-500">= 0 (0%)</span>
+
+<!-- Sin datos anteriores -->
+<span class="text-gray-400">-</span>
+```
+
+**Pseudocódigo para obtener datos del ciclo anterior:**
+```python
+def obtener_metricas_ciclo_anterior(ciclo_actual):
+    ciclo_anterior = ciclo_actual - 1
+    archivo = f"resumen/ciclo-{ciclo_anterior}.html"
+
+    if not existe_archivo(archivo):
+        return None  # No hay ciclo anterior
+
+    # Extraer métricas del HTML anterior
+    # Buscar en los KPIs o en el resumen ejecutivo
+    return {
+        'issues_completados': X,
+        'commits_gitlab': X,
+        'commits_github': X,
+        'loc_neto': X,
+        'ratio_exito': X,
+        ...
+    }
+
+def calcular_variacion(actual, anterior):
+    if anterior is None or anterior == 0:
+        return None
+    diferencia = actual - anterior
+    porcentaje = (diferencia / anterior) * 100
+    return {
+        'diferencia': diferencia,
+        'porcentaje': porcentaje,
+        'icono': '▲' if diferencia > 0 else ('▼' if diferencia < 0 else '='),
+        'color': 'green' if diferencia > 0 else ('red' if diferencia < 0 else 'gray')
+    }
+```
+
+---
+
+## SECCIÓN 3: Observaciones y Recomendaciones
+
+```markdown
+### ✅ Logros del Ciclo
+- {observaciones positivas}
+
+### ⚠️ Áreas de Mejora
+- {X} issues sin estimate
+- {X} MRs sin code review
+
+### 📋 Acciones Sugeridas
+1. [ ] {acción}
+```
+
+---
+
+## SECCIONES DE OWNER (AGRUPADAS)
+
+### SECCIÓN 4: Desglose por Owner
+
+| Desarrollador | Done | Todo | Blocked | Total |
+|---------------|------|------|---------|-------|
+| Leonardo | X | X | X | X |
+| Anderson | X | X | X | X |
+| Thiago | X | X | X | X |
+| Emilio | X | X | X | X |
+| Marlon | X | X | X | X |
+| Sin asignar | X | X | X | X |
+| **TOTAL** | **X** | **X** | **X** | **X** |
+
+**Definición de columnas:**
+- **Done**: Issues con state.type == "completed" (estados Done, Merged, etc.)
+- **Todo**: Issues con state.type == "started" o "unstarted" (In Progress, Todo, Backlog)
+- **Blocked**: Issues con state.type == "blocked" o label "blocked"
+- **Total**: Done + Todo + Blocked
+
+#### ⚠️ CÁLCULO CORRECTO DE ESTADOS POR OWNER (OBLIGATORIO)
+
+**Definición:** Agrupar issues del ciclo por estado (Done/Todo/Blocked) y por owner.
+
+**Fuente de datos ÚNICA:**
+```python
+# SOLO usar issues del ciclo específico
+issues_ciclo = mcp__linear__list_issues(cycle=cycleId, team=teamId)
+
+# Agrupar por assignee y estado
+owner_stats = {}
+for issue in issues_ciclo:
+    owner = issue.assignee.name if issue.assignee else "Sin asignar"
+    if owner not in owner_stats:
+        owner_stats[owner] = {"done": 0, "todo": 0, "blocked": 0, "total": 0}
+
+    # Clasificar por estado
+    state_type = issue.state.type if issue.state else "unstarted"
+    has_blocked_label = any(label.name.lower() == "blocked" for label in (issue.labels or []))
+
+    if state_type == "completed":
+        owner_stats[owner]["done"] += 1
+    elif state_type == "blocked" or has_blocked_label:
+        owner_stats[owner]["blocked"] += 1
+    else:  # started, unstarted, backlog, etc.
+        owner_stats[owner]["todo"] += 1
+
+    owner_stats[owner]["total"] += 1
+
+# Calcular totales
+totals = {"done": 0, "todo": 0, "blocked": 0, "total": 0}
+for owner, stats in owner_stats.items():
+    for key in totals:
+        totals[key] += stats[key]
+```
+
+**⚠️ VALIDACIONES OBLIGATORIAS antes de generar el reporte:**
+
+1. **Validación de suma:** `SUM(Total por owner) == len(issues_ciclo)`
+   - Si NO coincide → Error en el agrupamiento, revisar lógica
+
+2. **Validación de consistencia:** Para CADA owner:
+   - `Total == Done + Todo + Blocked`
+   - Si NO coincide → Error en el conteo de estados
+
+3. **Validación cruzada con Sección 5:**
+   - `Done_Seccion4[owner] == Total_Seccion5[owner]`
+   - Si NO coincide → Hay duplicados o issues faltantes
+
+4. **Validación de realidad (anti-inflación):**
+   ```python
+   # Verificar que no hay duplicados
+   all_issue_ids = [i.id for i in issues_ciclo]
+   assert len(all_issue_ids) == len(set(all_issue_ids)), "¡HAY DUPLICADOS!"
+
+   # Verificar que todos los issues son del ciclo correcto
+   for issue in issues_ciclo:
+       assert issue.cycle.id == cycleId, f"Issue {issue.id} no es del ciclo {cycleId}"
+   ```
+
+**⚠️ SI LAS VALIDACIONES FALLAN:**
+- NO generar el reporte
+- Mostrar mensaje de error indicando cuál validación falló
+- Listar los issues problemáticos para debugging
+
+**Ejemplo de output esperado (Ciclo 32 real):**
+```
+Validación de Desglose por Owner:
+✓ Total issues del ciclo: 21
+✓ Distribución de estados:
+  - Done: 9
+  - Todo: 10
+  - Blocked: 2
+✓ Sin duplicados detectados
+✓ Todos los issues pertenecen al ciclo 32
+
+Desglose verificado:
+  - Anderson Palomino: Done=1, Todo=4, Blocked=1 (Total=6)
+  - Leonardo Medina: Done=3, Todo=1, Blocked=0 (Total=4)
+  ...
+```
+
+### SECCIÓN 5: Issues Completados por Owner y Prioridad
+
+**⚠️ OBLIGATORIO: Mostrar cuántas tareas de CADA prioridad cerró CADA owner**
+
+#### Tabla Consolidada (Owner × Prioridad de COMPLETADOS)
+
+| Owner | 🔴 Urgent | 🟠 High | 🟡 Medium | 🟢 Low | ⚪ Sin Prior. | **Total** | **% del Total** |
+|-------|-----------|---------|-----------|--------|---------------|-----------|-----------------|
+| Leonardo | X | X | X | X | X | **X** | X% |
+| Anderson | X | X | X | X | X | **X** | X% |
+| Thiago | X | X | X | X | X | **X** | X% |
+| Emilio | X | X | X | X | X | **X** | X% |
+| Marlon | X | X | X | X | X | **X** | X% |
+| **TOTAL** | **X** | **X** | **X** | **X** | **X** | **X** | **100%** |
+| **% por Prioridad** | X% | X% | X% | X% | X% | 100% | - |
+
+**Gráfico:** Stacked bar chart (cada barra es un owner, colores por prioridad)
+
+#### Detalle por Owner
+
+**Leonardo** (X completados - X% del total)
+| Prioridad | Completados | % de sus tareas | % del total |
+|-----------|-------------|-----------------|-------------|
+| 🔴 Urgent | X | X% | X% |
+| 🟠 High | X | X% | X% |
+| 🟡 Medium | X | X% | X% |
+| 🟢 Low | X | X% | X% |
+| ⚪ Sin Prioridad | X | X% | X% |
+| **TOTAL** | **X** | **100%** | **X%** |
+
+(Repetir para cada owner)
+
+### SECCIÓN 5.1: Análisis por Solicitante
+
+**⚠️ OBLIGATORIO: Esta sección va INMEDIATAMENTE después de Issues por Owner y Prioridad**
+
+**¿Qué es el Solicitante?**
+El solicitante es el **primer label que tenga exactamente DOS palabras** (nunca de 1 palabra). Ejemplos válidos: "Patio Digital", "Bug Report", "Mejora Interna", "Marco DelRio". Labels de 1 palabra como "bug", "feature", "urgent" NO son solicitantes.
+
+**⚠️ REGLA CRÍTICA: La tabla y el gráfico DEBEN coincidir**
+- La suma de la columna "Completados" = Total Issues Completados del ciclo
+- El gráfico donut usa los MISMOS valores de la columna "Completados"
+- Los labels del gráfico = nombres de la columna "Solicitante"
+
+**Tabla de Análisis:**
+| Solicitante | Issues Asignados | Completados | Pendientes | % Completado | % del Total |
+|-------------|------------------|-------------|------------|--------------|-------------|
+| Patio Digital | X | X | X | X% | X% |
+| BBVA | X | X | X | X% | X% |
+| Bug Report | X | X | X | X% | X% |
+| Mejora Interna | X | X | X | X% | X% |
+| Otros | X | X | X | X% | X% |
+| **TOTAL** | **X** | **X** | **X** | **X%** | **100%** |
+
+**Gráfico Donut (DEBE COINCIDIR con tabla):**
+```javascript
+// Los valores de 'series' deben ser EXACTAMENTE los de columna "Completados"
+// Los valores de 'labels' deben ser EXACTAMENTE los de columna "Solicitante"
+var options = {
+  series: [X, X, X, X, X],  // ← Valores de "Completados" por solicitante
+  labels: ['Patio Digital', 'BBVA', 'Bug Report', 'Mejora Interna', 'Otros'],
+  chart: { type: 'donut', height: 300 },
+  colors: ['#262877', '#4F46E5', '#7C3AED', '#EC4899', '#F59E0B'],
+  legend: { position: 'bottom' }
+};
+```
+
+**Validación obligatoria antes de generar HTML:**
+```
+✓ SUM(series) == Total Completados en tabla
+✓ labels.length == filas de solicitantes en tabla
+✓ Cada valor en series == valor de "Completados" de esa fila
+```
+
+---
+
+### SECCIÓN 5.2: Issues por Proyecto Linear
+
+**⚠️ OBLIGATORIO: Mostrar distribución de issues por proyecto de Linear**
+
+**¿Qué es el Proyecto?**
+El proyecto se obtiene del campo `project.name` de cada issue en Linear. Agrupa issues por área de trabajo o iniciativa.
+
+**KPIs de Proyectos:**
+| KPI | Valor |
+|-----|-------|
+| Proyectos Activos | X |
+| Issues Totales | X |
+| Completados | X |
+| Tasa Completado | X% |
+
+**Tabla de Distribución por Proyecto:**
+| Proyecto | Issues | Completados | % | Puntos |
+|----------|--------|-------------|---|--------|
+| BaldeCash Core | X | X | X% | X |
+| Integraciones | X | X | X% | X |
+| Infraestructura | X | X | X% | X |
+| Sin proyecto | X | X | X% | X |
+| **TOTAL** | **X** | **X** | **X%** | **X** |
+
+**Gráfico Donut (chart-linear-projects):**
+```javascript
+Highcharts.chart('chart-linear-projects', {
+    chart: { type: 'pie', height: 280 },
+    plotOptions: {
+        pie: {
+            innerSize: '60%',
+            dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
+        }
+    },
+    series: [{
+        name: 'Issues',
+        colorByPoint: true,
+        data: [
+            { name: 'BaldeCash Core', y: X, color: '#262877' },
+            { name: 'Integraciones', y: X, color: '#7C3AED' },
+            { name: 'Infraestructura', y: X, color: '#06B6D4' }
+        ]
+    }]
+});
+```
+
+**Barras de Progreso:**
+Para cada proyecto, mostrar barra de progreso visual:
+```html
+<div>
+    <span>BaldeCash Core</span>
+    <span>6/15 (40%)</span>
+    <div class="progress-bar" style="width: 40%"></div>
+</div>
+```
+
+**Pseudocódigo de cálculo:**
+```python
+# Agrupar issues por proyecto
+issues_por_proyecto = {}
+for issue in issues_ciclo:
+    proyecto = issue.project.name if issue.project else "Sin proyecto"
+    if proyecto not in issues_por_proyecto:
+        issues_por_proyecto[proyecto] = []
+    issues_por_proyecto[proyecto].append(issue)
+
+# Calcular métricas por proyecto
+for proyecto, issues in issues_por_proyecto.items():
+    total = len(issues)
+    completados = len([i for i in issues if i.state.type == "completed"])
+    porcentaje = (completados / total * 100) if total > 0 else 0
+    puntos = sum(i.estimate or 0 for i in issues if i.state.type == "completed")
+```
+
+---
+
+### SECCIÓN 6: Matriz de Cumplimiento (Owner × Prioridad)
+
+| Owner | Urgent | High | Medium | Low | Sin Prior. | **Total** |
+|-------|--------|------|--------|-----|------------|-----------|
+| Leonardo | X/X (X%) | X/X (X%) | X/X (X%) | X/X (X%) | X/X (X%) | **X/X (X%)** |
+| Anderson | X/X (X%) | X/X (X%) | X/X (X%) | X/X (X%) | X/X (X%) | **X/X (X%)** |
+| ... | ... | ... | ... | ... | ... | ... |
+| **TOTAL** | **X/X** | **X/X** | **X/X** | **X/X** | **X/X** | **X/X (X%)** |
+
+**Formato:** Completados/Total (Porcentaje%)
+
+### SECCIÓN 7: Issues No Completados por Owner
+
+#### {Nombre Owner}
+| Issue | Título | Estado | Prioridad | Razón |
+|-------|--------|--------|-----------|-------|
+| BAL-XXX | {título} | In Progress | High | 70% avance |
+| **TOTAL: X** |
+
+---
+
+## SECCIÓN 8: Distribución por Prioridad
+
+| Prioridad | Total | Completados | No Completados | % Completado |
+|-----------|-------|-------------|----------------|--------------|
+| 🔴 Urgent | X | X | X | X% |
+| 🟠 High | X | X | X | X% |
+| 🟡 Medium | X | X | X | X% |
+| 🟢 Low | X | X | X | X% |
+| ⚪ Sin Prioridad | X | X | X | X% |
+| **TOTAL** | **X** | **X** | **X** | **X%** |
+
+**Gráfico:** Stacked bar (completados vs no completados)
+
+---
+
+## SECCIONES DE COMMITS Y CÓDIGO
+
+### SECCIÓN 9: Actividad de Commits
+
+| Fuente | Commits | % del Total |
+|--------|---------|-------------|
+| GitLab | X | X% |
+| GitHub | X | X% |
+| **TOTAL** | **X** | **100%** |
+
+**Gráfico:** Bar chart de commits por día
+
+### SECCIÓN 10: Commits por Autor
+
+| Autor | GitLab | GitHub | Total | % |
+|-------|--------|--------|-------|---|
+| Leonardo | X | X | X | X% |
+| Anderson | X | X | X | X% |
+| Thiago | X | X | X | X% |
+| Emilio | X | X | X | X% |
+| Marlon | X | X | X | X% |
+| **TOTAL** | **X** | **X** | **X** | **100%** |
+
+### SECCIÓN 11: Commits por Proyecto/Repo
+
+#### GitLab
+| Proyecto | Commits | MRs | Pipelines | Commit Destacado |
+|----------|---------|-----|-----------|------------------|
+| webservice | X | X | X | {sha}: +X/-X líneas |
+| admin | X | X | X | {sha}: +X/-X líneas |
+| ... | ... | ... | ... | ... |
+| **TOTAL GitLab** | **X** | **X** | **X** | - |
+
+#### GitHub
+| Repo | Commits | PRs | Commit Destacado (más LOC) |
+|------|---------|-----|----------------------------|
+| ws2 | X | X | {sha}: +X/-X líneas |
+| admin2 | X | X | {sha}: +X/-X líneas |
+| whatsapp-bot | X | X | {sha}: +X/-X líneas |
+| baldecash | X | X | {sha}: +X/-X líneas |
+| finanzas | X | X | {sha}: +X/-X líneas |
+| guia* | X | X | {sha}: +X/-X (solo último) |
+| **TOTAL GitHub** | **X** | **X** | - |
+
+*guia: Solo último commit para LOC (repo de documentación)
+
+**⚠️ OBLIGATORIO: Mostrar commit con más líneas por cada repo**
+
+### SECCIÓN 12: Líneas de Código Totales (OBLIGATORIO)
+
+**⚠️ ESTA SECCIÓN SIEMPRE DEBE INCLUIRSE**
+
+Mostrar resumen de líneas de código totales del ciclo (GitLab + GitHub):
+
+#### KPIs de LOC (3 tarjetas)
+```html
+<div class="grid md:grid-cols-3 gap-6">
+  <div>Líneas Agregadas: +X</div>
+  <div>Líneas Eliminadas: -X</div>
+  <div>Líneas Netas: +X</div>
+</div>
+```
+
+#### Tabla de LOC por Fuente
+
+| Fuente | Commits | Líneas + | Líneas - | Neto |
+|--------|---------|----------|----------|------|
+| GitLab | X | +X | -X | +X |
+| GitHub | X | +X | -X | +X |
+| **TOTAL** | **X** | **+X** | **-X** | **+X** |
+
+#### Tabla de LOC GitLab (por Proyecto)
+
+| Proyecto | Commits | Líneas + | Líneas - | Neto |
+|----------|---------|----------|----------|------|
+| webservice | X | +X | -X | +X |
+| admin | X | +X | -X | +X |
+| baldecash-api | X | +X | -X | +X |
+| ... | ... | ... | ... | ... |
+| **TOTAL GitLab** | **X** | **+X** | **-X** | **+X** |
+
+**Cálculo de LOC GitLab:**
+```
+Para cada commit en rango del ciclo:
+  mcp__gitlab__get_commit_diff (project_id, sha)
+  → Sumar additions, deletions de cada archivo en el diff
+
+Sumar por proyecto y calcular totales
+```
+
+#### Tabla de LOC GitHub (por Repositorio)
+
+| Repositorio | Commits | Líneas + | Líneas - | Neto |
+|-------------|---------|----------|----------|------|
+| admin2 | X | +X | -X | +X |
+| ws2 | X | +X | -X | +X |
+| whatsapp-bot | X | +X | -X | +X |
+| guia* | X | +X | -X | +X |
+| **TOTAL GitHub** | **X** | **+X** | **-X** | **+X** |
+
+*guia: Solo último commit para LOC (repo de documentación)
+
+**Cálculo de LOC GitHub:**
+```
+Para cada commit en rango del ciclo:
+  mcp__github__get_commit (sha, include_diff: true)
+  → stats.additions, stats.deletions
+
+Sumar por repositorio y calcular totales
+```
+
+### SECCIÓN 13: Líneas de Código por Usuario (GitLab + GitHub)
+
+**⚠️ OBLIGATORIO: Combinar LOC de GitLab y GitHub por cada usuario**
+
+#### Tabla Consolidada
+
+| Autor | GitLab + | GitLab - | GitHub + | GitHub - | Total + | Total - | Neto | Commits |
+|-------|----------|----------|----------|----------|---------|---------|------|---------|
+| Leonardo | +X | -X | +X | -X | +X | -X | +X | X |
+| Anderson | +X | -X | +X | -X | +X | -X | +X | X |
+| Thiago | +X | -X | +X | -X | +X | -X | +X | X |
+| Emilio | +X | -X | +X | -X | +X | -X | +X | X |
+| Marlon | +X | -X | +X | -X | +X | -X | +X | X |
+| **TOTAL** | **+X** | **-X** | **+X** | **-X** | **+X** | **-X** | **+X** | **X** |
+
+#### Gráfico de Barras Apiladas (LOC por Usuario)
+```javascript
+// Stacked bar chart: GitLab vs GitHub por usuario
+series: [
+  { name: 'GitLab +', data: [...], color: '#f59e0b' },
+  { name: 'GitHub +', data: [...], color: '#374151' }
+]
+```
+
+**Identificación de autor (orden de prioridad):**
+
+**⚠️ FLUJO DE BRANCHES:**
+```
+feature/BAL-XXX  ──►  develop  ──►  master
+     │                   │
+     │                   └── Commit de merge develop→master (NO cuenta)
+     │
+     └── El AUTOR es el OWNER del ticket BAL-XXX en Linear
+         (quien hace feature→develop es el responsable del trabajo)
+```
+
+```
+Para cada commit:
+  1. PRIMERO: Verificar si el nombre de la rama origen contiene un ticket de Linear
+     - Patrón: BAL-XXX, feature/BAL-XXX, fix/BAL-XXX, hotfix/BAL-XXX
+     - Si la rama tiene ticket: El OWNER del issue en Linear es el autor del commit
+     - Ejemplo: merge de "feature/BAL-123" a develop
+       → Buscar BAL-123 en Linear
+       → El owner del issue es el autor de TODOS los commits de esa rama
+
+  2. SI NO hay ticket en la rama:
+     - GitLab: commit.author_name o commit.author_email
+     - GitHub: commit.author.login o commit.commit.author.name
+
+Normalizar usando patrones de Autores en configuración
+```
+
+**Pseudocódigo de identificación:**
+```python
+# Cuenta compartida de GitLab (Thiago y Anderson)
+CUENTA_COMPARTIDA_GITLAB = ["baldecash", "desarrollobaldecash", ...]  # emails/usernames compartidos
+
+def identificar_autor_commit(commit, source_branch):
+    """
+    source_branch: La rama ORIGEN del commit (feature/BAL-XXX, no develop/master)
+    """
+    autor_commit = commit.author_name or commit.author_email  # GitLab
+    # o commit.author.login  # GitHub
+
+    # CASO ESPECIAL: Cuenta compartida Thiago/Anderson en GitLab
+    if es_cuenta_compartida(autor_commit):
+        # Para Thiago y Anderson: OBLIGATORIO usar ticket de Linear
+        ticket_match = re.search(r'BAL-(\d+)', source_branch, re.IGNORECASE)
+        if ticket_match:
+            ticket_id = ticket_match.group(0)  # "BAL-123"
+            issue = mcp__linear__get_issue(id=ticket_id)
+            if issue and issue.assignee:
+                return issue.assignee.name  # Owner del ticket
+        # Si no hay ticket, no se puede distinguir → marcar como "Thiago/Anderson"
+        return "Thiago/Anderson (sin ticket)"
+
+    # RESTO DEL EQUIPO: Usar autor del commit directamente
+    # Leonardo, Emilio, Marlon → tienen cuentas propias
+    return normalizar_autor(autor_commit)
+
+def es_cuenta_compartida(autor):
+    return autor.lower() in [x.lower() for x in CUENTA_COMPARTIDA_GITLAB]
+```
+
+**⚠️ CASO ESPECIAL: Cuenta compartida Thiago/Anderson**
+
+Thiago y Anderson comparten UNA cuenta de GitLab. La ÚNICA forma de distinguir sus commits es mediante el ticket de Linear asociado a la rama:
+
+```
+- Commit desde cuenta compartida en GitLab
+- Rama: feature/BAL-789
+- BAL-789 tiene owner = "Anderson" en Linear
+- → El commit se asigna a Anderson (NO a Thiago)
+
+- Commit desde cuenta compartida en GitLab
+- Rama: feature/BAL-790
+- BAL-790 tiene owner = "Thiago" en Linear
+- → El commit se asigna a Thiago (NO a Anderson)
+```
+
+**Para el resto del equipo (Leonardo, Emilio, Marlon):**
+- Tienen cuentas propias de GitLab/GitHub
+- Usar directamente el autor del commit
+- NO es necesario buscar ticket de Linear
+
+### SECCIÓN 14: Líneas de Código por Proyecto
+
+| Proyecto | Fuente | Líneas + | Líneas - | Neto | Commit Top |
+|----------|--------|----------|----------|------|------------|
+| webservice | GitLab | +X | -X | +X | {sha} |
+| ws2 | GitHub | +X | -X | +X | {sha} |
+| admin2 | GitHub | +X | -X | +X | {sha} |
+| whatsapp-bot | GitHub | +X | -X | +X | {sha} |
+| guia* | GitHub | +X | -X | +X | (último) |
+| ... | ... | ... | ... | ... | ... |
+| **TOTAL** | - | **+X** | **-X** | **+X** | - |
+
+---
+
+## SECCIONES DE CALIDAD
+
+### SECCIÓN 14: Hotfixes y Bugfixes
+
+**⚠️ IMPORTANTE: Distinguir entre Hotfixes y Bugfixes**
+
+| Tipo | Definición | Detección |
+|------|------------|-----------|
+| 🚨 **Hotfix** | Corrección urgente en **producción** | Rama: `hotfix/*`, `hot-fix/*`, `emergency/*` |
+| 🐛 **Bugfix** | Corrección de bug en desarrollo normal | Mensaje: empieza con `fix:` |
+
+---
+
+#### 14.1 Hotfixes (Emergencias en Producción)
+
+**¿Qué es un Hotfix?**
+Un hotfix es una corrección **urgente** que se hace directamente en producción, saltándose el flujo normal de desarrollo. Se identifica por el nombre de la rama.
+
+**Detección de Hotfixes:**
+```python
+def es_hotfix(branch_name):
+    """Detecta si un commit viene de una rama de hotfix"""
+    patrones_hotfix = [
+        r'^hotfix/',
+        r'^hot-fix/',
+        r'^emergency/',
+        r'^urgent-fix/',
+    ]
+    for patron in patrones_hotfix:
+        if re.match(patron, branch_name, re.IGNORECASE):
+            return True
+    return False
+```
+
+**Tabla de Hotfixes:**
+| # | Fuente | Proyecto | Rama | SHA | Fecha | Autor | Mensaje |
+|---|--------|----------|------|-----|-------|-------|---------|
+| 1 | GitLab | webservice | hotfix/fix-login | abc123 | 2025-01-02 | Leonardo | fix: corregir error de login |
+| **TOTAL: X hotfixes** |
+
+**Estado del Ciclo:**
+```html
+<!-- Si hotfixes == 0 -->
+<span class="bg-green-100 text-green-800 px-4 py-2 rounded-full">
+  ✅ Ciclo Estable - Sin Hotfixes
+</span>
+
+<!-- Si hotfixes >= 1 -->
+<span class="bg-red-100 text-red-800 px-4 py-2 rounded-full">
+  🚨 {X} Hotfixes en Producción
+</span>
+```
+
+---
+
+#### 14.2 Bugfixes (Correcciones Normales)
+
+**¿Qué es un Bugfix?**
+Un bugfix es una corrección de bug que sigue el flujo normal de desarrollo (feature branch → develop → master). Se identifica por el prefijo `fix:` en el mensaje del commit.
+
+**Detección de Bugfixes:**
+```python
+def es_bugfix(commit_message):
+    """Detecta si un commit es una corrección de bug por su mensaje"""
+    mensaje_lower = commit_message.lower().strip()
+
+    # Prefijos que indican bugfix
+    prefijos_bugfix = [
+        'fix:',
+        'fix(',      # fix(scope):
+        'bugfix:',
+        'bug:',
+    ]
+
+    for prefijo in prefijos_bugfix:
+        if mensaje_lower.startswith(prefijo):
+            return True
+    return False
+
+# IMPORTANTE: Un commit puede ser AMBOS (hotfix + bugfix)
+# Si viene de rama hotfix/ Y tiene mensaje fix: → cuenta en AMBAS tablas
+```
+
+**Tabla de Bugfixes:**
+| # | Fuente | Proyecto | SHA | Fecha | Autor | Mensaje |
+|---|--------|----------|-----|-------|-------|---------|
+| 1 | GitLab | admin | def456 | 2025-01-03 | Emilio | fix: corregir validación de formulario |
+| 2 | GitHub | ws2 | ghi789 | 2025-01-04 | Thiago | fix(api): resolver timeout en endpoint |
+| **TOTAL: X bugfixes** |
+
+---
+
+#### Resumen de Calidad
+
+| Métrica | Valor | % del Total | Estado |
+|---------|-------|-------------|--------|
+| 🚨 Hotfixes (rama hotfix/) | X | X% | 🟢/🟡/🔴 |
+| 🐛 Bugfixes (fix:) | X | X% | 🟢/🟡/🔴 |
+| ✨ Features (feat:) | X | X% | - |
+| 🔧 Chores (chore:) | X | X% | - |
+| **TOTAL COMMITS** | **X** | **100%** | - |
+
+**Indicadores de estado:**
+- 🟢 Verde: 0 hotfixes (ciclo estable)
+- 🟡 Amarillo: 1-2 hotfixes (atención)
+- 🔴 Rojo: 3+ hotfixes (revisar procesos)
+
+### SECCIÓN 14.3: Sentry - Monitoreo de Errores
+
+**⚠️ OBLIGATORIO: Incluir métricas de errores de Sentry**
+
+Esta sección muestra el estado de salud de las aplicaciones en producción durante el ciclo.
+
+#### Estructura HTML de la sección Sentry:
+
+```html
+<section id="sentry" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+    <h2>🛡️ Sentry - Monitoreo de Errores</h2>
+
+    <!-- KPIs de Sentry (4 tarjetas) -->
+    <div class="grid md:grid-cols-4 gap-4">
+        <div>Eventos de Error: {X}</div>
+        <div>Issues Nuevos: {X}</div>
+        <div>Issues Resueltos: {X}</div>
+        <div>Tasa Resolución: {X}%</div>
+    </div>
+
+    <!-- Tabla de errores por proyecto -->
+    <table>
+        <thead>
+            <tr>
+                <th>Proyecto</th>
+                <th>Eventos</th>
+                <th>Issues</th>
+                <th>Usuarios</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filas dinámicas de cada proyecto -->
+            <tr>
+                <td>webservice</td>
+                <td>{eventos}</td>
+                <td>{issues}</td>
+                <td>{usuarios}</td>
+            </tr>
+            <!-- ... más proyectos ... -->
+            <tr class="font-bold">
+                <td>TOTAL</td>
+                <td>{total_eventos}</td>
+                <td>{total_issues}</td>
+                <td>{total_usuarios}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Gráfico de tendencia -->
+    <div id="chart-sentry"></div>
+
+    <!-- Tabla de issues críticos -->
+    <table>
+        <thead>
+            <tr>
+                <th>Issue</th>
+                <th>Proyecto</th>
+                <th>Eventos</th>
+                <th>Usuarios</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Top 5 issues más frecuentes -->
+        </tbody>
+    </table>
+
+    <!-- Link a Sentry -->
+    <a href="https://sentry.io/organizations/{org_slug}/">Ver dashboard en Sentry</a>
+</section>
+```
+
+#### Datos a obtener de Sentry MCP:
+
+```python
+# 1. KPIs principales
+eventos_error = search_events(naturalLanguageQuery="count of errors from X to Y")
+issues_nuevos = search_issues(naturalLanguageQuery="new issues from X to Y").count
+issues_resueltos = search_issues(naturalLanguageQuery="resolved issues from X to Y").count
+tasa_resolucion = (issues_resueltos / issues_nuevos) * 100
+
+# 2. Por proyecto
+for project in projects:
+    eventos_proyecto = search_events(projectSlug=project, ...)
+    issues_proyecto = search_issues(projectSlug=project, ...)
+
+# 3. Issues críticos (top 5 por eventos)
+issues_criticos = search_issues(naturalLanguageQuery="issues sorted by events", limit=5)
+for issue in issues_criticos:
+    detalles = get_issue_details(issueId=issue.id)
+```
+
+#### Gráfico de tendencia (chart-sentry):
+
+```javascript
+// Actualizar con datos reales de errores por día
+Highcharts.chart('chart-sentry', {
+    chart: { type: 'area' },
+    xAxis: { categories: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'] },
+    series: [{
+        name: 'Errores',
+        data: [X, X, X, X, X, X, X],  // ← Datos reales de Sentry
+        color: '#ef4444'
+    }]
+});
+```
+
+#### Estados de issues en la tabla:
+
+```html
+<!-- Resuelto -->
+<span class="bg-green-100 text-green-700 rounded-full">Resuelto</span>
+
+<!-- En Progreso -->
+<span class="bg-yellow-100 text-yellow-700 rounded-full">En Progreso</span>
+
+<!-- Sin Resolver -->
+<span class="bg-red-100 text-red-700 rounded-full">Sin Resolver</span>
+
+<!-- Ignorado -->
+<span class="bg-gray-100 text-gray-700 rounded-full">Ignorado</span>
+```
+
+#### Indicadores de salud del ciclo:
+
+```html
+<!-- Si eventos < 50 -->
+<span class="bg-green-100 text-green-800">✅ Ciclo Estable</span>
+
+<!-- Si 50 <= eventos < 200 -->
+<span class="bg-yellow-100 text-yellow-800">⚠️ Atención Requerida</span>
+
+<!-- Si eventos >= 200 -->
+<span class="bg-red-100 text-red-800">🚨 Ciclo Crítico</span>
+```
+
+---
+
+### SECCIÓN 15: Commits con Claude Code (AI)
+
+**¿Qué son los commits con Claude Code?**
+
+Son commits donde el desarrollador usó **Claude Code** (el asistente de IA de Anthropic) para ayudar en el desarrollo. Se identifican por marcadores específicos en el mensaje del commit.
+
+---
+
+## 🎯 DISTINCIÓN IMPORTANTE: Código vs Commit Asistido
+
+Hay **dos tipos diferentes** de asistencia que Claude puede proporcionar:
+
+### 1️⃣ CÓDIGO ASISTIDO POR CLAUDE
+Claude ayudó a **escribir el código fuente** real. El desarrollador usó Claude para generar, refactorizar o corregir código.
+
+**Características:**
+- LOC significativas (típicamente >10 líneas netas)
+- Mensaje de commit detallado con descripción de cambios
+- Cambios en múltiples archivos o lógica compleja
+- El commit representa trabajo sustancial de programación
+
+**Ejemplo:**
+```
+feat: implement JWT authentication with refresh tokens
+
+- Add /auth/login endpoint with credential validation
+- Implement token refresh logic with 7-day expiry
+- Add bcrypt password hashing with salt rounds=12
+- Create middleware for protected routes
+- Add unit tests for auth flow
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+```
+→ **CÓDIGO ASISTIDO**: LOC alto, múltiples archivos, lógica compleja
+
+---
+
+### 2️⃣ COMMIT ASISTIDO POR CLAUDE
+Claude ayudó principalmente a **formatear el mensaje del commit** o hacer cambios menores. El código real fue escrito mayormente por el desarrollador.
+
+**Características:**
+- LOC bajas (típicamente <10 líneas netas)
+- Cambios simples: typos, configs, imports, comentarios
+- Un solo archivo o cambio trivial
+- El commit es más sobre documentación/formato que código
+
+**Ejemplo:**
+```
+docs: update README with installation instructions
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+→ **COMMIT ASISTIDO**: Solo documentación, no código funcional
+
+**Otro ejemplo:**
+```
+fix: correct typo in error message
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+```
+→ **COMMIT ASISTIDO**: Cambio trivial de 1-2 líneas
+
+---
+
+## 📊 Cómo Clasificar en el Reporte
+
+```yaml
+Clasificación:
+  codigo_asistido:
+    criterios:
+      - LOC_neto >= 10
+      - O: archivos_modificados >= 3
+      - O: commit_message tiene bullet points técnicos
+    peso: 1.0  # Cuenta completo para métricas de productividad
+
+  commit_asistido:
+    criterios:
+      - LOC_neto < 10
+      - archivos_modificados <= 2
+      - cambios simples (docs, typos, configs)
+    peso: 0.5  # Cuenta parcial para métricas de adopción
+```
+
+**Tabla de reporte recomendada:**
+
+| Tipo | Commits | % del Total | LOC Neto |
+|------|---------|-------------|----------|
+| 💻 Código Asistido | X | X% | +X |
+| 📝 Commit Asistido | X | X% | +X |
+| **Total Claude** | **X** | **X%** | **+X** |
+| Sin Claude | X | X% | +X |
+
+---
+
+## Indicadores de Detección (Marcadores)
+
+**Indicadores de detección:**
+```
+- Mensaje contiene "Claude Code"
+- Mensaje contiene "🤖"
+- Mensaje contiene "Co-Authored-By: Claude"
+- Mensaje contiene "Generated with Claude"
+```
+
+**Ejemplo de commit CON Claude Code:**
+```
+feat: add user authentication endpoint
+
+Implement JWT-based authentication with refresh tokens
+- Add login/logout endpoints
+- Implement token refresh logic
+- Add password hashing with bcrypt
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+→ Este commit SÍ cuenta como asistido por IA (CÓDIGO ASISTIDO - LOC alto)
+
+**Ejemplo de commit SIN Claude Code:**
+```
+clean code && check out EnviarClientesNuevos
+```
+→ Este commit NO cuenta (mensaje simple, sin marcadores de IA)
+
+**Ejemplo de commit CON Claude Code:**
+```
+fix: separar debug por cada periférico de seguro
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+```
+→ Contiene "🤖" y "Co-Authored-By: Claude" = SÍ cuenta como asistido por IA
+
+**¿Por qué rastreamos esto?**
+- Medir adopción de herramientas de IA en el equipo
+- Entender qué tipo de tareas se benefician de asistencia IA
+- Evaluar productividad del equipo con herramientas modernas
+- **Diferenciar entre asistencia en código vs solo formato de commit**
+
+| # | Fuente | Proyecto | SHA | Autor | Mensaje | LOC |
+|---|--------|----------|-----|-------|---------|-----|
+| **TOTAL: X commits (X%)** |
+
+> 📎 **Ver ejemplos reales:**
+> - [Commit SIN Claude Code](https://gitlab.com/baldecash/webservice/-/commit/8d0f4de2cee7b24c7dcb9c019053c84604e5c2d3) (Emilio - mensaje simple)
+> - [Commit CON Claude Code](https://gitlab.com/baldecash/webservice/-/commit/d174404581824661226fc11ab7ec3e7f2bdeda12) (Leonardo - con marcadores 🤖)
+
+### SECCIÓN 16: MRs/PRs sin Code Review
+
+| Fuente | Total | Sin Review | % |
+|--------|-------|------------|---|
+| GitLab | X | X | X% |
+| GitHub | X | X | X% |
+| **TOTAL** | **X** | **X** | **X%** |
+
+---
+
+## SECCIONES DE ISSUES
+
+### SECCIÓN 17: Issues Completados (Link a Linear)
+
+**⚠️ NO listar issues uno por uno. Mostrar resumen + link a Linear:**
+
+```html
+<section id="completados">
+  <h2>Issues Completados (X)</h2>
+  <div class="grid grid-cols-2 gap-6">
+    <div class="bg-green-50 p-6 text-center">
+      <p class="text-4xl font-bold text-green-600">{X}</p>
+      <p>Issues completados</p>
+    </div>
+    <div class="bg-indigo-50 p-6 text-center">
+      <p class="text-4xl font-bold">{X}</p>
+      <p>Puntos completados</p>
+    </div>
+  </div>
+  <a href="https://linear.app/baldecash/team/BAL/cycle/{N}" target="_blank">
+    Ver issues en Linear →
+  </a>
+  <p class="text-sm text-gray-500">Se abrirá Linear con la vista del Ciclo {N}</p>
+</section>
+```
+
+**Razón:** Evita duplicar datos, siempre muestra información actualizada desde Linear.
+
+### SECCIÓN 18: Issues Mal Registrados
+
+| Severidad | Motivo | Cantidad | % |
+|-----------|--------|----------|---|
+| 🔴 Crítico | Sin prioridad | X | X% |
+| 🟠 Alto | Sin estimate | X | X% |
+| 🟡 Medio | Sin assignee | X | X% |
+| **TOTAL** | - | **X** | **X%** |
+
+---
+
+## SECCIÓN 20: Panel de Discrepancias
+
+```html
+<details>
+  <summary>⚠️ Verificación de Datos</summary>
+  | Verificación | Estado |
+  |--------------|--------|
+  | Issues API vs UI | ✅/❌ |
+  | Commits GitHub listados | ✅/❌ |
+  | Sumas consistentes | ✅/❌ |
+</details>
+```
+
+---
+
+## SECCIÓN 21: Footer
+
+**⚠️ OBLIGATORIO: Incluir navegación entre ciclos en el footer**
+
+```html
+<footer class="bg-[#262877] text-white py-8 mt-12">
+  <div class="container mx-auto px-6">
+    <!-- Navegación entre ciclos -->
+    <div class="flex items-center justify-between mb-6">
+      <!-- Ciclo Anterior -->
+      <a href="ciclo-{N-1}.html" class="footer-nav {hidden si no existe}">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <div>
+          <p class="text-xs text-white/60">Anterior</p>
+          <p class="font-semibold">Ciclo {N-1}</p>
+        </div>
+      </a>
+
+      <!-- Home -->
+      <a href="../index.html" class="footer-home">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+        </svg>
+        <span>Inicio</span>
+      </a>
+
+      <!-- Ciclo Siguiente -->
+      <a href="ciclo-{N+1}.html" class="footer-nav {hidden si no existe}">
+        <div class="text-right">
+          <p class="text-xs text-white/60">Siguiente</p>
+          <p class="font-semibold">Ciclo {N+1}</p>
+        </div>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Info -->
+    <div class="text-center pt-6 border-t border-white/20">
+      <p class="text-white/60 text-sm">Generado automáticamente</p>
+      <p class="text-white/80 text-sm mt-1">⏱️ Generado en {X} min {Y} seg</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: white/10;
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+.footer-nav:hover {
+  background: white/20;
+  transform: scale(1.02);
+}
+.footer-home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 24px;
+  background: white/10;
+  border-radius: 16px;
+  transition: all 0.2s;
+}
+.footer-home:hover {
+  background: white/20;
+  transform: translateY(-2px);
+}
+</style>
+```
+
+---
+
+## FASE 3: GUARDAR EN CARPETA RESUMEN
+
+**⚠️ OBLIGATORIO: Guardar el HTML generado en la carpeta `resumen/`**
+
+```python
+# Guardar el archivo HTML
+archivo_salida = f"resumen/ciclo-{N}.html"
+Write(file_path=archivo_salida, content=html_generado)
+```
+
+---
+
+## FASE 4: ACTUALIZAR INDEX.HTML
+
+Después de generar el reporte, agregar card al índice principal (`index.html`):
+
+```html
+<!-- Agregar en la sección de ciclos del index.html -->
+<a href="resumen/ciclo-{N}.html" class="hover-card bg-white rounded-xl p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-xl font-bold text-[#262877]">Ciclo {N}</h3>
+    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">Completado</span>
+  </div>
+  <p class="text-gray-500 text-sm mb-4">{FECHA_INICIO} - {FECHA_FIN}</p>
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <div>
+      <p class="text-2xl font-bold text-[#262877]">{X}</p>
+      <p class="text-xs text-gray-500">Issues</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-orange-600">{X}</p>
+      <p class="text-xs text-gray-500">Commits GL</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-gray-800">{X}</p>
+      <p class="text-xs text-gray-500">Commits GH</p>
+    </div>
+    <div>
+      <p class="text-2xl font-bold text-green-600">+{X}</p>
+      <p class="text-xs text-gray-500">LOC Neto</p>
+    </div>
+  </div>
+</a>
+```
+
+---
+
+## FASE 5: COMMIT Y PUSH AUTOMÁTICO (OBLIGATORIO)
+
+### ⚠️ ESTA FASE ES OBLIGATORIA - NO SE PUEDE OMITIR
+
+**El comando DEBE hacer commit y push después de generar el reporte. NO preguntar al usuario, hacerlo automáticamente.**
+
+```yaml
+Obligatorio:
+  commit: true
+  push: true
+  preguntar_usuario: false  # NO preguntar, ejecutar directamente
+```
+
+### Pasos de Git (ejecutar en secuencia):
+
+```bash
+# 1. Agregar archivos al staging
+git add resumen/ciclo-{N}.html
+git add index.html
+
+# 2. Crear commit con mensaje descriptivo usando HEREDOC
+git commit -m "$(cat <<'EOF'
+docs: add cycle {N} report
+
+- Issues completados: {X}
+- Commits GitLab: {X}
+- Commits GitHub: {X}
+- LOC neto: +{X}
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
+EOF
+)"
+
+# 3. Push al repositorio
+git push
+```
+
+### Pseudocódigo (EJECUTAR SIEMPRE):
+
+```python
+def commit_y_push(ciclo, metricas):
+    """
+    ⚠️ ESTA FUNCIÓN SE EJECUTA SIEMPRE AL FINAL DEL COMANDO
+    NO es opcional, NO requiere confirmación del usuario
+    """
+
+    # Agregar archivos
+    Bash(f"git add resumen/ciclo-{ciclo}.html index.html")
+
+    # Commit con HEREDOC para formato correcto
+    mensaje = f"""docs: add cycle {ciclo} report
+
+- Issues completados: {metricas['issues']}
+- Commits GitLab: {metricas['commits_gitlab']}
+- Commits GitHub: {metricas['commits_github']}
+- LOC neto: {metricas['loc_neto']:+d}
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>"""
+
+    Bash(f'git commit -m "$(cat <<\'EOF\'\n{mensaje}\nEOF\n)"')
+
+    # Push OBLIGATORIO
+    Bash("git push")
+
+    print(f"✅ Ciclo {ciclo} publicado en GitHub")
+    print(f"📁 Archivo: resumen/ciclo-{ciclo}.html")
+    print(f"🔗 Index actualizado")
+
+# ⚠️ IMPORTANTE: NO preguntar al usuario, ejecutar directamente
+commit_y_push(ciclo_numero, metricas_calculadas)
+```
+
+### Mensaje de confirmación al usuario:
+
+```
+✅ Reporte del Ciclo {N} generado y publicado:
+   📄 resumen/ciclo-{N}.html creado
+   📝 index.html actualizado
+   📤 Commit y push realizados
+   ⏱️ Tiempo de ejecución: {X}m {Y}s
+```
+
+---
+
+## SECUENCIA DE EJECUCIÓN
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    FLUJO COMPLETO                           │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. ⏱️ INICIO                                               │
+│     └── Registrar timestamp de inicio                       │
+│                                                             │
+│  2. 📊 FASE 1: RECOLECCIÓN DE DATOS                         │
+│     ├── Linear: teams → cycles → issues                     │
+│     ├── GitLab: list_projects → commits → diff (LOC)        │
+│     └── GitHub: search_repos → commits → stats (LOC)        │
+│                                                             │
+│  3. 📝 FASE 2: GENERAR HTML                                 │
+│     ├── Leer modelo.html como plantilla                     │
+│     ├── Llenar datos en cada sección                        │
+│     ├── Actualizar gráficos con datos reales                │
+│     └── NO agregar/quitar secciones                         │
+│                                                             │
+│  4. 💾 FASE 3: GUARDAR                                      │
+│     └── Write → resumen/ciclo-{N}.html                      │
+│                                                             │
+│  5. 🏠 FASE 4: ACTUALIZAR INDEX                             │
+│     └── Agregar card del ciclo en index.html                │
+│                                                             │
+│  6. 📤 FASE 5: COMMIT Y PUSH (OBLIGATORIO)                  │
+│     ├── git add resumen/ciclo-{N}.html index.html           │
+│     ├── git commit -m "docs: add cycle {N} report..."       │
+│     └── git push                                            │
+│                                                             │
+│  7. ✅ FIN                                                   │
+│     └── Mostrar mensaje de confirmación con tiempo          │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+
+⚠️ IMPORTANTE: Las fases 5 y 6 son OBLIGATORIAS
+   - NO preguntar al usuario
+   - Ejecutar automáticamente
+   - El comando NO está completo hasta que se haga push
+```
+
+---
+
+## VALIDACIONES
+
+1. **KPIs incluyen commits GitHub** (ws2, admin2, whatsapp-bot, etc.)
+2. **Todas las tablas tienen TOTAL**
+3. **Issues completados por owner muestra prioridades**
+4. **Cada repo tiene su commit destacado (más LOC)**
+5. **Repo guia solo cuenta último commit para LOC**
+
+---
+
+## NAVEGACIÓN E INTERACTIVIDAD
+
+### Índice Flotante (Sidebar)
+
+**⚠️ OBLIGATORIO: Incluir navegación flotante para saltar a secciones**
+
+```html
+<!-- Índice flotante fijo a la izquierda -->
+<!-- ⚠️ IMPORTANTE: El orden del menú DEBE coincidir con el orden de secciones en el HTML -->
+<nav id="sidebar-nav" class="fixed left-0 top-1/4 z-40 hidden lg:block">
+  <div class="bg-white/95 backdrop-blur-sm shadow-xl rounded-r-2xl border border-gray-100 overflow-hidden">
+    <!-- Header del nav -->
+    <div class="bg-gradient-to-r from-[#262877] to-indigo-600 px-4 py-3">
+      <p class="text-white text-xs font-semibold tracking-wide">📍 NAVEGACIÓN</p>
+    </div>
+    <!-- Links -->
+    <ul class="p-3 space-y-1 text-sm max-h-[60vh] overflow-y-auto scrollbar-thin">
+      <li><a href="#kpis" class="nav-link">📊 KPIs</a></li>
+      <li><a href="#resumen" class="nav-link">📋 Resumen</a></li>
+      <li><a href="#observaciones" class="nav-link">💡 Observaciones</a></li>
+      <li class="nav-separator">OWNER</li>
+      <li><a href="#desglose-owner" class="nav-link">👥 Por Owner</a></li>
+      <li><a href="#owner-prioridad" class="nav-link">📈 Owner × Prioridad</a></li>
+      <li><a href="#solicitante" class="nav-link">🏷️ Solicitante</a></li>
+      <li><a href="#matriz" class="nav-link">🎯 Matriz</a></li>
+      <li><a href="#no-completados" class="nav-link">⏳ No Completados</a></li>
+      <li><a href="#prioridad" class="nav-link">🎨 Por Prioridad</a></li>
+      <li class="nav-separator">COMMITS</li>
+      <li><a href="#actividad" class="nav-link">📅 Actividad</a></li>
+      <li><a href="#commits-autor" class="nav-link">👤 Por Autor</a></li>
+      <li><a href="#commits-proyecto" class="nav-link">📁 Por Proyecto</a></li>
+      <li class="nav-separator">LOC</li>
+      <li><a href="#loc-total" class="nav-link">📏 LOC Total</a></li>
+      <li><a href="#loc-usuario" class="nav-link">👤 LOC Usuario</a></li>
+      <li><a href="#loc-proyecto" class="nav-link">📁 LOC Proyecto</a></li>
+      <li class="nav-separator">CALIDAD</li>
+      <li><a href="#hotfixes" class="nav-link">🔥 Hotfixes</a></li>
+      <li><a href="#claude" class="nav-link">🤖 Claude Code</a></li>
+      <li><a href="#sin-review" class="nav-link">⚠️ Sin Review</a></li>
+      <li class="nav-separator">ISSUES</li>
+      <li><a href="#completados" class="nav-link">✅ Completados</a></li>
+      <li><a href="#mal-registrados" class="nav-link">❌ Mal Registrados</a></li>
+    </ul>
+  </div>
+</nav>
+
+<style>
+/* Scrollbar personalizado */
+.scrollbar-thin::-webkit-scrollbar { width: 4px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Separadores de sección */
+.nav-separator {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9ca3af;
+  letter-spacing: 0.5px;
+  padding: 8px 12px 4px;
+  margin-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+/* Links de navegación */
+.nav-link {
+  display: block;
+  padding: 8px 12px;
+  color: #4b5563;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+}
+.nav-link:hover {
+  background: linear-gradient(90deg, #eef2ff 0%, #f8fafc 100%);
+  color: #262877;
+  border-left-color: #262877;
+  transform: translateX(2px);
+}
+.nav-link.active {
+  background: linear-gradient(90deg, #262877 0%, #4338ca 100%);
+  color: white;
+  border-left-color: #262877;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(38, 40, 119, 0.3);
+}
+</style>
+
+<script>
+// Resaltar sección activa al hacer scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (scrollY >= sectionTop) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+```
+
+### Botón "Ir arriba"
+
+```html
+<button id="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+        class="fixed bottom-6 right-6 bg-[#262877] text-white p-3 rounded-full shadow-lg hidden hover:bg-indigo-700 z-50">
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+  </svg>
+</button>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.getElementById('scroll-top').classList.toggle('hidden', scrollY < 500);
+});
+</script>
+```
+
+### Modales Interactivos
+
+**Implementación de modales para explorar detalles:**
+
+```html
+<!-- Modal Container -->
+<div id="modal" class="fixed inset-0 bg-black/50 hidden z-50 items-center justify-center">
+  <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden shadow-2xl">
+    <div class="brand-bg text-white px-6 py-4 flex justify-between items-center">
+      <h3 id="modal-title" class="text-lg font-semibold">Detalle</h3>
+      <button onclick="closeModal()" class="hover:bg-white/20 rounded-lg p-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <div id="modal-body" class="p-6 overflow-y-auto max-h-[60vh]"></div>
+  </div>
+</div>
+
+<script>
+// Datos embebidos en el HTML
+const data = {
+  issues: {
+    'BAL-123': {
+      title: 'Implementar login',
+      owner: 'Leonardo',
+      priority: 'High',
+      estimate: 3,
+      state: 'Done',
+      description: 'Implementar sistema de autenticación...',
+      commits: ['abc1234', 'def5678']
+    }
+  },
+  commits: {
+    'abc1234': {
+      message: 'feat: add login endpoint',
+      author: 'Leonardo',
+      date: '2025-12-15 14:30',
+      project: 'ws2',
+      additions: 150,
+      deletions: 30
+    }
+  }
+};
+
+function showIssue(id) {
+  const issue = data.issues[id];
+  document.getElementById('modal-title').textContent = id;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="space-y-4">
+      <h4 class="text-xl font-bold">${issue.title}</h4>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Owner</span>
+          <p class="font-semibold">${issue.owner}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Prioridad</span>
+          <p class="font-semibold">${issue.priority}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Estimate</span>
+          <p class="font-semibold">${issue.estimate} pts</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Estado</span>
+          <p class="font-semibold text-green-600">${issue.state}</p>
+        </div>
+      </div>
+      <div>
+        <span class="text-xs text-gray-500">Descripción</span>
+        <p class="mt-1">${issue.description}</p>
+      </div>
+      <div>
+        <span class="text-xs text-gray-500">Commits (${issue.commits.length})</span>
+        <div class="mt-2 space-y-2">
+          ${issue.commits.map(c => `
+            <button onclick="showCommit('${c}')" class="w-full text-left px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg font-mono text-sm">
+              ${c}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  openModal();
+}
+
+function showCommit(sha) {
+  const commit = data.commits[sha];
+  document.getElementById('modal-title').textContent = 'Commit: ' + sha;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="space-y-4">
+      <p class="text-lg font-medium">${commit.message}</p>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Autor</span>
+          <p class="font-semibold">${commit.author}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Fecha</span>
+          <p class="font-semibold">${commit.date}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Proyecto</span>
+          <p class="font-semibold">${commit.project}</p>
+        </div>
+        <div class="bg-gray-50 rounded-lg p-3">
+          <span class="text-xs text-gray-500">Cambios</span>
+          <p class="font-semibold">
+            <span class="text-green-600">+${commit.additions}</span> /
+            <span class="text-red-600">-${commit.deletions}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  `;
+  openModal();
+}
+
+function openModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
+
+// Cerrar al hacer click fuera
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+</script>
+```
+
+### Elementos Clicables
+
+Todas las filas de tablas con datos detallados deben ser clicables:
+
+```html
+<!-- Ejemplo: Tabla de issues completados -->
+<tr class="cursor-pointer hover:bg-indigo-50 transition-colors" onclick="showIssue('BAL-123')">
+  <td>BAL-123</td>
+  <td>Implementar login</td>
+  <td>Leonardo</td>
+  <td>High</td>
+  <td>3</td>
+</tr>
+
+<!-- Ejemplo: SHA de commit clicable -->
+<td>
+  <button onclick="showCommit('abc1234')" class="font-mono text-indigo-600 hover:underline">
+    abc1234
+  </button>
+</td>
+```
+
+### Tooltips Informativos
+
+```html
+<div class="relative group">
+  <span class="stat-number text-3xl font-bold">25</span>
+  <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
+    <div class="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap">
+      Issues completados en este ciclo
+      <div class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900"></div>
+    </div>
+  </div>
+</div>
+```
+
+### Secciones Colapsables
+
+Para tablas largas, permitir colapsar/expandir:
+
+```html
+<section id="hotfixes" class="bg-white rounded-2xl overflow-hidden mb-8">
+  <button onclick="toggleSection('hotfixes-content')"
+          class="w-full brand-bg text-white px-6 py-5 flex items-center justify-between">
+    <h3 class="text-lg font-semibold">🔥 Hotfixes del Ciclo</h3>
+    <div class="flex items-center gap-3">
+      <span class="bg-white/20 px-3 py-1 rounded-full text-sm">5</span>
+      <svg id="chevron-hotfixes-content" class="w-5 h-5 transition-transform">
+        <path d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+  </button>
+  <div id="hotfixes-content" class="transition-all duration-300">
+    <!-- Tabla de hotfixes -->
+  </div>
+</section>
+
+<script>
+function toggleSection(id) {
+  const content = document.getElementById(id);
+  const chevron = document.getElementById('chevron-' + id);
+  content.classList.toggle('hidden');
+  chevron.classList.toggle('rotate-180');
+}
+</script>
+```
+
+---
+
+## PALETA DE COLORES
+
+```javascript
+const colors = [
+  '#262877', // Brand
+  '#4f46e5', // Indigo
+  '#0ea5e9', // Sky
+  '#10b981', // Emerald
+  '#f59e0b', // Amber
+  '#ef4444', // Red
+  '#8b5cf6'  // Violet
+];
+```
