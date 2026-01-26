@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=http://baldecash.com&size=64">
+    <title>Ciclo 35 - BaldeCash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Asap:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Asap', sans-serif; }
+        .brand-primary { color: #262877; }
+        .brand-bg { background-color: #262877; }
+        .brand-bg-light { background-color: #3d3d99; }
+        .card-shadow { box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: all 0.3s ease; }
+        .card-shadow:hover { transform: translateY(-2px); border-color: rgba(38, 40, 119, 0.3); }
+        .brand-header { background-color: #262877; }
+        .kpi-card { background: #fff; border: 1px solid rgba(38, 40, 119, 0.08); }
+        .kpi-card:hover { border-color: rgba(38, 40, 119, 0.2); }
+        .table-row-hover:hover { background-color: rgba(38, 40, 119, 0.04); }
+        .section-title { position: relative; display: inline-block; }
+        .section-title::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 40px; height: 3px; background-color: #262877; border-radius: 2px; }
+        .stat-number { color: #262877; font-weight: 700; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s ease forwards; }
+
+        /* Modern Floating Sidebar */
+        #sidebar-nav {
+            transform: translateX(-100%) translateY(-50%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            pointer-events: none;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        #sidebar-nav::-webkit-scrollbar { width: 4px; }
+        #sidebar-nav::-webkit-scrollbar-track { background: transparent; }
+        #sidebar-nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        #sidebar-nav:hover,
+        #sidebar-nav.visible {
+            transform: translateX(0) translateY(-50%);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #sidebar-icon {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 38;
+            background: linear-gradient(135deg, #262877 0%, #3d3d99 100%);
+            color: white;
+            padding: 12px 8px;
+            border-radius: 0 12px 12px 0;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 2px 12px rgba(38, 40, 119, 0.3);
+        }
+        #sidebar-icon:hover {
+            padding-right: 16px;
+            box-shadow: 4px 4px 16px rgba(38, 40, 119, 0.4);
+        }
+        #sidebar-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+        #sidebar-nav.visible ~ #sidebar-icon,
+        #sidebar-nav:hover ~ #sidebar-icon {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-50%) translateX(-20px);
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            color: #64748b;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .nav-link:hover {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #262877;
+            transform: translateX(4px);
+        }
+        .nav-link.active {
+            background: linear-gradient(135deg, #262877 0%, #3d3d99 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(38, 40, 119, 0.3);
+        }
+        .nav-section {
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+            padding: 12px 12px 6px;
+        }
+        .nav-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Modern Floating Sidebar -->
+    <nav id="sidebar-nav" class="fixed left-0 top-1/2 bg-white/95 backdrop-blur-xl shadow-2xl rounded-r-2xl py-3 px-3 z-40 hidden lg:block border border-gray-200/50 max-h-[80vh] overflow-y-auto" style="min-width: 160px;">
+        <ul class="space-y-1">
+            <li><a href="#kpis" class="nav-link"><span class="nav-dot"></span>KPIs</a></li>
+            <li><a href="#resumen" class="nav-link"><span class="nav-dot"></span>Resumen</a></li>
+
+            <li class="nav-section">Issues</li>
+            <li><a href="#desglose-owner" class="nav-link"><span class="nav-dot"></span>Por Owner</a></li>
+            <li><a href="#owner-prioridad" class="nav-link"><span class="nav-dot"></span>Por Prioridad</a></li>
+            <li><a href="#linear-projects" class="nav-link"><span class="nav-dot"></span>Por Proyecto</a></li>
+            <li><a href="#no-completados" class="nav-link"><span class="nav-dot"></span>Pendientes</a></li>
+
+            <li class="nav-section">Codigo</li>
+            <li><a href="#commits-proyecto" class="nav-link"><span class="nav-dot"></span>Commits/Repo</a></li>
+            <li><a href="#commits-autor" class="nav-link"><span class="nav-dot"></span>Commits/Autor</a></li>
+            <li><a href="#loc-autor" class="nav-link"><span class="nav-dot"></span>LOC</a></li>
+            <li><a href="#claude" class="nav-link"><span class="nav-dot"></span>Claude Code</a></li>
+
+            <li class="nav-section">Calidad</li>
+            <li><a href="#sentry" class="nav-link"><span class="nav-dot"></span>Sentry</a></li>
+
+            <li class="nav-section">Detalles</li>
+            <li><a href="#completados" class="nav-link"><span class="nav-dot"></span>Completados</a></li>
+            <li><a href="#solicitante" class="nav-link"><span class="nav-dot"></span>Solicitante</a></li>
+        </ul>
+    </nav>
+
+    <!-- Sidebar Icon -->
+    <div id="sidebar-icon" class="hidden lg:flex flex-col items-center gap-1">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-[#262877] text-white">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Sprint</p>
+                    <h1 class="text-4xl font-bold tracking-tight">Ciclo 35</h1>
+                    <p class="text-sm text-white/70 mt-1 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        19 Ene 2026 — 26 Ene 2026
+                    </p>
+                </div>
+                <nav class="flex items-center gap-2">
+                    <a href="ciclo-34.html" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-all group" title="Ir a Ciclo 34">
+                        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                        <span class="text-sm font-medium">34</span>
+                    </a>
+                    <a href="../index.html" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors" title="Ir al inicio">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    </a>
+                    <span class="flex items-center gap-2 px-3 py-2 rounded-xl text-white/30 cursor-not-allowed" title="No hay ciclo siguiente">
+                        <span class="text-sm font-medium">36</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </span>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- KPIs Cards -->
+        <section id="kpis" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10 mt-4 relative z-20">
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.1s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Issues Completados</p>
+                    <div class="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-green-600">43</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.15s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Ratio de Exito</p>
+                    <div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-emerald-600">75.4%</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.2s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Commits GitLab</p>
+                    <div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-orange-600">124</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.25s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Commits GitHub</p>
+                    <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-gray-700" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold stat-number">38</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.3s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Total Commits</p>
+                    <div class="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold stat-number">162</p>
+            </div>
+            <div class="kpi-card rounded-xl p-5 card-shadow animate-fade-in" style="animation-delay: 0.35s;">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-500 text-xs font-medium uppercase tracking-wide">Claude Code</p>
+                    <div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                        <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                </div>
+                <p class="text-3xl font-bold text-purple-600">52 <span class="text-sm font-normal">(32%)</span></p>
+            </div>
+        </section>
+
+        <!-- Resumen Ejecutivo -->
+        <section id="resumen" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Resumen Ejecutivo</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Issues</h3>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total issues en ciclo</td><td class="py-2 font-semibold text-right">57</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Issues completados (Done)</td><td class="py-2 font-semibold text-right text-green-600">43</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">In Progress</td><td class="py-2 font-semibold text-right text-blue-500">0</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Todo / Pendiente</td><td class="py-2 font-semibold text-right text-orange-500">14</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Ratio de exito</td><td class="py-2 font-semibold text-right">75.4%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Commits GitLab</h3>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">124</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Proyectos con actividad</td><td class="py-2 font-semibold text-right">4</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">webservice</td><td class="py-2 font-semibold text-right">100</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">pidetuprestamo</td><td class="py-2 font-semibold text-right">11</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">admin + zonaclientes</td><td class="py-2 font-semibold text-right">13</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase mb-3">Commits GitHub</h3>
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Total commits</td><td class="py-2 font-semibold text-right">38</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">Repos con actividad</td><td class="py-2 font-semibold text-right">3</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">ws2</td><td class="py-2 font-semibold text-right">14</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">admin2</td><td class="py-2 font-semibold text-right">19</td></tr>
+                            <tr class="border-b"><td class="py-2 text-gray-600">contabilidad-concar</td><td class="py-2 font-semibold text-right">5</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Observaciones y Recomendaciones -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-8 section-title">Observaciones y Recomendaciones</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-green-50 rounded-xl p-6 border border-green-200">
+                    <h3 class="text-lg font-bold text-green-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">&#10004;</div>
+                        Aspectos Positivos
+                    </h3>
+                    <ul class="space-y-2 text-sm text-green-800">
+                        <li>&#8226; 43 issues completados - excelente productividad</li>
+                        <li>&#8226; 162 commits totales (GitLab + GitHub)</li>
+                        <li>&#8226; Ratio de exito del 75.4%</li>
+                        <li>&#8226; +37,657 lineas de codigo agregadas</li>
+                        <li>&#8226; Fuerte actividad en Baldecash 3.0</li>
+                    </ul>
+                </div>
+                <div class="bg-orange-50 rounded-xl p-6 border border-orange-200">
+                    <h3 class="text-lg font-bold text-orange-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">&#9888;</div>
+                        Areas de Mejora
+                    </h3>
+                    <ul class="space-y-2 text-sm text-orange-800">
+                        <li>&#8226; 14 issues pendientes para siguiente ciclo</li>
+                        <li>&#8226; Algunos issues sin prioridad definida</li>
+                        <li>&#8226; Sin datos de Sentry disponibles</li>
+                        <li>&#8226; Considerar mejor tracking de errores</li>
+                    </ul>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-6 border border-blue-200">
+                    <h3 class="text-lg font-bold text-blue-700 mb-4 flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">&#128203;</div>
+                        Acciones Sugeridas
+                    </h3>
+                    <ul class="space-y-2 text-sm text-blue-800">
+                        <li>&#8226; Continuar con ritmo actual de desarrollo</li>
+                        <li>&#8226; Asegurar estimates en todos los issues</li>
+                        <li>&#8226; Revisar configuracion de Sentry</li>
+                        <li>&#8226; Continuar uso de Claude Code</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Distribucion por Prioridad -->
+        <section class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Distribucion por Prioridad</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Prioridad</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Completados</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover"><td class="px-4 py-3">&#128308; Urgent</td><td class="px-4 py-3 text-center">6</td><td class="px-4 py-3 text-center text-green-600">6</td><td class="px-4 py-3 text-center">100%</td></tr>
+                            <tr class="border-b table-row-hover"><td class="px-4 py-3">&#128992; High</td><td class="px-4 py-3 text-center">29</td><td class="px-4 py-3 text-center text-green-600">25</td><td class="px-4 py-3 text-center">86%</td></tr>
+                            <tr class="border-b table-row-hover"><td class="px-4 py-3">&#128993; Medium</td><td class="px-4 py-3 text-center">10</td><td class="px-4 py-3 text-center text-green-600">7</td><td class="px-4 py-3 text-center">70%</td></tr>
+                            <tr class="border-b table-row-hover"><td class="px-4 py-3">&#128994; Low</td><td class="px-4 py-3 text-center">2</td><td class="px-4 py-3 text-center text-green-600">1</td><td class="px-4 py-3 text-center">50%</td></tr>
+                            <tr class="border-b table-row-hover"><td class="px-4 py-3">&#9898; Sin Prioridad</td><td class="px-4 py-3 text-center">10</td><td class="px-4 py-3 text-center text-green-600">4</td><td class="px-4 py-3 text-center">40%</td></tr>
+                            <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">57</td><td class="px-4 py-3 text-center text-green-600">43</td><td class="px-4 py-3 text-center">75.4%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="chart-priority" class="h-72"></div>
+            </div>
+        </section>
+
+        <!-- Desglose por Owner -->
+        <section id="desglose-owner" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Desglose por Owner</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Desarrollador</th>
+                                <th class="px-4 py-3 text-center font-semibold text-green-600">Done</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600 bg-gray-100">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">14</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">14</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">9</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">9</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">10</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Anderson Palomino</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">10</td>
+                            </tr>
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center text-green-700">43</td>
+                                <td class="px-4 py-3 text-center">43</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="chart-owner" class="h-72"></div>
+            </div>
+        </section>
+
+        <!-- Análisis por Proyecto Linear -->
+        <section id="linear-projects" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128203; Issues por Proyecto Linear</h2>
+
+            <div class="grid md:grid-cols-4 gap-4 mb-6">
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold stat-number">10</div>
+                    <div class="text-sm text-gray-600">Proyectos Activos</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold stat-number">43</div>
+                    <div class="text-sm text-gray-600">Issues Totales</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-green-600">43</div>
+                    <div class="text-sm text-gray-600">Completados</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-amber-600">100%</div>
+                    <div class="text-sm text-gray-600">Tasa Completado</div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Distribucion por Proyecto</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-indigo-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Issues</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Completados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Baldecash 3.0</td>
+                                <td class="px-4 py-3 text-center">10</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Lockers & Trucks</td>
+                                <td class="px-4 py-3 text-center">10</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Emilio Concar</td>
+                                <td class="px-4 py-3 text-center">4</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">4</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Integracion VoxImplant</td>
+                                <td class="px-4 py-3 text-center">2</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">2</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Botmaker</td>
+                                <td class="px-4 py-3 text-center">1</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">1</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Insurama</td>
+                                <td class="px-4 py-3 text-center">1</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">1</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Otros</td>
+                                <td class="px-4 py-3 text-center">15</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">15</td>
+                            </tr>
+                            <tr class="bg-indigo-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center">43</td>
+                                <td class="px-4 py-3 text-center text-green-700">43</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Distribucion de Issues</h3>
+                    <div id="chart-linear-projects" style="height: 280px;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commits por Proyecto -->
+        <section id="commits-proyecto" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Commits por Proyecto</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- GitLab -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 24 24"><path d="M22.65 14.39L12 22.13 1.35 14.39a.84.84 0 01-.3-.94l1.22-3.78 2.44-7.51A.42.42 0 014.82 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.49h8.1l2.44-7.51A.42.42 0 0118.6 2a.43.43 0 01.58 0 .42.42 0 01.11.18l2.44 7.51L23 13.45a.84.84 0 01-.35.94z"/></svg>
+                        GitLab (124 commits)
+                    </h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-orange-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-2 text-center font-semibold text-gray-600">Commits</th>
+                                <th class="px-4 py-2 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="px-4 py-2">webservice</td><td class="px-4 py-2 text-center font-semibold">100</td><td class="px-4 py-2 text-center">81%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">pidetuprestamo</td><td class="px-4 py-2 text-center font-semibold">11</td><td class="px-4 py-2 text-center">9%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">admin</td><td class="px-4 py-2 text-center font-semibold">7</td><td class="px-4 py-2 text-center">6%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">zonaclientes</td><td class="px-4 py-2 text-center font-semibold">6</td><td class="px-4 py-2 text-center">5%</td></tr>
+                            <tr class="bg-orange-100 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">124</td><td class="px-4 py-2 text-center">100%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- GitHub -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        GitHub (38 commits)
+                    </h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-4 py-2 text-left font-semibold text-gray-600">Repo</th>
+                                <th class="px-4 py-2 text-center font-semibold text-gray-600">Commits</th>
+                                <th class="px-4 py-2 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b"><td class="px-4 py-2">admin2</td><td class="px-4 py-2 text-center font-semibold">19</td><td class="px-4 py-2 text-center">50%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">ws2</td><td class="px-4 py-2 text-center font-semibold">14</td><td class="px-4 py-2 text-center">37%</td></tr>
+                            <tr class="border-b"><td class="px-4 py-2">contabilidad-concar</td><td class="px-4 py-2 text-center font-semibold">5</td><td class="px-4 py-2 text-center">13%</td></tr>
+                            <tr class="bg-gray-200 font-bold"><td class="px-4 py-2">TOTAL</td><td class="px-4 py-2 text-center">38</td><td class="px-4 py-2 text-center">100%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commits por Autor -->
+        <section id="commits-autor" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Commits por Autor</h2>
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">GitLab</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">GitHub</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marlon Cano</td><td class="px-4 py-3 text-center">72</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">72</td><td class="px-4 py-3 text-center">44%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Leonardo Medina</td><td class="px-4 py-3 text-center">8</td><td class="px-4 py-3 text-center">33</td><td class="px-4 py-3 text-center font-bold">41</td><td class="px-4 py-3 text-center">25%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Emilio Gonzales</td><td class="px-4 py-3 text-center">12</td><td class="px-4 py-3 text-center">5</td><td class="px-4 py-3 text-center font-bold">17</td><td class="px-4 py-3 text-center">10%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Thiago Gutierrez</td><td class="px-4 py-3 text-center">32</td><td class="px-4 py-3 text-center">0</td><td class="px-4 py-3 text-center font-bold">32</td><td class="px-4 py-3 text-center">20%</td></tr>
+                    <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">124</td><td class="px-4 py-3 text-center">38</td><td class="px-4 py-3 text-center">162</td><td class="px-4 py-3 text-center">100%</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Lineas de Codigo por Autor -->
+        <section id="loc-autor" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Lineas de Codigo por Autor</h2>
+
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="bg-green-50 rounded-xl p-5 text-center border border-green-200">
+                    <p class="text-3xl font-bold text-green-600">+37,657</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas anadidas</p>
+                </div>
+                <div class="bg-red-50 rounded-xl p-5 text-center border border-red-200">
+                    <p class="text-3xl font-bold text-red-500">-8,725</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas eliminadas</p>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 text-center border border-blue-200">
+                    <p class="text-3xl font-bold text-blue-600">+28,932</p>
+                    <p class="text-xs text-gray-600 mt-1">Lineas netas</p>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Autor (GitLab webservice)</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th>
+                                <th class="px-4 py-3 text-center font-semibold text-green-600">+Anadidas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-red-500">-Eliminadas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-blue-600">Neto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
+                                <td class="px-4 py-3 text-center text-green-600">+10,987</td>
+                                <td class="px-4 py-3 text-center text-red-500">-2,150</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+8,837</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                                <td class="px-4 py-3 text-center text-green-600">+7,716</td>
+                                <td class="px-4 py-3 text-center text-red-500">-1,665</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+6,051</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Marlon Cano</td>
+                                <td class="px-4 py-3 text-center text-green-600">+13,894</td>
+                                <td class="px-4 py-3 text-center text-red-500">-4,206</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+9,688</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                                <td class="px-4 py-3 text-center text-green-600">+5,060</td>
+                                <td class="px-4 py-3 text-center text-red-500">-704</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+4,356</td>
+                            </tr>
+                            <tr class="bg-gray-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center text-green-600">+37,657</td>
+                                <td class="px-4 py-3 text-center text-red-500">-8,725</td>
+                                <td class="px-4 py-3 text-center text-blue-600">+28,932</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Repositorio</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Repositorio</th>
+                                <th class="px-4 py-3 text-center font-semibold text-green-600">+Anadidas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-red-500">-Eliminadas</th>
+                                <th class="px-4 py-3 text-center font-semibold text-blue-600">Neto</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">webservice (GitLab)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+37,657</td>
+                                <td class="px-4 py-3 text-center text-red-500">-8,725</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+28,932</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">pidetuprestamo</td>
+                                <td class="px-4 py-3 text-center text-green-600">+606</td>
+                                <td class="px-4 py-3 text-center text-red-500">-122</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+484</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">admin</td>
+                                <td class="px-4 py-3 text-center text-green-600">+689</td>
+                                <td class="px-4 py-3 text-center text-red-500">-205</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+484</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">zonaclientes</td>
+                                <td class="px-4 py-3 text-center text-green-600">+10,855</td>
+                                <td class="px-4 py-3 text-center text-red-500">-524</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+10,331</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Comparacion de Lineas de Codigo</h3>
+                <div id="chart-loc" style="height: 300px;"></div>
+            </div>
+        </section>
+
+        <!-- Commits con Claude Code -->
+        <section id="claude" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#129302; Commits con Claude Code (AI-Assisted)</h2>
+            <div class="mb-6 p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <p class="text-sm text-purple-800">
+                    <strong>&#191;Que son?</strong> Commits donde el desarrollador uso Claude Code (IA de Anthropic) para ayudar a escribir codigo.
+                    Se identifican por marcadores: "&#129302;", "Co-Authored-By: Claude", "Claude Code".
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-purple-50 rounded-xl p-6 text-center border border-purple-200">
+                    <p class="text-4xl font-bold text-purple-600">52</p>
+                    <p class="text-sm text-gray-600 mt-1">Commits con Claude Code</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-6 text-center border border-gray-200">
+                    <p class="text-4xl font-bold stat-number">162</p>
+                    <p class="text-sm text-gray-600 mt-1">Total Commits</p>
+                </div>
+                <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200">
+                    <p class="text-4xl font-bold text-green-600">32%</p>
+                    <p class="text-sm text-gray-600 mt-1">Tasa de Adopcion AI</p>
+                </div>
+            </div>
+            <table class="w-full text-sm">
+                <thead class="bg-purple-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-gray-600">Fuente</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Con Claude</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b"><td class="px-4 py-3">GitLab</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">22</td><td class="px-4 py-3 text-center">124</td><td class="px-4 py-3 text-center">18%</td></tr>
+                    <tr class="border-b"><td class="px-4 py-3">GitHub</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">30</td><td class="px-4 py-3 text-center">38</td><td class="px-4 py-3 text-center">79%</td></tr>
+                    <tr class="bg-purple-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center text-purple-600">52</td><td class="px-4 py-3 text-center">162</td><td class="px-4 py-3 text-center">32%</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Sentry -->
+        <section id="sentry" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128737; Sentry - Monitoreo de Errores</h2>
+            <div class="mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                <p class="text-sm text-yellow-800">
+                    <strong>&#9888; Nota:</strong> No se pudieron obtener datos de Sentry para este ciclo debido a permisos de API.
+                    Se recomienda verificar la configuracion de acceso.
+                </p>
+            </div>
+        </section>
+
+        <!-- Issues Completados -->
+        <section id="completados" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#10004; Issues Completados (43)</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-green-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Issue</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Titulo</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Prioridad</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Owner</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-982" target="_blank" class="text-indigo-600 hover:underline">BAL-982</a></td><td class="px-4 py-2">Despliegue de Seguros</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Insurama</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-981" target="_blank" class="text-indigo-600 hover:underline">BAL-981</a></td><td class="px-4 py-2">Mejoras Detalle de Solicitud Admin2</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-980" target="_blank" class="text-indigo-600 hover:underline">BAL-980</a></td><td class="px-4 py-2">Mejoras Sidebar y Navegacion Admin2</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-979" target="_blank" class="text-indigo-600 hover:underline">BAL-979</a></td><td class="px-4 py-2">Rebranding Admin2 a Baldecash</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-978" target="_blank" class="text-indigo-600 hover:underline">BAL-978</a></td><td class="px-4 py-2">Mejoras Endpoint de Aplicaciones</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-977" target="_blank" class="text-indigo-600 hover:underline">BAL-977</a></td><td class="px-4 py-2">Sistema de Notificaciones Backoffice</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-976" target="_blank" class="text-indigo-600 hover:underline">BAL-976</a></td><td class="px-4 py-2">Infraestructura Backend ws2</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-975" target="_blank" class="text-indigo-600 hover:underline">BAL-975</a></td><td class="px-4 py-2">Arquitectura de Workflows v4.4</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-974" target="_blank" class="text-indigo-600 hover:underline">BAL-974</a></td><td class="px-4 py-2">Modulo de Seguros - Insurance module v4.8</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-970" target="_blank" class="text-indigo-600 hover:underline">BAL-970</a></td><td class="px-4 py-2">Selector de institucion COAR para docentes</td><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-967" target="_blank" class="text-indigo-600 hover:underline">BAL-967</a></td><td class="px-4 py-2">Unificar formato de respuesta api/solicitudes</td><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-965" target="_blank" class="text-indigo-600 hover:underline">BAL-965</a></td><td class="px-4 py-2">Actualizar documentacion Politicas BD</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Documentacion</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-962" target="_blank" class="text-indigo-600 hover:underline">BAL-962</a></td><td class="px-4 py-2">Mover mensajes preventivos a Botmaker</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Botmaker</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-964" target="_blank" class="text-indigo-600 hover:underline">BAL-964</a></td><td class="px-4 py-2">Generar documento EnviarClientesNuevos</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Emilio Concar</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-961" target="_blank" class="text-indigo-600 hover:underline">BAL-961</a></td><td class="px-4 py-2">Preparar documento base Devices BD</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-959" target="_blank" class="text-indigo-600 hover:underline">BAL-959</a></td><td class="px-4 py-2">Reformular flujo Lovable</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-960" target="_blank" class="text-indigo-600 hover:underline">BAL-960</a></td><td class="px-4 py-2">Crear endpoint Dashboard Lovable</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-931" target="_blank" class="text-indigo-600 hover:underline">BAL-931</a></td><td class="px-4 py-2">Sesion abierta iframe Voximplant</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Integracion VoxImplant</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-886" target="_blank" class="text-indigo-600 hover:underline">BAL-886</a></td><td class="px-4 py-2">Alternativa Bright Browser API</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Baldecash Web Scraping</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-916" target="_blank" class="text-indigo-600 hover:underline">BAL-916</a></td><td class="px-4 py-2">Baldecash 3.0 Levantamiento Observaciones</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-956" target="_blank" class="text-indigo-600 hover:underline">BAL-956</a></td><td class="px-4 py-2">Generar excel de error Reporte Ventas</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Emilio Concar</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-955" target="_blank" class="text-indigo-600 hover:underline">BAL-955</a></td><td class="px-4 py-2">Levantar observaciones Reporte Ventas</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Emilio Concar</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-953" target="_blank" class="text-indigo-600 hover:underline">BAL-953</a></td><td class="px-4 py-2">Endpoint liberar pre-reserva</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-952" target="_blank" class="text-indigo-600 hover:underline">BAL-952</a></td><td class="px-4 py-2">Endpoint pre-reservar equipo</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-950" target="_blank" class="text-indigo-600 hover:underline">BAL-950</a></td><td class="px-4 py-2">Endpoint recibir contrato firmado</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-951" target="_blank" class="text-indigo-600 hover:underline">BAL-951</a></td><td class="px-4 py-2">Endpoint reenviar codigo WhatsApp</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-949" target="_blank" class="text-indigo-600 hover:underline">BAL-949</a></td><td class="px-4 py-2">Endpoint validar WhatsApp</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-948" target="_blank" class="text-indigo-600 hover:underline">BAL-948</a></td><td class="px-4 py-2">Endpoint enviar codigo validacion WhatsApp</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-947" target="_blank" class="text-indigo-600 hover:underline">BAL-947</a></td><td class="px-4 py-2">Endpoint validar Stock</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-941" target="_blank" class="text-indigo-600 hover:underline">BAL-941</a></td><td class="px-4 py-2">Estructura BD equipos lockers</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Lockers & Trucks</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-946" target="_blank" class="text-indigo-600 hover:underline">BAL-946</a></td><td class="px-4 py-2">Modificar correo receptor Absolute</td><td class="px-4 py-2 text-center">&#128994;</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Absolute</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-929" target="_blank" class="text-indigo-600 hover:underline">BAL-929</a></td><td class="px-4 py-2">Agregar imagenes plantillas WhatsApp</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-897" target="_blank" class="text-indigo-600 hover:underline">BAL-897</a></td><td class="px-4 py-2">Flujos colegios solo carga colegios</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-576" target="_blank" class="text-indigo-600 hover:underline">BAL-576</a></td><td class="px-4 py-2">Cambio mensajeria bloqueo equipos</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-818" target="_blank" class="text-indigo-600 hover:underline">BAL-818</a></td><td class="px-4 py-2">API identificacion clientes VoxImplant</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-715" target="_blank" class="text-indigo-600 hover:underline">BAL-715</a></td><td class="px-4 py-2">Reporte de bancos por mes</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-954" target="_blank" class="text-indigo-600 hover:underline">BAL-954</a></td><td class="px-4 py-2">ParseError syntax error</td><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-915" target="_blank" class="text-indigo-600 hover:underline">BAL-915</a></td><td class="px-4 py-2">Endpoints convenios y activaciones Airtable</td><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-924" target="_blank" class="text-indigo-600 hover:underline">BAL-924</a></td><td class="px-4 py-2">Agregar SKU Monitor TEROS</td><td class="px-4 py-2 text-center">&#128993;</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-944" target="_blank" class="text-indigo-600 hover:underline">BAL-944</a></td><td class="px-4 py-2">Endpoint agrupar productos Airtable</td><td class="px-4 py-2 text-center">-</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">-</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Desglose por Solicitante -->
+        <section id="solicitante" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Desglose por Solicitante</h2>
+            <table class="w-full text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-semibold text-gray-600">Solicitante</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">Issues</th>
+                        <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Vania Hagel</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">35%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marco Del Rio</td><td class="px-4 py-3 text-center">8</td><td class="px-4 py-3 text-center">19%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Yadira Yovera</td><td class="px-4 py-3 text-center">4</td><td class="px-4 py-3 text-center">9%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Juan Carlos</td><td class="px-4 py-3 text-center">2</td><td class="px-4 py-3 text-center">5%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Otros</td><td class="px-4 py-3 text-center">14</td><td class="px-4 py-3 text-center">33%</td></tr>
+                    <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">43</td><td class="px-4 py-3 text-center">100%</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Issues No Completados -->
+        <section id="no-completados" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128308; Issues No Completados (14)</h2>
+            <div class="p-4 bg-amber-50 rounded-xl border border-amber-200 mb-6">
+                <p class="text-sm text-amber-800">
+                    Estos issues quedaron pendientes del ciclo 35 y pasaran al siguiente ciclo.
+                </p>
+            </div>
+            <p class="text-gray-600 text-sm">Los issues no completados no estan disponibles en el listado actual del ciclo. Consultar Linear para detalles.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-sm text-gray-400">Reporte generado automaticamente por Claude Code - BaldeCash Dev Team</p>
+            <p class="text-xs text-gray-500 mt-2">Ciclo 35 | 19 Ene - 26 Ene 2026</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to top button -->
+    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-6 right-6 bg-[#262877] text-white p-3 rounded-full shadow-lg hover:bg-[#3d3d99] transition-colors z-50">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
+
+    <script>
+        // Charts
+        Highcharts.chart('chart-priority', {
+            chart: { type: 'pie', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            plotOptions: {
+                pie: {
+                    innerSize: '50%',
+                    dataLabels: { enabled: true, format: '{point.name}: {point.y}' }
+                }
+            },
+            series: [{
+                name: 'Issues',
+                data: [
+                    { name: 'Urgent', y: 6, color: '#ef4444' },
+                    { name: 'High', y: 25, color: '#f97316' },
+                    { name: 'Medium', y: 7, color: '#eab308' },
+                    { name: 'Low', y: 1, color: '#22c55e' },
+                    { name: 'Sin Prioridad', y: 4, color: '#9ca3af' }
+                ]
+            }]
+        });
+
+        Highcharts.chart('chart-owner', {
+            chart: { type: 'bar', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            xAxis: { categories: ['Emilio', 'Thiago', 'Anderson', 'Leonardo'] },
+            yAxis: { title: { text: '' } },
+            legend: { enabled: false },
+            series: [{
+                name: 'Issues',
+                data: [14, 10, 10, 9],
+                color: '#262877'
+            }]
+        });
+
+        Highcharts.chart('chart-linear-projects', {
+            chart: { type: 'pie', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            series: [{
+                name: 'Issues',
+                data: [
+                    { name: 'Baldecash 3.0', y: 10, color: '#262877' },
+                    { name: 'Lockers & Trucks', y: 10, color: '#3d3d99' },
+                    { name: 'Emilio Concar', y: 4, color: '#6366f1' },
+                    { name: 'VoxImplant', y: 2, color: '#8b5cf6' },
+                    { name: 'Otros', y: 17, color: '#94a3b8' }
+                ]
+            }]
+        });
+
+        Highcharts.chart('chart-loc', {
+            chart: { type: 'column', backgroundColor: 'transparent' },
+            title: { text: '' },
+            credits: { enabled: false },
+            xAxis: { categories: ['Thiago', 'Marlon', 'Emilio', 'Leonardo'] },
+            yAxis: { title: { text: 'Lineas de Codigo' } },
+            series: [{
+                name: 'Anadidas',
+                data: [10987, 13894, 7716, 5060],
+                color: '#22c55e'
+            }, {
+                name: 'Eliminadas',
+                data: [-2150, -4206, -1665, -704],
+                color: '#ef4444'
+            }]
+        });
+
+        // Sidebar hover behavior
+        const sidebar = document.getElementById('sidebar-nav');
+        const sidebarIcon = document.getElementById('sidebar-icon');
+
+        sidebarIcon.addEventListener('mouseenter', () => {
+            sidebar.classList.add('visible');
+        });
+
+        sidebar.addEventListener('mouseleave', () => {
+            sidebar.classList.remove('visible');
+        });
+    </script>
+</body>
+</html>
