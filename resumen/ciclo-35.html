@@ -393,24 +393,28 @@
 
         <!-- Análisis por Proyecto Linear -->
         <section id="linear-projects" class="bg-white rounded-2xl p-8 card-shadow mb-8">
-            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128203; Issues por Proyecto Linear</h2>
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Proyectos Linear</h2>
 
-            <div class="grid md:grid-cols-4 gap-4 mb-6">
+            <div class="grid md:grid-cols-5 gap-4 mb-6">
                 <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold stat-number">10</div>
-                    <div class="text-sm text-gray-600">Proyectos Activos</div>
+                    <div class="text-3xl font-bold stat-number">40</div>
+                    <div class="text-sm text-gray-600">Total Proyectos</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center">
+                    <div class="text-3xl font-bold text-green-600">10</div>
+                    <div class="text-sm text-gray-600">Con Issues Ciclo</div>
                 </div>
                 <div class="kpi-card rounded-xl p-4 text-center">
                     <div class="text-3xl font-bold stat-number">43</div>
                     <div class="text-sm text-gray-600">Issues Totales</div>
                 </div>
                 <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold text-green-600">43</div>
-                    <div class="text-sm text-gray-600">Completados</div>
-                </div>
-                <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold text-amber-600">100%</div>
+                    <div class="text-3xl font-bold text-green-600">100%</div>
                     <div class="text-sm text-gray-600">Tasa Completado</div>
+                </div>
+                <div class="kpi-card rounded-xl p-4 text-center border-2 border-amber-300">
+                    <div class="text-3xl font-bold text-amber-600">14</div>
+                    <div class="text-sm text-gray-600">Sin Lead Asignado</div>
                 </div>
             </div>
 
@@ -554,25 +558,26 @@
         <!-- Lineas de Codigo por Autor -->
         <section id="loc-autor" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Lineas de Codigo por Autor</h2>
+            <p class="text-sm text-gray-500 mb-6">Datos consolidados de GitLab y GitHub (incluye commits del 26 enero)</p>
 
             <div class="grid grid-cols-3 gap-4 mb-8">
                 <div class="bg-green-50 rounded-xl p-5 text-center border border-green-200">
-                    <p class="text-3xl font-bold text-green-600">+37,657</p>
+                    <p class="text-3xl font-bold text-green-600">+125,814</p>
                     <p class="text-xs text-gray-600 mt-1">Lineas anadidas</p>
                 </div>
                 <div class="bg-red-50 rounded-xl p-5 text-center border border-red-200">
-                    <p class="text-3xl font-bold text-red-500">-8,725</p>
+                    <p class="text-3xl font-bold text-red-500">-45,636</p>
                     <p class="text-xs text-gray-600 mt-1">Lineas eliminadas</p>
                 </div>
                 <div class="bg-blue-50 rounded-xl p-5 text-center border border-blue-200">
-                    <p class="text-3xl font-bold text-blue-600">+28,932</p>
+                    <p class="text-3xl font-bold text-blue-600">+80,178</p>
                     <p class="text-xs text-gray-600 mt-1">Lineas netas</p>
                 </div>
             </div>
 
             <div class="grid lg:grid-cols-2 gap-8">
                 <div>
-                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Autor (GitLab webservice)</h3>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Por Autor (GitLab + GitHub)</h3>
                     <table class="w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
@@ -584,34 +589,34 @@
                         </thead>
                         <tbody>
                             <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
-                                <td class="px-4 py-3 text-center text-green-600">+10,987</td>
-                                <td class="px-4 py-3 text-center text-red-500">-2,150</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+8,837</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
-                                <td class="px-4 py-3 text-center text-green-600">+7,716</td>
-                                <td class="px-4 py-3 text-center text-red-500">-1,665</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+6,051</td>
+                                <td class="px-4 py-3 font-medium">Leonardo Medina</td>
+                                <td class="px-4 py-3 text-center text-green-600">+92,163</td>
+                                <td class="px-4 py-3 text-center text-red-500">-37,415</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+54,748</td>
                             </tr>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">Marlon Cano</td>
-                                <td class="px-4 py-3 text-center text-green-600">+13,894</td>
-                                <td class="px-4 py-3 text-center text-red-500">-4,206</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+9,688</td>
+                                <td class="px-4 py-3 text-center text-green-600">+14,539</td>
+                                <td class="px-4 py-3 text-center text-red-500">-4,272</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+10,267</td>
                             </tr>
                             <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Leonardo Medina</td>
-                                <td class="px-4 py-3 text-center text-green-600">+5,060</td>
-                                <td class="px-4 py-3 text-center text-red-500">-704</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+4,356</td>
+                                <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
+                                <td class="px-4 py-3 text-center text-green-600">+11,042</td>
+                                <td class="px-4 py-3 text-center text-red-500">-2,184</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+8,858</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
+                                <td class="px-4 py-3 text-center text-green-600">+8,070</td>
+                                <td class="px-4 py-3 text-center text-red-500">-1,765</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+6,305</td>
                             </tr>
                             <tr class="bg-gray-100 font-bold">
                                 <td class="px-4 py-3">TOTAL</td>
-                                <td class="px-4 py-3 text-center text-green-600">+37,657</td>
-                                <td class="px-4 py-3 text-center text-red-500">-8,725</td>
-                                <td class="px-4 py-3 text-center text-blue-600">+28,932</td>
+                                <td class="px-4 py-3 text-center text-green-600">+125,814</td>
+                                <td class="px-4 py-3 text-center text-red-500">-45,636</td>
+                                <td class="px-4 py-3 text-center text-blue-600">+80,178</td>
                             </tr>
                         </tbody>
                     </table>
@@ -629,32 +634,51 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr class="border-b table-row-hover bg-orange-50">
+                                <td class="px-4 py-3 font-medium">ws2 (GitHub)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+82,690</td>
+                                <td class="px-4 py-3 text-center text-red-500">-35,911</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+46,779</td>
+                            </tr>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">webservice (GitLab)</td>
-                                <td class="px-4 py-3 text-center text-green-600">+37,657</td>
-                                <td class="px-4 py-3 text-center text-red-500">-8,725</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+28,932</td>
+                                <td class="px-4 py-3 text-center text-green-600">+38,357</td>
+                                <td class="px-4 py-3 text-center text-red-500">-8,791</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+29,566</td>
                             </tr>
                             <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">pidetuprestamo</td>
-                                <td class="px-4 py-3 text-center text-green-600">+606</td>
-                                <td class="px-4 py-3 text-center text-red-500">-122</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+484</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">admin</td>
-                                <td class="px-4 py-3 text-center text-green-600">+689</td>
-                                <td class="px-4 py-3 text-center text-red-500">-205</td>
-                                <td class="px-4 py-3 text-center font-bold text-blue-600">+484</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">zonaclientes</td>
+                                <td class="px-4 py-3 font-medium">zonaclientes (GitLab)</td>
                                 <td class="px-4 py-3 text-center text-green-600">+10,855</td>
                                 <td class="px-4 py-3 text-center text-red-500">-524</td>
                                 <td class="px-4 py-3 text-center font-bold text-blue-600">+10,331</td>
                             </tr>
+                            <tr class="border-b table-row-hover bg-orange-50">
+                                <td class="px-4 py-3 font-medium">admin2 (GitHub)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+5,052</td>
+                                <td class="px-4 py-3 text-center text-red-500">-1,165</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+3,887</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">pidetuprestamo (GitLab)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+768</td>
+                                <td class="px-4 py-3 text-center text-red-500">-137</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+631</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">admin (GitLab)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+689</td>
+                                <td class="px-4 py-3 text-center text-red-500">-205</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+484</td>
+                            </tr>
+                            <tr class="border-b table-row-hover bg-orange-50">
+                                <td class="px-4 py-3 font-medium">contabilidad-concar (GitHub)</td>
+                                <td class="px-4 py-3 text-center text-green-600">+551</td>
+                                <td class="px-4 py-3 text-center text-red-500">-118</td>
+                                <td class="px-4 py-3 text-center font-bold text-blue-600">+433</td>
+                            </tr>
                         </tbody>
                     </table>
+                    <p class="text-xs text-gray-400 mt-2">Filas naranja = repositorios GitHub</p>
                 </div>
             </div>
 
@@ -878,17 +902,17 @@
 
         Highcharts.chart('chart-loc', {
             chart: { type: 'column', backgroundColor: 'transparent' },
-            title: { text: '' },
+            title: { text: 'GitLab + GitHub combinado' },
             credits: { enabled: false },
-            xAxis: { categories: ['Thiago', 'Marlon', 'Emilio', 'Leonardo'] },
+            xAxis: { categories: ['Leonardo', 'Marlon', 'Thiago', 'Emilio'] },
             yAxis: { title: { text: 'Lineas de Codigo' } },
             series: [{
                 name: 'Anadidas',
-                data: [10987, 13894, 7716, 5060],
+                data: [92163, 14539, 11042, 8070],
                 color: '#22c55e'
             }, {
                 name: 'Eliminadas',
-                data: [-2150, -4206, -1665, -704],
+                data: [-37415, -4272, -2184, -1765],
                 color: '#ef4444'
             }]
         });
