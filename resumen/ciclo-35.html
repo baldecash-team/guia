@@ -129,6 +129,7 @@
             <li><a href="#claude" class="nav-link"><span class="nav-dot"></span>Claude Code</a></li>
 
             <li class="nav-section">Calidad</li>
+            <li><a href="#hotfixes" class="nav-link"><span class="nav-dot"></span>Hotfixes</a></li>
             <li><a href="#sentry" class="nav-link"><span class="nav-dot"></span>Sentry</a></li>
 
             <li class="nav-section">Detalles</li>
@@ -391,7 +392,7 @@
                                 <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
                             </tr>
                             <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium text-gray-400">Sin asignar</td>
+                                <td class="px-4 py-3 font-medium">Marlon Alvarez</td>
                                 <td class="px-4 py-3 text-center text-green-600 font-semibold">3</td>
                                 <td class="px-4 py-3 text-center text-blue-600">0</td>
                                 <td class="px-4 py-3 text-center font-bold bg-gray-50">3</td>
@@ -727,13 +728,91 @@
             </table>
         </section>
 
+        <!-- Hotfixes y Bugfixes -->
+        <section id="hotfixes" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128293; Hotfixes y Bugfixes del Ciclo</h2>
+            <div class="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <p class="text-sm text-blue-800">
+                    <strong>&#128680; Hotfix:</strong> Correccion urgente en produccion (rama: <code class="bg-blue-100 px-1 rounded">hotfix/*</code>, <code class="bg-blue-100 px-1 rounded">hot-fix/*</code>, <code class="bg-blue-100 px-1 rounded">emergency/*</code>, <code class="bg-blue-100 px-1 rounded">urgent-fix/*</code>)<br>
+                    <strong>&#128027; Bugfix:</strong> Correccion de bug en desarrollo normal (mensaje: <code class="bg-blue-100 px-1 rounded">fix:</code>, <code class="bg-blue-100 px-1 rounded">fix()</code>, <code class="bg-blue-100 px-1 rounded">bugfix:</code>)
+                </p>
+            </div>
+            <div class="flex items-center justify-center py-6">
+                <span class="bg-green-100 text-green-800 px-6 py-3 rounded-full text-lg font-semibold flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Ciclo Estable - Sin Hotfixes de Emergencia
+                </span>
+            </div>
+            <div class="grid md:grid-cols-4 gap-4 mt-6">
+                <div class="bg-green-50 rounded-xl p-4 text-center border border-green-200">
+                    <div class="text-2xl font-bold text-green-600">0</div>
+                    <div class="text-xs text-gray-600 mt-1">&#128680; Hotfixes</div>
+                </div>
+                <div class="bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
+                    <div class="text-2xl font-bold text-amber-600">6</div>
+                    <div class="text-xs text-gray-600 mt-1">&#128027; Bugfixes</div>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-200">
+                    <div class="text-2xl font-bold stat-number">162</div>
+                    <div class="text-xs text-gray-600 mt-1">Total Commits</div>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4 text-center border border-gray-200">
+                    <div class="text-2xl font-bold text-amber-600">3.7%</div>
+                    <div class="text-xs text-gray-600 mt-1">Tasa de Correccion</div>
+                </div>
+            </div>
+
+            <!-- Tabla de Bugfixes -->
+            <h3 class="text-lg font-semibold text-gray-700 mt-8 mb-4">&#128027; Bugfixes (6)</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-amber-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">#</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">Fuente</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">Proyecto</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">SHA</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">Fecha</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">Autor</th>
+                            <th class="px-4 py-2 text-left font-semibold text-gray-600">Mensaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">1</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">webservice</td><td class="px-4 py-2 font-mono text-xs">7b4a180c</td><td class="px-4 py-2">2026-01-26</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2 text-xs">fix: retornar cliente_encontrado false cuando no tiene solicitudes</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">2</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">webservice</td><td class="px-4 py-2 font-mono text-xs">8ed08d55</td><td class="px-4 py-2">2026-01-26</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-xs">fix(seguros): quitar restriccion de precio maximo de 7000</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">3</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">webservice</td><td class="px-4 py-2 font-mono text-xs">56c41e2a</td><td class="px-4 py-2">2026-01-26</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-xs">fix(contratos): cambiar CUOTA ACCESORIO por CUOTA ADICIONAL</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">4</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">webservice</td><td class="px-4 py-2 font-mono text-xs">10b08da6</td><td class="px-4 py-2">2026-01-23</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2 text-xs">fix: eliminar validacion redundante en controlador</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">5</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">webservice</td><td class="px-4 py-2 font-mono text-xs">abb80630</td><td class="px-4 py-2">2026-01-22</td><td class="px-4 py-2">Marlon Cano</td><td class="px-4 py-2 text-xs">Fix Modulo Merge PDFs</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2">6</td><td class="px-4 py-2">GitLab</td><td class="px-4 py-2">pidetuprestamo</td><td class="px-4 py-2 font-mono text-xs">56a27901</td><td class="px-4 py-2">2026-01-20</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-xs">fix: actualizar condiciones y codigo SBS en cards de seguros</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xs text-gray-400 mt-4 text-center">
+                Indicadores Hotfix: &#128994; 0 (estable) | &#128993; 1-2 (atencion) | &#128308; 3+ (revisar procesos)
+            </p>
+        </section>
+
         <!-- Sentry -->
         <section id="sentry" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128737; Sentry - Monitoreo de Errores</h2>
-            <div class="mb-6 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
-                <p class="text-sm text-yellow-800">
-                    <strong>&#9888; Nota:</strong> No se pudieron obtener datos de Sentry para este ciclo debido a permisos de API.
-                    Se recomienda verificar la configuracion de acceso.
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div class="bg-red-50 rounded-xl p-6 text-center border border-red-100">
+                    <div class="text-3xl font-bold text-red-600">2,251</div>
+                    <div class="text-sm text-red-700 mt-1">Eventos de Error</div>
+                </div>
+                <div class="bg-green-50 rounded-xl p-6 text-center border border-green-100">
+                    <div class="text-3xl font-bold text-green-600">0</div>
+                    <div class="text-sm text-green-700 mt-1">Issues No Resueltos</div>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-6 text-center border border-blue-100">
+                    <div class="text-3xl font-bold text-blue-600">7 dias</div>
+                    <div class="text-sm text-blue-700 mt-1">Periodo Analizado</div>
+                </div>
+            </div>
+            <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <p class="text-sm text-gray-600">
+                    <strong>Periodo:</strong> 19 Ene 2026 - 26 Ene 2026 |
+                    <a href="https://baldecash-gy.sentry.io/explore/discover/homepage/?dataset=errors&queryDataset=error-events&query=&field=count%28%29&sort=-count%28%29&start=2026-01-19T00%3A00%3A00Z&end=2026-01-26T23%3A59%3A59Z&mode=aggregate&yAxis=count%28%29" target="_blank" class="text-indigo-600 hover:underline">Ver en Sentry &#8599;</a>
                 </p>
             </div>
         </section>
@@ -753,6 +832,9 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-988" target="_blank" class="text-indigo-600 hover:underline">BAL-988</a></td><td class="px-4 py-2">Filtros Cobranzas</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-987" target="_blank" class="text-indigo-600 hover:underline">BAL-987</a></td><td class="px-4 py-2">Servicio Pdf Merge</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-986" target="_blank" class="text-indigo-600 hover:underline">BAL-986</a></td><td class="px-4 py-2">Continuar BBVA QR</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2">-</td></tr>
                         <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-982" target="_blank" class="text-indigo-600 hover:underline">BAL-982</a></td><td class="px-4 py-2">Despliegue de Seguros</td><td class="px-4 py-2 text-center">&#128308;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Insurama</td></tr>
                         <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-981" target="_blank" class="text-indigo-600 hover:underline">BAL-981</a></td><td class="px-4 py-2">Mejoras Detalle de Solicitud Admin2</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
                         <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-980" target="_blank" class="text-indigo-600 hover:underline">BAL-980</a></td><td class="px-4 py-2">Mejoras Sidebar y Navegacion Admin2</td><td class="px-4 py-2 text-center">&#128992;</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Baldecash 3.0</td></tr>
@@ -811,10 +893,15 @@
                 </thead>
                 <tbody>
                     <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Vania Hagel</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">35%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marco Del Rio</td><td class="px-4 py-3 text-center">8</td><td class="px-4 py-3 text-center">19%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Yadira Yovera</td><td class="px-4 py-3 text-center">4</td><td class="px-4 py-3 text-center">9%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Juan Carlos</td><td class="px-4 py-3 text-center">2</td><td class="px-4 py-3 text-center">5%</td></tr>
-                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Otros</td><td class="px-4 py-3 text-center">14</td><td class="px-4 py-3 text-center">33%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Marco Del Rio</td><td class="px-4 py-3 text-center">14</td><td class="px-4 py-3 text-center">33%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Yadira Yovera</td><td class="px-4 py-3 text-center">3</td><td class="px-4 py-3 text-center">7%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Milena Garcia</td><td class="px-4 py-3 text-center">2</td><td class="px-4 py-3 text-center">5%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Juan Carlos</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">2%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Miguel</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">2%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Gretchen Garrat</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">2%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Jorge Morales</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">2%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Cecilia Aliaga</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">2%</td></tr>
+                    <tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium text-gray-500">Sin solicitante</td><td class="px-4 py-3 text-center">4</td><td class="px-4 py-3 text-center">9%</td></tr>
                     <tr class="bg-gray-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center">43</td><td class="px-4 py-3 text-center">100%</td></tr>
                 </tbody>
             </table>
@@ -825,10 +912,38 @@
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">&#128308; Issues No Completados (14)</h2>
             <div class="p-4 bg-amber-50 rounded-xl border border-amber-200 mb-6">
                 <p class="text-sm text-amber-800">
-                    Estos issues quedaron pendientes del ciclo 35 y pasaran al siguiente ciclo.
+                    Estos 14 issues quedaron pendientes del ciclo 35 y fueron movidos al ciclo 36.
                 </p>
             </div>
-            <p class="text-gray-600 text-sm">Los issues no completados no estan disponibles en el listado actual del ciclo. Consultar Linear para detalles.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-red-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Issue</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Titulo</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Asignado</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Solicitante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-957" target="_blank" class="text-indigo-600 hover:underline">BAL-957</a></td><td class="px-4 py-2">Baldecash 3.0 - Levantamiento Observaciones P2</td><td class="px-4 py-2 text-center">&#128993; Todo</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Marco Del Rio</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-966" target="_blank" class="text-indigo-600 hover:underline">BAL-966</a></td><td class="px-4 py-2">Integrar colas dentro de Blip</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Yadira Yovera</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-958" target="_blank" class="text-indigo-600 hover:underline">BAL-958</a></td><td class="px-4 py-2">Sincronizar campo Carpeta.confirmada en Airtable</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">Carolina Ledesma</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-945" target="_blank" class="text-indigo-600 hover:underline">BAL-945</a></td><td class="px-4 py-2">Automatizacion de las compras</td><td class="px-4 py-2 text-center">&#128993; Todo</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Milena Garcia</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-930" target="_blank" class="text-indigo-600 hover:underline">BAL-930</a></td><td class="px-4 py-2">Investigar nueva Arquitectura de Base de Datos</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Emilio Gonzales</td><td class="px-4 py-2">Marco Del Rio</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-918" target="_blank" class="text-indigo-600 hover:underline">BAL-918</a></td><td class="px-4 py-2">Politicas de Tareas en Linear</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">Marco Del Rio</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-901" target="_blank" class="text-indigo-600 hover:underline">BAL-901</a></td><td class="px-4 py-2">PLANNING 13/1/2026</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2">Marco Del Rio</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-856" target="_blank" class="text-indigo-600 hover:underline">BAL-856</a></td><td class="px-4 py-2">WS- Usar Userdefined para codigos desbloqueo Absolute</td><td class="px-4 py-2 text-center">&#128995; In Review</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">Marco Del Rio</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-820" target="_blank" class="text-indigo-600 hover:underline">BAL-820</a></td><td class="px-4 py-2">Rediseno: Migrar de cliente.solicitud_id a tabla intermedia</td><td class="px-4 py-2 text-center">&#128993; Todo</td><td class="px-4 py-2">-</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-817" target="_blank" class="text-indigo-600 hover:underline">BAL-817</a></td><td class="px-4 py-2">Landing de Practica para Activaciones</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">Jhahayra Cachay</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-800" target="_blank" class="text-indigo-600 hover:underline">BAL-800</a></td><td class="px-4 py-2">Integracion Blip WhatsApp para programa de referidos</td><td class="px-4 py-2 text-center">&#128995; In Review</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">Vania Hagel</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-798" target="_blank" class="text-indigo-600 hover:underline">BAL-798</a></td><td class="px-4 py-2">Planing DINET</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2">-</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-825" target="_blank" class="text-indigo-600 hover:underline">BAL-825</a></td><td class="px-4 py-2">Configurar validacion de correo para evitar spam</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2">Yadira Yovera</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2"><a href="https://linear.app/baldecash/issue/BAL-727" target="_blank" class="text-indigo-600 hover:underline">BAL-727</a></td><td class="px-4 py-2">Crear endpoint para area de gestion de celulares</td><td class="px-4 py-2 text-center">&#128309; In Progress</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2">Vania Hagel</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
@@ -873,7 +988,7 @@
             chart: { type: 'bar', backgroundColor: 'transparent' },
             title: { text: '' },
             credits: { enabled: false },
-            xAxis: { categories: ['Emilio', 'Leonardo', 'Thiago', 'Anderson', 'Sin asignar'] },
+            xAxis: { categories: ['Emilio', 'Leonardo', 'Thiago', 'Anderson', 'Marlon'] },
             yAxis: { title: { text: '' } },
             legend: { enabled: false },
             series: [{
