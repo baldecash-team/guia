@@ -348,6 +348,7 @@
         <!-- Desglose por Owner -->
         <section id="desglose-owner" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Desglose por Owner</h2>
+            <p class="text-sm text-gray-500 mb-4">Incluye tareas Done e In Review del ciclo. Ratio = (Done + In Review) / Total asignados al ciclo.</p>
             <div class="grid md:grid-cols-2 gap-8">
                 <div>
                     <table class="w-full text-sm">
@@ -355,34 +356,53 @@
                             <tr>
                                 <th class="px-4 py-3 text-left font-semibold text-gray-600">Desarrollador</th>
                                 <th class="px-4 py-3 text-center font-semibold text-green-600">Done</th>
+                                <th class="px-4 py-3 text-center font-semibold text-blue-600">In Review</th>
                                 <th class="px-4 py-3 text-center font-semibold text-gray-600 bg-gray-100">Total</th>
+                                <th class="px-4 py-3 text-center font-semibold text-emerald-600">Ratio</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">Emilio Gonzales</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">14</td>
-                                <td class="px-4 py-3 text-center font-bold bg-gray-50">14</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">20</td>
+                                <td class="px-4 py-3 text-center text-blue-600">0</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">20</td>
+                                <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
                             </tr>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">Leonardo Medina</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">9</td>
-                                <td class="px-4 py-3 text-center font-bold bg-gray-50">9</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
+                                <td class="px-4 py-3 text-center text-blue-600">0</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">10</td>
+                                <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
                             </tr>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">Thiago Gutierrez</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
-                                <td class="px-4 py-3 text-center font-bold bg-gray-50">10</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">5</td>
+                                <td class="px-4 py-3 text-center text-blue-600">0</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">5</td>
+                                <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
                             </tr>
                             <tr class="border-b table-row-hover">
                                 <td class="px-4 py-3 font-medium">Anderson Palomino</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
-                                <td class="px-4 py-3 text-center font-bold bg-gray-50">10</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">5</td>
+                                <td class="px-4 py-3 text-center text-blue-600">0</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">5</td>
+                                <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium text-gray-400">Sin asignar</td>
+                                <td class="px-4 py-3 text-center text-green-600 font-semibold">3</td>
+                                <td class="px-4 py-3 text-center text-blue-600">0</td>
+                                <td class="px-4 py-3 text-center font-bold bg-gray-50">3</td>
+                                <td class="px-4 py-3 text-center font-bold text-emerald-600">100%</td>
                             </tr>
                             <tr class="bg-gray-100 font-bold">
                                 <td class="px-4 py-3">TOTAL</td>
                                 <td class="px-4 py-3 text-center text-green-700">43</td>
+                                <td class="px-4 py-3 text-center text-blue-700">0</td>
                                 <td class="px-4 py-3 text-center">43</td>
+                                <td class="px-4 py-3 text-center text-emerald-700">100%</td>
                             </tr>
                         </tbody>
                     </table>
@@ -391,92 +411,71 @@
             </div>
         </section>
 
-        <!-- Análisis por Proyecto Linear -->
+        <!-- Proyectos Linear -->
         <section id="linear-projects" class="bg-white rounded-2xl p-8 card-shadow mb-8">
             <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Proyectos Linear</h2>
 
-            <div class="grid md:grid-cols-5 gap-4 mb-6">
-                <div class="kpi-card rounded-xl p-4 text-center">
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <div class="kpi-card rounded-xl p-5 text-center">
                     <div class="text-3xl font-bold stat-number">40</div>
                     <div class="text-sm text-gray-600">Total Proyectos</div>
                 </div>
-                <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold text-green-600">10</div>
-                    <div class="text-sm text-gray-600">Con Issues Ciclo</div>
+                <div class="kpi-card rounded-xl p-5 text-center">
+                    <div class="text-3xl font-bold text-blue-600">14</div>
+                    <div class="text-sm text-gray-600">In Progress</div>
                 </div>
-                <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold stat-number">43</div>
-                    <div class="text-sm text-gray-600">Issues Totales</div>
+                <div class="kpi-card rounded-xl p-5 text-center">
+                    <div class="text-3xl font-bold text-green-600">4</div>
+                    <div class="text-sm text-gray-600">Completed</div>
                 </div>
-                <div class="kpi-card rounded-xl p-4 text-center">
-                    <div class="text-3xl font-bold text-green-600">100%</div>
-                    <div class="text-sm text-gray-600">Tasa Completado</div>
-                </div>
-                <div class="kpi-card rounded-xl p-4 text-center border-2 border-amber-300">
+                <div class="kpi-card rounded-xl p-5 text-center border-2 border-amber-300">
                     <div class="text-3xl font-bold text-amber-600">14</div>
                     <div class="text-sm text-gray-600">Sin Lead Asignado</div>
                 </div>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Distribucion por Proyecto</h3>
-                    <table class="w-full text-sm">
-                        <thead class="bg-indigo-50">
-                            <tr>
-                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
-                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Issues</th>
-                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Completados</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Baldecash 3.0</td>
-                                <td class="px-4 py-3 text-center">10</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Lockers & Trucks</td>
-                                <td class="px-4 py-3 text-center">10</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">10</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Emilio Concar</td>
-                                <td class="px-4 py-3 text-center">4</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">4</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Integracion VoxImplant</td>
-                                <td class="px-4 py-3 text-center">2</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">2</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Botmaker</td>
-                                <td class="px-4 py-3 text-center">1</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">1</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Insurama</td>
-                                <td class="px-4 py-3 text-center">1</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">1</td>
-                            </tr>
-                            <tr class="border-b table-row-hover">
-                                <td class="px-4 py-3 font-medium">Otros</td>
-                                <td class="px-4 py-3 text-center">15</td>
-                                <td class="px-4 py-3 text-center text-green-600 font-semibold">15</td>
-                            </tr>
-                            <tr class="bg-indigo-100 font-bold">
-                                <td class="px-4 py-3">TOTAL</td>
-                                <td class="px-4 py-3 text-center">43</td>
-                                <td class="px-4 py-3 text-center text-green-700">43</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Distribucion de Issues</h3>
-                    <div id="chart-linear-projects" style="height: 280px;"></div>
-                </div>
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Proyectos In Progress con Lead</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm mb-6">
+                    <thead class="bg-blue-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                            <th class="px-4 py-3 text-left font-semibold text-gray-600">Lead</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+                            <th class="px-4 py-3 text-center font-semibold text-gray-600">Prioridad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Baldecash 3.0</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Plataforma de riesgo crediticio</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Bcp / Kashio</td><td class="px-4 py-2">Marlon Alvarez</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">Medium</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Knox</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">DINET X BALDECASH</td><td class="px-4 py-2">Anderson Palomino</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Lovable / Generador de Piezas</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">Medium</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Lovable / Referidos</td><td class="px-4 py-2">Thiago Gutierrez</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">Medium</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Reduccion de deuda tecnica</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Integracion Escritura Lovable</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">High</td></tr>
+                        <tr class="border-b table-row-hover"><td class="px-4 py-2 font-medium">Baldecash Roadmap</td><td class="px-4 py-2">Leonardo Medina</td><td class="px-4 py-2 text-center"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">In Progress</span></td><td class="px-4 py-2 text-center">Urgent</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Proyectos Sin Lead Asignado (14)</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Integracion con VoxImplant</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Emilio Concar</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Refactorizacion Modales</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">BBVA QR - Request to Pay</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Insurama</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Optimizacion de base de datos</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Mensajeria Blip</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Activaciones</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Automatizacion de procesos TI</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Integracion mensajes Blip</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Demos iniciativas nuevas</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Agentes de IA</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Mejoras UI/UX Pidetuprestamo</div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm">Nuevo BaldeCash</div>
             </div>
         </section>
 
@@ -874,29 +873,13 @@
             chart: { type: 'bar', backgroundColor: 'transparent' },
             title: { text: '' },
             credits: { enabled: false },
-            xAxis: { categories: ['Emilio', 'Thiago', 'Anderson', 'Leonardo'] },
+            xAxis: { categories: ['Emilio', 'Leonardo', 'Thiago', 'Anderson', 'Sin asignar'] },
             yAxis: { title: { text: '' } },
             legend: { enabled: false },
             series: [{
                 name: 'Issues',
-                data: [14, 10, 10, 9],
+                data: [20, 10, 5, 5, 3],
                 color: '#262877'
-            }]
-        });
-
-        Highcharts.chart('chart-linear-projects', {
-            chart: { type: 'pie', backgroundColor: 'transparent' },
-            title: { text: '' },
-            credits: { enabled: false },
-            series: [{
-                name: 'Issues',
-                data: [
-                    { name: 'Baldecash 3.0', y: 10, color: '#262877' },
-                    { name: 'Lockers & Trucks', y: 10, color: '#3d3d99' },
-                    { name: 'Emilio Concar', y: 4, color: '#6366f1' },
-                    { name: 'VoxImplant', y: 2, color: '#8b5cf6' },
-                    { name: 'Otros', y: 17, color: '#94a3b8' }
-                ]
             }]
         });
 
