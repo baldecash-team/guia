@@ -1751,6 +1751,44 @@ Thiago y Anderson comparten UNA cuenta de GitLab. La ÚNICA forma de distinguir 
 - Usar directamente el autor del commit
 - NO es necesario buscar ticket de Linear
 
+### SECCIÓN 13.1: LOC por Repositorio y Persona (matriz)
+
+**⚠️ OBLIGATORIO: Va INMEDIATAMENTE debajo de la Sección 13 (LOC por Usuario).**
+Desglose cruzado **persona × repositorio**: cuántas líneas netas aportó cada autor en cada repo
+(GitLab + GitHub juntos). Permite ver en qué repos trabajó cada persona.
+
+**Tabla matriz (filas = autor, columnas = repos con actividad, celda = neto LOC):**
+
+| Autor | webservice (GL) | admin (GL) | ws2 (GH) | admin2 (GH) | baldecash (GH) | ... | **Total Neto** | **Commits** |
+|-------|-----------------|------------|----------|-------------|----------------|-----|----------------|-------------|
+| Leonardo | +X | +X | +X | +X | +X | ... | **+X** | X |
+| Emilio | +X | +X | +X | +X | +X | ... | **+X** | X |
+| Anderson | +X | +X | +X | +X | +X | ... | **+X** | X |
+| Thiago | +X | +X | +X | +X | +X | ... | **+X** | X |
+| Marlon | +X | +X | +X | +X | +X | ... | **+X** | X |
+| **TOTAL** | **+X** | **+X** | **+X** | **+X** | **+X** | ... | **+X** | **X** |
+
+**Reglas:**
+- Solo columnas de repos con actividad en el ciclo (las mismas de la Sección 14).
+- Celda vacía o `—` si la persona no tocó ese repo.
+- Mostrar neto (`+añadidas −eliminadas`); opción de tooltip con `+add/-del` por celda.
+- Fila y columna **TOTAL** obligatorias; el gran total debe cuadrar con el neto de la Sección 13.
+- `guia` (documentación): solo último commit, igual que en el resto del reporte.
+
+**Cálculo:**
+```python
+# matriz[autor][repo] = {"add":0,"del":0,"commits":0}
+for commit in todos_los_commits_del_ciclo:        # GitLab + GitHub, sin merges
+    autor = identificar_autor_commit(commit, commit.source_branch)
+    repo  = commit.repo
+    matriz[autor][repo]["add"]     += commit.additions
+    matriz[autor][repo]["del"]     += commit.deletions
+    matriz[autor][repo]["commits"] += 1
+# neto celda = add - del ; totales por fila/columna
+```
+
+**Gráfico (opcional):** stacked bar horizontal — una barra por autor, segmentos por repo.
+
 ### SECCIÓN 14: Líneas de Código por Proyecto
 
 | Proyecto | Fuente | Líneas + | Líneas - | Neto | Commit Top |
