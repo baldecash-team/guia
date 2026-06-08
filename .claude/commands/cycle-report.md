@@ -9,15 +9,19 @@ Genera un reporte completo del ciclo usando **Linear** (issues), **GitLab** (com
 ```yaml
 Plantilla:
   archivo: "modelo.html"
-  ubicacion: "D:/repos/guia/modelo.html"
+  ubicacion: "D:/repos/baldecash/guia/modelo.html"   # ruta real del repo
   regla: "Usar SIEMPRE como base, NO modificar estructura"
 
 Generación_HTML:
   - Leer modelo.html
-  - Llenar datos de MCP en CADA sección (ver checklist abajo)
+  - Llenar datos en CADA sección (ver checklist abajo)
   - NO agregar secciones nuevas
   - NO quitar secciones existentes
   - Solo actualizar valores y gráficos
+
+Reemplazo_Ciclo:
+  # Si ya existe resumen/ciclo-{N}.html → SOBREESCRIBIRLO (no crear duplicado, no preguntar)
+  sobreescribir_si_existe: true
 
 Commit_Push:
   obligatorio: true
@@ -216,10 +220,97 @@ def validar_secciones(html_content):
 ## PARÁMETROS
 
 ```
-/cycle-report {NUMERO}    ← Número de ciclo desde $ARGUMENTS
+/cycle-report {NUMERO}    ← Número de ciclo explícito (ej: /cycle-report 54)
+/cycle-report             ← Sin número / "último": usa el ÚLTIMO ciclo COMPLETADO
+/cycle-report último      ← Igual que sin número
 ```
 
-Fechas se obtienen automáticamente de Linear.
+Resolución del ciclo cuando NO se pasa número:
+```
+1. mcp__linear__list_cycles(type: "current")   → ciclo en curso (NO usar para el reporte)
+2. mcp__linear__list_cycles(type: "previous")  → ÚLTIMO ciclo completado  ← este se reporta
+   (fallback API: query GraphQL de cycles del team, tomar el de mayor number ya finalizado)
+```
+
+Fechas (startsAt / endsAt) se obtienen automáticamente de Linear.
+Si `resumen/ciclo-{N}.html` ya existe → se SOBREESCRIBE.
+
+---
+
+## 🔌 ESTRATEGIA DE FUENTES DE DATOS (MCP o FALLBACK)
+
+**⚠️ REGLA CRÍTICA:** Para **Linear, GitLab y GitHub** el comando NO depende de que exista el MCP.
+Al inicio de la Fase 1, **detectar** qué fuente está disponible y usar la primera que funcione, en este orden:
+
+```yaml
+Orden_de_preferencia:
+  1_MCP:   "Si el servidor MCP está conectado (mcp__linear__*, mcp__gitlab__*, mcp__github__*) → usarlo."
+  2_CLI:   "Si no hay MCP pero existe la CLI autenticada → usar gh / glab / git."
+  3_API:   "Si no hay MCP ni CLI pero hay token en variables de entorno → usar la REST API con curl."
+  4_LOCAL: "Último recurso para git: usar el repo local clonado (git log) del/los repos disponibles."
+
+Deteccion_rapida:
+  Linear:
+    mcp:  "¿Existe la herramienta mcp__linear__list_issues? (ToolSearch)"
+    api:  "$LINEAR_API_KEY presente → POST https://api.linear.app/graphql (header Authorization: <key>)"
+  GitHub:
+    mcp:  "¿Existe mcp__github__list_commits?"
+    cli:  "gh auth status  → si OK, usar gh api / gh repo list / gh search"
+    api:  "$GITHUB_TOKEN → curl -H 'Authorization: Bearer $GITHUB_TOKEN' https://api.github.com/..."
+  GitLab:
+    mcp:  "¿Existe mcp__gitlab__list_commits?"
+    cli:  "glab auth status  → si OK, usar glab api / glab repo list"
+    api:  "$GITLAB_TOKEN → curl -H 'PRIVATE-TOKEN: $GITLAB_TOKEN' https://gitlab.com/api/v4/..."
+
+Regla_de_oro:
+  - "Si NINGUNA fuente está disponible para GitLab o GitHub, NO inventar datos:
+     marcar esa sección como 'Sin datos disponibles (sin MCP/CLI/API)' y continuar con el resto."
+  - "Mostrar al inicio un resumen de qué fuente se usó para cada sistema."
+```
+
+### Fallbacks concretos (sin MCP)
+
+**Linear (fallback API GraphQL):**
+```bash
+# Requiere $LINEAR_API_KEY. Issues del ciclo:
+curl -s https://api.linear.app/graphql \
+  -H "Authorization: $LINEAR_API_KEY" -H "Content-Type: application/json" \
+  -d '{"query":"{ cycle(id:\"<CYCLE_ID>\"){ number startsAt endsAt issues(first:250){ nodes { identifier title estimate priority state{name type} assignee{name} project{name} creator{name} labels{nodes{name}} } } } }"}'
+```
+
+**GitHub (fallback CLI `gh` — TODOS los repos a los que perteneces):**
+```bash
+# 1) Listar TODOS los repos accesibles por el usuario autenticado (todas las orgs + personales)
+gh repo list --limit 1000 --json nameWithOwner,pushedAt
+gh api "/user/repos?per_page=100&affiliation=owner,collaborator,organization_member" --paginate \
+  --jq '.[] | .full_name'
+
+# 2) Commits de un repo en el rango del ciclo
+gh api "/repos/<owner>/<repo>/commits?since=<ISO_INICIO>&until=<ISO_FIN>&per_page=100" --paginate \
+  --jq '.[] | {sha:.sha, msg:.commit.message, author:.commit.author.name, date:.commit.author.date}'
+
+# 3) LOC de un commit
+gh api "/repos/<owner>/<repo>/commits/<sha>" --jq '{add:.stats.additions, del:.stats.deletions}'
+```
+
+**GitLab (fallback CLI `glab` / API — TODOS los proyectos donde eres miembro):**
+```bash
+# 1) Proyectos de los que eres miembro (todas las membresías)
+glab api "/projects?membership=true&per_page=100&simple=true" --paginate --jq '.[] | .path_with_namespace'
+# o con token:  curl -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "https://gitlab.com/api/v4/projects?membership=true&per_page=100"
+
+# 2) Commits de un proyecto en el rango (todas las ramas)
+glab api "/projects/<id>/repository/commits?since=<ISO_INICIO>&until=<ISO_FIN>&all=true&per_page=100" --paginate
+
+# 3) Diff/LOC de un commit
+glab api "/projects/<id>/repository/commits/<sha>"   # campos stats.additions / stats.deletions
+```
+
+**git local (último recurso, si el repo está clonado):**
+```bash
+git -C <ruta_repo> log --since="<INICIO>" --until="<FIN>" --no-merges \
+  --pretty=format:'%h|%an|%ad|%s' --date=short --numstat
+```
 
 ---
 
@@ -229,17 +320,21 @@ Fechas se obtienen automáticamente de Linear.
 Linear:
   team: "BaldeCash"
   team_key: "BAL"
+  fuente: "mcp__linear__* → fallback: API GraphQL con $LINEAR_API_KEY"
 
 GitLab:
-  # ⚠️ DINÁMICO: Obtener TODOS los proyectos con mcp__gitlab__list_projects
-  # Solo incluir en reporte los repos que tengan commits en el rango de fechas
+  # ⚠️ DINÁMICO: TODOS los proyectos donde el usuario es MIEMBRO (membership=true), no una lista fija
   obtener_dinamicamente: true
+  alcance: "todas las membresías del usuario (todas las orgs/grupos), no solo 'baldecash'"
+  fuente: "mcp__gitlab__list_projects → fallback: glab api /projects?membership=true → fallback: $GITLAB_TOKEN"
+  # Solo incluir en el reporte los repos con commits productivos en el rango de fechas
 
 GitHub:
-  owner: "baldecash-team"
-  # ⚠️ DINÁMICO: Obtener TODOS los repos con mcp__github__search_repositories
-  # Solo incluir en reporte los repos que tengan commits en el rango de fechas
+  # ⚠️ DINÁMICO: TODOS los repos accesibles por el usuario (owner + colaborador + miembro de org)
   obtener_dinamicamente: true
+  alcance: "todos los repos del usuario autenticado en TODAS sus orgs, no solo 'baldecash-team'"
+  fuente: "mcp__github__search_repositories → fallback: gh repo list / gh api /user/repos → fallback: $GITHUB_TOKEN"
+  # Solo incluir en el reporte los repos con commits productivos en el rango de fechas
 
   repos_documentacion:  # Solo último commit para LOC (no inflar métricas)
     - guia
@@ -306,6 +401,13 @@ MCP_Tools:
     - mcp__sentry__search_issues: auto
     - mcp__sentry__search_events: auto
     - mcp__sentry__get_issue_details: auto
+
+Fallback_CLI_API:
+  # Si NO hay MCP, estas también se ejecutan sin confirmación
+  - Bash(gh ...): auto      # GitHub CLI (repos, commits, LOC)
+  - Bash(glab ...): auto    # GitLab CLI (proyectos, commits, LOC)
+  - Bash(curl ...): auto    # REST/GraphQL con tokens ($GITHUB_TOKEN, $GITLAB_TOKEN, $LINEAR_API_KEY)
+  - Bash(git log ...): auto # git local como último recurso
 
 Local_Operations:
   # Operaciones locales sin confirmación
@@ -396,53 +498,76 @@ Mostrar en footer: `⏱️ Generado en {X} min {Y} seg`
 
 ## FASE 1: RECOLECCIÓN DE DATOS
 
+### 1.0 Detección de fuentes (PRIMER PASO OBLIGATORIO)
+
+```
+Antes de recolectar, detectar para Linear / GitLab / GitHub qué fuente está disponible
+(ver "ESTRATEGIA DE FUENTES DE DATOS"). Usar la primera que funcione: MCP → CLI → API → git local.
+Imprimir un resumen tipo:
+  Linear: MCP ✓   | GitHub: gh CLI ✓ (sin MCP) | GitLab: API token ✓ (sin MCP/CLI)
+Si un sistema NO tiene ninguna fuente → su sección se marca "Sin datos disponibles", NO se inventa.
+```
+
 ### 1.1 Linear - Issues
 
 ```
-mcp__linear__list_teams → team ID
-mcp__linear__list_cycles (teamId) → fechas del ciclo
-mcp__linear__list_issues (cycle: cycleId)
+FUENTE PRIMARIA (MCP):
+  mcp__linear__list_teams → team ID
+  mcp__linear__list_cycles (teamId) → fechas del ciclo
+  mcp__linear__list_issues (cycle: cycleId)
+
+FALLBACK (sin MCP): API GraphQL con $LINEAR_API_KEY
+  curl https://api.linear.app/graphql (ver ejemplo en ESTRATEGIA DE FUENTES)
 ```
 
-### 1.2 GitLab - Proyectos (DINÁMICO)
+### 1.2 GitLab - Proyectos (DINÁMICO — TODOS donde eres MIEMBRO)
 
 ```
-⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos
+⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos.
+⚠️ ALCANCE: TODOS los proyectos donde el usuario es miembro (membership=true),
+   en TODAS sus orgs/grupos — NO solo "baldecash".
 
 PASO 1: Obtener TODOS los proyectos
-  mcp__gitlab__list_projects (membership: true)
+  MCP:      mcp__gitlab__list_projects (membership: true)
+  FALLBACK: glab api "/projects?membership=true&simple=true&per_page=100" --paginate
+  FALLBACK: curl -H "PRIVATE-TOKEN: $GITLAB_TOKEN" ".../api/v4/projects?membership=true&per_page=100"
 
-PASO 2: Para CADA proyecto, verificar si tiene commits en el rango
-  mcp__gitlab__list_commits (since, until)
+PASO 2: Para CADA proyecto, verificar si tiene commits en el rango (all=true para todas las ramas)
+  MCP:      mcp__gitlab__list_commits (since, until)
+  FALLBACK: glab api "/projects/<id>/repository/commits?since=...&until=...&all=true" --paginate
 
 PASO 3: Solo incluir en el reporte los proyectos CON commits productivos
   - Aplicar filtro de exclusión de merge commits
-  - Si commits_productivos > 0 → incluir en reporte
-  - Si commits_productivos == 0 → NO incluir
+  - commits_productivos > 0 → incluir ; == 0 → NO incluir
 
-PASO 4: Para proyectos con commits, obtener:
-  mcp__gitlab__list_pipelines
-  mcp__gitlab__list_merge_requests (state: "merged")
+PASO 4: Para proyectos con commits, obtener (si la fuente lo permite):
+  MRs mergeados y pipelines (mcp__gitlab__list_merge_requests / glab api .../merge_requests?state=merged)
 ```
 
-### 1.3 GitHub - Repos (DINÁMICO)
+### 1.3 GitHub - Repos (DINÁMICO — TODOS los que te pertenecen/accedes)
 
 ```
-⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos
+⚠️ ANÁLISIS DINÁMICO - No hay lista fija de repos.
+⚠️ ALCANCE: TODOS los repos accesibles por el usuario autenticado
+   (owner + colaborador + miembro de organización), en TODAS sus orgs — NO solo "baldecash-team".
 
-PASO 1: Obtener TODOS los repos de la organización
-  mcp__github__search_repositories (owner: "baldecash-team")
+PASO 1: Obtener TODOS los repos accesibles
+  MCP:      mcp__github__search_repositories (por cada org del usuario) / list por afiliación
+  FALLBACK: gh repo list --limit 1000 --json nameWithOwner,pushedAt
+  FALLBACK: gh api "/user/repos?affiliation=owner,collaborator,organization_member&per_page=100" --paginate
+  FALLBACK: curl -H "Authorization: Bearer $GITHUB_TOKEN" ".../user/repos?per_page=100" (paginar)
 
 PASO 2: Para CADA repo, verificar si tiene commits en el rango
-  mcp__github__list_commits (since, until)
+  MCP:      mcp__github__list_commits (since, until)
+  FALLBACK: gh api "/repos/<owner>/<repo>/commits?since=...&until=..." --paginate
 
 PASO 3: Solo incluir en el reporte los repos CON commits productivos
   - Aplicar filtro de exclusión de merge commits
-  - Si commits_productivos > 0 → incluir en reporte
-  - Si commits_productivos == 0 → NO incluir
+  - commits_productivos > 0 → incluir ; == 0 → NO incluir
 
 PASO 4: Para repos con commits, obtener líneas de código:
-  mcp__github__get_commit (sha) → additions, deletions
+  MCP:      mcp__github__get_commit (sha) → additions, deletions
+  FALLBACK: gh api "/repos/<owner>/<repo>/commits/<sha>" --jq '.stats'
 ```
 
 **Regla especial para repo `guia`:**
@@ -824,7 +949,7 @@ html = html.replace("2m 47s", tiempo_str)
 
 ```python
 # 1. Leer modelo.html como texto
-html_base = Read("D:/repos/guia/modelo.html")
+html_base = Read("D:/repos/baldecash/guia/modelo.html")
 
 # 2. Reemplazar placeholders con datos reales
 reemplazos = {
@@ -2188,7 +2313,9 @@ Co-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>
 **⚠️ OBLIGATORIO: Guardar el HTML generado en la carpeta `resumen/`**
 
 ```python
-# Guardar el archivo HTML
+# Guardar el archivo HTML.
+# ⚠️ Si resumen/ciclo-{N}.html YA EXISTE, se SOBREESCRIBE sin preguntar
+# (Write reemplaza el contenido completo del ciclo).
 archivo_salida = f"resumen/ciclo-{N}.html"
 Write(file_path=archivo_salida, content=html_generado)
 ```
