@@ -2048,6 +2048,77 @@ Highcharts.chart('chart-sentry', {
 
 ---
 
+### SECCIÓN 14.4: Post-Mortem del Ciclo
+
+**⚠️ OBLIGATORIO: Incluir un post-mortem con los aprendizajes, riesgos de proceso y acuerdos del ciclo.**
+
+El post-mortem captura **lo que falló en el proceso** (no solo en el código), los **riesgos abiertos** y los **acuerdos/temas a comunicar al equipo**. A diferencia de Sentry (errores en producción) y Observaciones (resumen automático), el post-mortem es **cualitativo** y se nutre de lo que el equipo reporta: cuellos de botella, deadlines, entornos, prácticas de deploy, responsables de exponer cada tema.
+
+**Modelo de datos del post-mortem:**
+```yaml
+post_mortem:
+  resumen: "1-2 frases del estado de salud del proceso este ciclo"
+  temas:        # cada tema = un riesgo / aprendizaje / acuerdo
+    - titulo: "Deadlines agresivos"
+      categoria: "Proceso"          # Proceso | Calidad | Infra | Comunicación | Riesgo
+      severidad: "alta"             # alta | media | baja
+      detalle: "Descripción del problema observado en el ciclo"
+      accion: "Acuerdo o acción correctiva"
+      responsable: "Quién lo expone / es dueño del tema"
+      estado: "Pendiente"           # Pendiente | En curso | Resuelto
+  comunicacion_equipo:              # temas que se comunicarán/expondrán esta semana
+    - tema: "Entorno de prueba pendiente"
+      expone: "Emilio"
+    - tema: "Deploys sin verificación"
+      expone: "Emilio"
+```
+
+**Estructura HTML de la sección Post-Mortem (`id="post-mortem"`):**
+```html
+<section id="post-mortem" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+    <h2 class="text-2xl font-bold brand-primary mb-6 section-title">🩺 Post-Mortem del Ciclo</h2>
+    <p class="text-sm text-gray-600 mb-6">{resumen cualitativo del proceso}</p>
+
+    <!-- Tabla de temas (riesgos / aprendizajes / acuerdos) -->
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+        <thead class="bg-gray-50"><tr>
+            <th class="px-4 py-3 text-left font-semibold text-gray-600">Tema</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-600">Categoría</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-600">Severidad</th>
+            <th class="px-4 py-3 text-left font-semibold text-gray-600">Acción / Acuerdo</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-600">Responsable</th>
+            <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+        </tr></thead>
+        <tbody>
+            <!-- una fila por tema; severidad alta = badge rojo, media = ámbar, baja = gris -->
+        </tbody>
+    </table></div>
+
+    <!-- Comunicación al equipo (esta semana) -->
+    <div class="mt-6 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
+        <h3 class="text-sm font-bold text-indigo-800 mb-2">📣 A comunicar esta semana</h3>
+        <ul class="text-sm text-indigo-900 space-y-1">
+            <li>• {tema} — expone <strong>{quien}</strong></li>
+        </ul>
+    </div>
+</section>
+```
+
+**Badges de severidad:**
+```html
+<span class="bg-red-100 text-red-700 rounded-full px-2 py-0.5 text-xs">Alta</span>
+<span class="bg-amber-100 text-amber-700 rounded-full px-2 py-0.5 text-xs">Media</span>
+<span class="bg-gray-100 text-gray-700 rounded-full px-2 py-0.5 text-xs">Baja</span>
+```
+
+**Reglas:**
+- La sección va **después de Sentry** y **antes de Claude Code** en el reporte.
+- Agregar `#post-mortem` al índice flotante (sidebar) bajo el grupo "Calidad".
+- Si el equipo no reporta temas en el ciclo, mostrar: "Sin temas de post-mortem registrados este ciclo" (no inventar).
+- El contenido es **provisto por el equipo** (no se deduce de commits/issues); el comando solo lo formatea.
+
+---
+
 ### SECCIÓN 15: Commits con Claude Code (AI)
 
 **¿Qué son los commits con Claude Code?**
