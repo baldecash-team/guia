@@ -52,6 +52,8 @@
             <li class="nav-section">Calidad</li>
             <li><a href="#sentry" class="nav-link"><span class="nav-dot"></span>Sentry</a></li>
             <li><a href="#post-mortem" class="nav-link"><span class="nav-dot"></span>Post-Mortem</a></li>
+            <li class="nav-section">Proceso</li>
+            <li><a href="#acuerdos" class="nav-link"><span class="nav-dot"></span>Acuerdos</a></li>
             <li class="nav-section">Detalles</li>
             <li><a href="#completados" class="nav-link"><span class="nav-dot"></span>Completados</a></li>
             <li><a href="#solicitante" class="nav-link"><span class="nav-dot"></span>Solicitante</a></li>
@@ -168,7 +170,70 @@
     <div class="mt-6 text-center"><a href="https://baldecash-gy.sentry.io/" target="_blank" class="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>Ver dashboard en Sentry</a></div></section><section id="post-mortem" class="bg-white rounded-2xl p-8 card-shadow mb-8"><h2 class="text-2xl font-bold brand-primary mb-6 section-title">🩺 Post-Mortem del Ciclo</h2>
     <p class="text-sm text-gray-600 mb-6">Ritmo de entrega muy alto este ciclo (160+ issues, ~98% de ratio), pero a costa de deadlines agresivos, un entorno de prueba aún pendiente y deploys sin verificación previa. Son riesgos de proceso a comunicar y atender esta semana.</p>
     <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-gray-50"><tr><th class="px-4 py-3 text-left font-semibold text-gray-600">Tema</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Categoría</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Severidad</th><th class="px-4 py-3 text-left font-semibold text-gray-600">Acción / Acuerdo</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Responsable</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th></tr></thead><tbody><tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Deadlines agresivos</td><td class="px-4 py-3 text-center text-gray-600">Proceso</td><td class="px-4 py-3 text-center"><span class="bg-red-100 text-red-700 rounded-full px-2 py-0.5 text-xs">Alta</span></td><td class="px-4 py-3 text-gray-700">Revisar planificación y capacidad real del equipo; evitar comprometer entregas no sostenibles.</td><td class="px-4 py-3 text-center font-medium">Equipo</td><td class="px-4 py-3 text-center"><span class="bg-orange-100 text-orange-700 rounded-full px-2 py-0.5 text-xs">Pendiente</span></td></tr><tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Entorno de prueba pendiente</td><td class="px-4 py-3 text-center text-gray-600">Infra</td><td class="px-4 py-3 text-center"><span class="bg-red-100 text-red-700 rounded-full px-2 py-0.5 text-xs">Alta</span></td><td class="px-4 py-3 text-gray-700">Definir y montar un entorno de staging/QA estable para validar antes de producción.</td><td class="px-4 py-3 text-center font-medium">Emilio</td><td class="px-4 py-3 text-center"><span class="bg-orange-100 text-orange-700 rounded-full px-2 py-0.5 text-xs">Pendiente</span></td></tr><tr class="border-b table-row-hover"><td class="px-4 py-3 font-medium">Deploys sin verificación</td><td class="px-4 py-3 text-center text-gray-600">Calidad</td><td class="px-4 py-3 text-center"><span class="bg-red-100 text-red-700 rounded-full px-2 py-0.5 text-xs">Alta</span></td><td class="px-4 py-3 text-gray-700">Establecer un checklist / gate de verificación previo a cada deploy.</td><td class="px-4 py-3 text-center font-medium">Emilio</td><td class="px-4 py-3 text-center"><span class="bg-orange-100 text-orange-700 rounded-full px-2 py-0.5 text-xs">Pendiente</span></td></tr></tbody></table></div>
-    <div class="mt-6 p-4 bg-indigo-50 rounded-xl border border-indigo-200"><h3 class="text-sm font-bold text-indigo-800 mb-2">📣 A comunicar al equipo esta semana</h3><ul class="text-sm text-indigo-900 space-y-1"><li>• Entorno de prueba pendiente — expone <strong>Emilio</strong></li><li>• Deploys sin verificación — expone <strong>Emilio</strong></li></ul></div></section><section id="completados" class="bg-white rounded-2xl p-8 card-shadow mb-8"><h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Completados (199)</h2>
+    <div class="mt-6 p-4 bg-indigo-50 rounded-xl border border-indigo-200"><h3 class="text-sm font-bold text-indigo-800 mb-2">📣 A comunicar al equipo esta semana</h3><ul class="text-sm text-indigo-900 space-y-1"><li>• Entorno de prueba pendiente — expone <strong>Emilio</strong></li><li>• Deploys sin verificación — expone <strong>Emilio</strong></li></ul></div></section><section id="acuerdos" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+    <h2 class="text-2xl font-bold brand-primary mb-2 section-title">🤝 Acuerdos de Proceso</h2>
+    <p class="text-sm text-gray-500 mb-6 mt-4">Vigentes a partir del <strong>Ciclo 57</strong>. Nacen del post-mortem y aplican para todo el equipo. Principio rector: <strong>ninguna pieza crítica —emergencia, cierre o reunión— depende de una sola persona disponible</strong>.</p>
+    <div class="rounded-xl p-6 mb-6 border-2" style="border-color:#262877; background:rgba(38,40,119,0.04);">
+        <h3 class="text-lg font-bold brand-primary mb-2">🩺 Post-mortems al momento</h3>
+        <p class="text-sm text-gray-700">Cada incidente o emergencia genera su post-mortem <strong>en el instante en que ocurre</strong>, no después ni "cuando el encargado esté libre". El dueño del incidente lo abre de inmediato en Linear con la línea de tiempo. <strong>Así el análisis no depende de ninguna persona en particular</strong>: cualquiera puede facilitarlo y el equipo nunca queda bloqueado esperando a alguien.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-indigo-50 rounded-xl p-6 border border-indigo-200">
+            <h3 class="text-base font-bold text-indigo-800 mb-3">📅 Weekly fija</h3>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="brand-bg text-white rounded-lg px-4 py-2 text-center"><div class="text-[10px] uppercase tracking-wide text-white/70">Lunes</div><div class="text-2xl font-bold leading-none">11:00</div></div>
+                <p class="text-sm text-indigo-900"><strong>Siempre</strong>, sin excepción.</p>
+            </div>
+            <ul class="space-y-1.5 text-sm text-indigo-900">
+                <li>• Empieza a la hora, esté quien esté.</li>
+                <li>• Horario protegido: no se agenda nada encima.</li>
+                <li>• Facilitador rotativo + suplente.</li>
+            </ul>
+        </div>
+        <div class="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
+            <h3 class="text-base font-bold text-emerald-700 mb-3">📋 Linear: fuente única de verdad</h3>
+            <ul class="space-y-1.5 text-sm text-emerald-900">
+                <li>• <strong>Si no está en Linear, no existe.</strong></li>
+                <li>• Todo compromiso, emergencia, post-mortem y acuerdo se registra ahí.</li>
+                <li>• Estimar con labels de <em>scope</em> para cuidar la carga del equipo.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="rounded-xl p-6 border-2 border-red-200" style="background:rgba(239,68,68,0.04);">
+        <h3 class="text-lg font-bold text-red-700 mb-1">🚨 Protocolo «Emergencia BaldeCash» — las 6 reglas</h3>
+        <p class="text-sm text-red-900/80 mb-5">Para que ninguna emergencia vuelva a quedar en el aire. Las reglas viven en la plantilla y los filtros de Linear, no en la memoria de la gente.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">1</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">Sin ticket, no hay compromiso</p><p class="text-sm text-gray-600">Toda emergencia se registra en Linear en el momento (label <em>urgente</em>, assignee, due date). El compromiso verbal no existe. Regla de oro: <em>"si no está en Linear, nadie lo está atendiendo"</em>. Esto solo ya habría evitado el viernes.</p></div>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">2</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">Nunca una sola persona: responsable + respaldo</p><p class="text-sm text-gray-600">Cada emergencia se crea con un dueño y un segundo par de ojos (sub-issue "respaldo" o co-asignado). Si el dueño se cae, el respaldo lo nota. Un único punto de falla = falla garantizada tarde o temprano.</p></div>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">3</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">SLA visible y corto</p><p class="text-sm text-gray-600">Tiempos por gravedad (ej. P0: tomar en &lt;30 min / resolver o escalar en &lt;2 h). El due date en Linear hace que la tarjeta se ponga roja sola si nadie avanza — la herramienta vigila por ti.</p></div>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">4</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">Handoff obligatorio</p><p class="text-sm text-gray-600">Quien se compromete no puede irse dejando la tarea abierta sin reasignar o avisar. <em>"Antes de desconectarte, o está en Done o se la pasas a alguien con nombre"</em>. Ataca directo el "lo dejó en el aire".</p></div>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">5</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">Cierre verificado, no asumido</p><p class="text-sm text-gray-600">Una emergencia no es "Done" hasta que está resuelta Y verificada (alguien confirmó que funciona). Nada de "creo que ya quedó".</p></div>
+            </div>
+            <div class="bg-white rounded-lg p-4 border border-red-100 flex gap-3">
+                <div class="flex-shrink-0 w-8 h-8 rounded-full brand-bg text-white flex items-center justify-center font-bold text-sm">6</div>
+                <div><p class="font-semibold text-gray-800 text-sm mb-1">Barrido diario de urgentes</p><p class="text-sm text-gray-600">1–2 min al inicio de la daily: revisar que ningún <em>urgente</em> esté estancado. Filtro guardado en Linear ("urgentes abiertos") en una pantalla visible. Lo que se ve, no se cae.</p></div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+        <h3 class="text-sm font-bold text-gray-700 mb-1">⚖️ Sin culpa, con responsabilidad</h3>
+        <p class="text-sm text-gray-600">Los errores honestos se corrigen mejorando el <strong>proceso</strong>, no señalando personas. Pero los acuerdos que aceptamos, se cumplen: el incumplimiento repetido se maneja con una escalera conocida de antemano (conversación → expectativa escrita → seguimiento → consecuencia formal). Protege a todo el equipo, no solo al negocio.</p>
+    </div>
+</section><section id="completados" class="bg-white rounded-2xl p-8 card-shadow mb-8"><h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Completados (199)</h2>
     <div class="flex flex-col items-center py-8"><div class="grid grid-cols-3 gap-6 mb-8 w-full max-w-2xl">
         <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200"><p class="text-4xl font-bold text-green-600">199</p><p class="text-sm text-gray-600 mt-1">Completados</p></div>
         <div class="bg-indigo-50 rounded-xl p-6 text-center border border-indigo-200"><p class="text-4xl font-bold stat-number">98.5%</p><p class="text-sm text-gray-600 mt-1">Ratio</p></div>
