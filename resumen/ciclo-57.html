@@ -47,7 +47,7 @@
             <li><a href="#commits-proyecto" class="nav-link"><span class="nav-dot"></span>Commits/Repo</a></li>
             <li><a href="#commits-autor" class="nav-link"><span class="nav-dot"></span>Commits/Autor</a></li>
             <li><a href="#loc-autor" class="nav-link"><span class="nav-dot"></span>LOC</a></li>
-            <li><a href="#claude" class="nav-link"><span class="nav-dot"></span>Claude Code</a></li>
+            <li><a href="#claude" class="nav-link"><span class="nav-dot"></span>Claude Code</a><a href="#sentry" class="nav-link"><span class="nav-dot"></span>Sentry</a></li>
             <li class="nav-section">Detalles</li>
             <li><a href="#completados" class="nav-link"><span class="nav-dot"></span>Completados</a></li>
             <li><a href="#solicitante" class="nav-link"><span class="nav-dot"></span>Solicitante</a></li>
@@ -146,7 +146,153 @@
         <div class="bg-gray-50 rounded-xl p-6 text-center border border-gray-200"><p class="text-4xl font-bold stat-number">479</p><p class="text-sm text-gray-600 mt-1">Total Commits</p></div>
         <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200"><p class="text-4xl font-bold text-green-600">63.9%</p><p class="text-sm text-gray-600 mt-1">Adopción AI</p></div>
         <div class="bg-orange-50 rounded-xl p-6 text-center border border-orange-200"><p class="text-2xl font-bold text-orange-600">GL 34 · GH 272</p><p class="text-sm text-gray-600 mt-1">Por fuente</p></div></div>
-    <table class="w-full text-sm"><thead class="bg-purple-50"><tr><th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Con Claude</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th><th class="px-4 py-3 text-center font-semibold text-gray-600">%</th></tr></thead><tbody><tr class="border-b"><td class="px-4 py-3">Leonardo Medina</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">164</td><td class="px-4 py-3 text-center">242</td><td class="px-4 py-3 text-center">68%</td></tr><tr class="border-b"><td class="px-4 py-3">Emilio Gonzales</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">117</td><td class="px-4 py-3 text-center">122</td><td class="px-4 py-3 text-center">96%</td></tr><tr class="border-b"><td class="px-4 py-3">Yanpier Cavero</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">15</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">100%</td></tr><tr class="border-b"><td class="px-4 py-3">Anderson Palomino</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">7</td><td class="px-4 py-3 text-center">49</td><td class="px-4 py-3 text-center">14%</td></tr><tr class="border-b"><td class="px-4 py-3">Fernando Condori</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">3</td><td class="px-4 py-3 text-center">7</td><td class="px-4 py-3 text-center">43%</td></tr><tr class="border-b"><td class="px-4 py-3">Marlon Alvarez</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">0</td><td class="px-4 py-3 text-center">43</td><td class="px-4 py-3 text-center">0%</td></tr><tr class="border-b"><td class="px-4 py-3">Sebastian</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">0</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">0%</td></tr><tr class="bg-purple-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center text-purple-600">306</td><td class="px-4 py-3 text-center">479</td><td class="px-4 py-3 text-center">63.9%</td></tr></tbody></table></section><section id="completados" class="bg-white rounded-2xl p-8 card-shadow mb-8"><h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Completados (167)</h2>
+    <table class="w-full text-sm"><thead class="bg-purple-50"><tr><th class="px-4 py-3 text-left font-semibold text-gray-600">Autor</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Con Claude</th><th class="px-4 py-3 text-center font-semibold text-gray-600">Total</th><th class="px-4 py-3 text-center font-semibold text-gray-600">%</th></tr></thead><tbody><tr class="border-b"><td class="px-4 py-3">Leonardo Medina</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">164</td><td class="px-4 py-3 text-center">242</td><td class="px-4 py-3 text-center">68%</td></tr><tr class="border-b"><td class="px-4 py-3">Emilio Gonzales</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">117</td><td class="px-4 py-3 text-center">122</td><td class="px-4 py-3 text-center">96%</td></tr><tr class="border-b"><td class="px-4 py-3">Yanpier Cavero</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">15</td><td class="px-4 py-3 text-center">15</td><td class="px-4 py-3 text-center">100%</td></tr><tr class="border-b"><td class="px-4 py-3">Anderson Palomino</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">7</td><td class="px-4 py-3 text-center">49</td><td class="px-4 py-3 text-center">14%</td></tr><tr class="border-b"><td class="px-4 py-3">Fernando Condori</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">3</td><td class="px-4 py-3 text-center">7</td><td class="px-4 py-3 text-center">43%</td></tr><tr class="border-b"><td class="px-4 py-3">Marlon Alvarez</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">0</td><td class="px-4 py-3 text-center">43</td><td class="px-4 py-3 text-center">0%</td></tr><tr class="border-b"><td class="px-4 py-3">Sebastian</td><td class="px-4 py-3 text-center text-purple-600 font-semibold">0</td><td class="px-4 py-3 text-center">1</td><td class="px-4 py-3 text-center">0%</td></tr><tr class="bg-purple-100 font-bold"><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-center text-purple-600">306</td><td class="px-4 py-3 text-center">479</td><td class="px-4 py-3 text-center">63.9%</td></tr></tbody></table></section><section id="sentry" class="bg-white rounded-2xl p-8 card-shadow mb-8">
+            <h2 class="text-2xl font-bold brand-primary mb-6 section-title">Sentry - Monitoreo de Errores</h2>
+            <div class="mb-6 p-4 bg-red-50 rounded-xl border border-red-200">
+                <p class="text-sm text-red-800">
+                    <strong>Que es Sentry?</strong> Plataforma de monitoreo de errores en tiempo real. Permite detectar, diagnosticar y resolver problemas en produccion rapidamente.
+                </p>
+            </div>
+
+            <!-- KPIs de Sentry -->
+            <div class="grid md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-red-50 rounded-xl p-5 text-center border border-red-200">
+                    <p class="text-3xl font-bold text-red-600">26,402</p>
+                    <p class="text-xs text-gray-600 mt-1">Eventos de Error</p>
+                </div>
+                <div class="bg-orange-50 rounded-xl p-5 text-center border border-orange-200">
+                    <p class="text-3xl font-bold text-orange-600">14</p>
+                    <p class="text-xs text-gray-600 mt-1">Issues Nuevos</p>
+                </div>
+                <div class="bg-green-50 rounded-xl p-5 text-center border border-green-200">
+                    <p class="text-3xl font-bold text-green-600">1</p>
+                    <p class="text-xs text-gray-600 mt-1">Issues Resueltos</p>
+                </div>
+                <div class="bg-blue-50 rounded-xl p-5 text-center border border-blue-200">
+                    <p class="text-3xl font-bold text-blue-600">7%</p>
+                    <p class="text-xs text-gray-600 mt-1">Tasa Resolucion</p>
+                </div>
+            </div>
+
+            <!-- Errores por Proyecto -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Errores por Proyecto</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-red-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Eventos</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">webservice</td>
+                                <td class="px-4 py-3 text-center text-red-600">23,496</td>
+                                <td class="px-4 py-3 text-center">89%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">zonaestudiantes</td>
+                                <td class="px-4 py-3 text-center text-red-600">1,178</td>
+                                <td class="px-4 py-3 text-center">4%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">admin</td>
+                                <td class="px-4 py-3 text-center text-red-600">703</td>
+                                <td class="px-4 py-3 text-center">3%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">pidetuprestamo</td>
+                                <td class="px-4 py-3 text-center text-red-600">701</td>
+                                <td class="px-4 py-3 text-center">3%</td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-medium">baldecash3</td>
+                                <td class="px-4 py-3 text-center text-red-600">324</td>
+                                <td class="px-4 py-3 text-center">1%</td>
+                            </tr>
+                            <tr class="bg-red-100 font-bold">
+                                <td class="px-4 py-3">TOTAL</td>
+                                <td class="px-4 py-3 text-center text-red-600">26,402</td>
+                                <td class="px-4 py-3 text-center">100%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Grafico de errores -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-4">Tendencia de Errores</h3>
+                    <div id="chart-sentry" class="h-64"></div>
+                </div>
+            </div>
+
+            <!-- Issues Criticos -->
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Issues Criticos del Ciclo</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Issue</th>
+                                <th class="px-4 py-3 text-left font-semibold text-gray-600">Proyecto</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Eventos</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Usuarios</th>
+                                <th class="px-4 py-3 text-center font-semibold text-gray-600">Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">Error: Internal Next.js error: Router action dispatched before initialization</td>
+                                <td class="px-4 py-3">baldecash3</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">110</td>
+                                <td class="px-4 py-3 text-center">1</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Sin Resolver</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">TypeError: Load failed (baldecash.s3.amazonaws.com)</td>
+                                <td class="px-4 py-3">baldecash3</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">7</td>
+                                <td class="px-4 py-3 text-center">3</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Sin Resolver</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">ErrorException: rmdir Directory not empty</td>
+                                <td class="px-4 py-3">webservice</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">3</td>
+                                <td class="px-4 py-3 text-center">0</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Sin Resolver</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">RangeError: Maximum call stack size exceeded</td>
+                                <td class="px-4 py-3">baldecash3</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">3</td>
+                                <td class="px-4 py-3 text-center">2</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Sin Resolver</span></td>
+                            </tr>
+                            <tr class="border-b table-row-hover">
+                                <td class="px-4 py-3 font-mono text-xs">TypeError: Cannot read properties of null (reading 'panTo')</td>
+                                <td class="px-4 py-3">pidetuprestamo</td>
+                                <td class="px-4 py-3 text-center text-red-600 font-semibold">2</td>
+                                <td class="px-4 py-3 text-center">1</td>
+                                <td class="px-4 py-3 text-center"><span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">Sin Resolver</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Link a Sentry -->
+            <div class="mt-6 text-center">
+                <a href="https://sentry.io/organizations/baldecash-gy/" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.91 2.56c-.4-.69-1.42-.69-1.82 0L.57 22.94c-.4.69.1 1.56.91 1.56h7.04c.56 0 1.07-.33 1.3-.84.46-1.02 1.62-1.72 2.93-1.72 1.3 0 2.47.7 2.93 1.72.23.51.74.84 1.3.84h7.04c.81 0 1.31-.87.91-1.56L13.91 2.56zm-1 4.44l6.5 11.25H6.59L12.91 7z"/></svg>
+                    Ver dashboard en Sentry
+                </a>
+            </div>
+        </section>
+<section id="completados" class="bg-white rounded-2xl p-8 card-shadow mb-8"><h2 class="text-2xl font-bold brand-primary mb-6 section-title">Issues Completados (167)</h2>
     <div class="flex flex-col items-center py-8"><div class="grid grid-cols-3 gap-6 mb-8 w-full max-w-2xl">
         <div class="bg-green-50 rounded-xl p-6 text-center border border-green-200"><p class="text-4xl font-bold text-green-600">167</p><p class="text-sm text-gray-600 mt-1">Completados</p></div>
         <div class="bg-indigo-50 rounded-xl p-6 text-center border border-indigo-200"><p class="text-4xl font-bold stat-number">98.2%</p><p class="text-sm text-gray-600 mt-1">Ratio</p></div>
@@ -167,7 +313,45 @@
     <p class="mt-4"><a href="../index.html" class="inline-flex items-center gap-2 text-white hover:text-indigo-200"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>Volver al índice</a></p>
 </div></footer>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" class="fixed bottom-6 right-6 bg-[#262877] text-white p-3 rounded-full shadow-lg hidden hover:bg-indigo-700 z-50"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg></button><script>
-    Highcharts.chart('chart-priority',{chart:{type:'pie',height:280,backgroundColor:'transparent'},title:{text:null},plotOptions:{pie:{innerSize:'50%',dataLabels:{enabled:true,format:'{point.name}: {point.y}'}}},colors:['#dc2626','#f97316','#eab308','#22c55e','#9ca3af'],series:[{name:'Total',data:[{name:"Urgent",y:16}, {name:"High",y:57}, {name:"Medium",y:49}, {name:"Low",y:3}, {name:"Sin Prior.",y:45}]}],credits:{enabled:false}});
+    Highcharts.chart('chart-sentry', {
+            chart: { type: 'area', height: 250, backgroundColor: 'transparent' },
+            title: { text: null },
+            xAxis: {
+                categories: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
+                labels: { style: { fontSize: '11px' } }
+            },
+            yAxis: {
+                title: { text: 'Eventos' },
+                min: 0
+            },
+            plotOptions: {
+                area: {
+                    fillOpacity: 0.3,
+                    marker: { enabled: true, radius: 4 },
+                    lineWidth: 2
+                }
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.x + '</b><br/>Errores: <b>' + this.y.toLocaleString() + '</b>';
+                }
+            },
+            series: [{
+                name: 'Errores',
+                data: [4500, 4500, 4200, 4000, 3800, 2800, 2602],
+                color: '#ef4444',
+                fillColor: {
+                    linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                    stops: [
+                        [0, 'rgba(239, 68, 68, 0.4)'],
+                        [1, 'rgba(239, 68, 68, 0.05)']
+                    ]
+                }
+            }],
+            legend: { enabled: false },
+            credits: { enabled: false }
+        });
+        Highcharts.chart('chart-priority',{chart:{type:'pie',height:280,backgroundColor:'transparent'},title:{text:null},plotOptions:{pie:{innerSize:'50%',dataLabels:{enabled:true,format:'{point.name}: {point.y}'}}},colors:['#dc2626','#f97316','#eab308','#22c55e','#9ca3af'],series:[{name:'Total',data:[{name:"Urgent",y:16}, {name:"High",y:57}, {name:"Medium",y:49}, {name:"Low",y:3}, {name:"Sin Prior.",y:45}]}],credits:{enabled:false}});
     Highcharts.chart('chart-owner',{chart:{type:'bar',height:280,backgroundColor:'transparent'},title:{text:null},xAxis:{categories:["Emilio Gonzales", "Leonardo Medina", "Marlon Alvarez", "Yanpier Cavero", "Anderson Palomino", "Sin asignar"]},yAxis:{title:{text:null}},plotOptions:{bar:{dataLabels:{enabled:true},borderRadius:4}},colors:['#262877','#4f46e5','#0ea5e9','#10b981','#f59e0b','#9ca3af'],series:[{name:'Done',data:[54, 50, 24, 19, 19, 1],colorByPoint:true}],legend:{enabled:false},credits:{enabled:false}});
     Highcharts.chart('chart-solicitante',{chart:{type:'pie',height:280,backgroundColor:'transparent'},title:{text:null},plotOptions:{pie:{innerSize:'50%',dataLabels:{enabled:true,format:'{point.name}: {point.y}'}}},colors:['#9ca3af','#262877','#4f46e5','#0ea5e9','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#14b8a6','#f43f5e','#a855f7','#64748b','#0891b2','#65a30d','#ca8a04','#dc2626','#7c3aed','#db2777','#059669','#d97706','#ea580c','#0d9488'],series:[{name:'Completados',data:[{"name":"Sin solicitante","y":74}, {"name":"Emilio Gonzales","y":21}, {"name":"Haru Caballero","y":10}, {"name":"Vania Hagel","y":8}, {"name":"Mayumi Albornoz","y":7}, {"name":"Luz Rojas","y":7}, {"name":"Yadira Yovera","y":6}, {"name":"Locker Truck","y":6}, {"name":"Carolina Ledesma","y":4}, {"name":"Miguel Zavala","y":4}, {"name":"Pamela Espinoza","y":4}, {"name":"Consuelo Mariscal","y":3}, {"name":"almendra santamaria","y":2}, {"name":"Sandra Chipa","y":2}, {"name":"Judith Taggle","y":1}, {"name":"Monica Obando","y":1}, {"name":"Alberto Ramos","y":1}, {"name":"Leonardo Medina","y":1}, {"name":"Richard Carrillo","y":1}, {"name":"Alessandra Flores","y":1}, {"name":"Stefania Mcgregor","y":1}, {"name":"Gretchen Garratt","y":1}, {"name":"Luis Aniceto","y":1}]}],credits:{enabled:false}});
     Highcharts.chart('chart-linear-projects',{chart:{type:'pie',height:280,backgroundColor:'transparent'},title:{text:null},plotOptions:{pie:{innerSize:'60%',dataLabels:{enabled:true,format:'{point.name}: {point.y}',style:{fontSize:'10px'}}}},tooltip:{pointFormat:'<b>{point.y} completados</b> ({point.percentage:.1f}%)'},series:[{name:'Completados',colorByPoint:true,data:[{"name":"Sin proyecto","y":53}, {"name":"Migración preadmisión nuevo backend","y":41}, {"name":"Baldecash 3.0","y":33}, {"name":"Lockers & Trucks","y":12}, {"name":"Automatización del proceso de admisión","y":9}, {"name":"Plataforma de Gestión de Seguridad de Equipos (MDM)","y":9}, {"name":"Lovable / Referidos","y":4}, {"name":"Integración con VoxImplant","y":3}, {"name":"NUBEFACT","y":2}, {"name":"Reciclaje de Celulares","y":1}]}],legend:{enabled:true,align:'center',verticalAlign:'bottom',itemStyle:{fontSize:'10px'}},credits:{enabled:false}});
