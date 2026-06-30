@@ -16,8 +16,10 @@ Generación_HTML:
   - Leer modelo.html
   - Llenar datos en CADA sección (ver checklist abajo)
   - NO agregar secciones nuevas
-  - NO quitar secciones existentes
   - Solo actualizar valores y gráficos
+  - OCULTAR_SECCIONES_VACIAS: "Si una sección NO tiene datos para este ciclo (p.ej. post-mortem,
+    acuerdos, sentry sin fuente), NO mostrarla: eliminar su <section> del HTML y su entrada del
+    sidebar. NO dejar empty-states tipo 'Sin temas registrados'. Solo se renderizan secciones con datos."
 
 Reemplazo_Ciclo:
   # Si ya existe resumen/ciclo-{N}.html → SOBREESCRIBIRLO (no crear duplicado, no preguntar)
@@ -131,7 +133,8 @@ Commit_Push:
     - KPIs: +añadidas, -eliminadas, neto
     - Tabla por autor: +añadidas, -eliminadas, neto, %
     - Tabla por repo: +añadidas, -eliminadas, neto
-    - Gráfico chart-loc
+    - Tabla matriz "LOC por Repositorio y Persona" (Sección 13.1), DENTRO de este mismo card
+    - (Sin gráfico: "Comparación por Autor"/chart-loc ELIMINADO)
   mcp_tools:
     - mcp__gitlab__get_commit (sha, stats=true) para cada commit
     - Sumar additions/deletions por autor
@@ -245,9 +248,13 @@ Al inicio de la Fase 1, **detectar** qué fuente está disponible y usar la prim
 ```yaml
 Orden_de_preferencia:
   1_MCP:   "Si el servidor MCP está conectado (mcp__linear__*, mcp__gitlab__*, mcp__github__*) → usarlo."
-  2_CLI:   "Si no hay MCP pero existe la CLI autenticada → usar gh / glab / git."
+  2_CLI:   "Si no hay MCP pero existe la CLI autenticada → usar gh / glab."
   3_API:   "Si no hay MCP ni CLI pero hay token en variables de entorno → usar la REST API con curl."
-  4_LOCAL: "Último recurso para git: usar el repo local clonado (git log) del/los repos disponibles."
+
+# ⚠️ SOLO REMOTO: el análisis es 100% sobre fuentes remotas (MCP/CLI/API).
+# NO usar repos git locales / clones (git log local) bajo ninguna circunstancia:
+# los clones locales pueden estar desactualizados o incompletos y omiten repos no clonados.
+# La enumeración de repos debe ser dinámica vía remoto (gh repo list / glab api projects).
 
 Deteccion_rapida:
   Linear:
@@ -263,9 +270,9 @@ Deteccion_rapida:
     api:  "$GITLAB_TOKEN → curl -H 'PRIVATE-TOKEN: $GITLAB_TOKEN' https://gitlab.com/api/v4/..."
 
 Regla_de_oro:
-  - "Si NINGUNA fuente está disponible para GitLab o GitHub, NO inventar datos:
-     marcar esa sección como 'Sin datos disponibles (sin MCP/CLI/API)' y continuar con el resto."
-  - "Mostrar al inicio un resumen de qué fuente se usó para cada sistema."
+  - "Si NINGUNA fuente REMOTA (MCP/CLI/API) está disponible para GitLab o GitHub, NO inventar datos
+     y NO recurrir a clones locales: marcar esa sección como 'Sin datos disponibles (sin MCP/CLI/API)' y continuar."
+  - "Mostrar al inicio un resumen de qué fuente remota se usó para cada sistema."
 ```
 
 ### Fallbacks concretos (sin MCP)
@@ -306,11 +313,9 @@ glab api "/projects/<id>/repository/commits?since=<ISO_INICIO>&until=<ISO_FIN>&a
 glab api "/projects/<id>/repository/commits/<sha>"   # campos stats.additions / stats.deletions
 ```
 
-**git local (último recurso, si el repo está clonado):**
-```bash
-git -C <ruta_repo> log --since="<INICIO>" --until="<FIN>" --no-merges \
-  --pretty=format:'%h|%an|%ad|%s' --date=short --numstat
-```
+> ⚠️ **No se usa `git` local.** El análisis es exclusivamente remoto (MCP/CLI/API). Los clones
+> locales están prohibidos como fuente porque pueden estar desactualizados/incompletos y omiten
+> repos no clonados. La enumeración de repos siempre es dinámica vía remoto.
 
 ---
 
@@ -407,7 +412,7 @@ Fallback_CLI_API:
   - Bash(gh ...): auto      # GitHub CLI (repos, commits, LOC)
   - Bash(glab ...): auto    # GitLab CLI (proyectos, commits, LOC)
   - Bash(curl ...): auto    # REST/GraphQL con tokens ($GITHUB_TOKEN, $GITLAB_TOKEN, $LINEAR_API_KEY)
-  - Bash(git log ...): auto # git local como último recurso
+  # NO usar git local (clones) como fuente — análisis 100% remoto.
 
 Local_Operations:
   # Operaciones locales sin confirmación
@@ -489,6 +494,142 @@ def es_commit_productivo(mensaje):
 
 ---
 
+## ⚠️ EXCLUSIÓN DE ARCHIVOS `.md` EN LOC (OBLIGATORIO)
+
+**Las líneas de código (LOC) NO deben incluir archivos Markdown (`.md`).** La documentación
+infla las métricas de código real (ej. dumps de docs de miles de líneas). El conteo de LOC
+(por autor, por repo, KPIs, matriz) se calcula **a nivel de archivo**, sumando
+solo los archivos cuyo path **NO** termina en `.md` (case-insensitive).
+
+```
+Regla:
+  - EXCLUIR de additions/deletions todo archivo cuyo filename termine en ".md" (case-insensitive).
+  - El conteo de COMMITS NO cambia: un commit sigue contando aunque solo tocara archivos .md
+    (su aporte de LOC no-md es 0). Reportar cuántos fueron "solo-.md" si es relevante.
+  - Otros formatos de documentación (.html, .txt, etc.) SÍ se cuentan salvo indicación contraria;
+    solo .md se excluye por defecto.
+  - El repo `guia` mantiene su regla aparte (solo último commit).
+```
+
+**Cálculo correcto (file-level, no usar `.stats.additions` del commit completo):**
+```bash
+# GitHub (gh): sumar additions/deletions SOLO de archivos que NO son .md
+gh api "repos/<owner>/<repo>/commits/<sha>" \
+  --jq '[.files[] | select((.filename|ascii_downcase|endswith(".md"))|not) | {a:.additions,d:.deletions}]
+        | {add:(map(.a)|add // 0), del:(map(.d)|add // 0)}'
+
+# GitLab (glab/API): usar el diff por archivo y excluir new_path que termine en .md
+glab api "/projects/<id>/repository/commits/<sha>/diff"   # filtrar entradas cuyo new_path ~ /\.md$/i
+```
+
+**Pseudocódigo:**
+```python
+def loc_commit_sin_md(files):
+    add = sum(f.additions for f in files if not f.filename.lower().endswith(".md"))
+    dele = sum(f.deletions for f in files if not f.filename.lower().endswith(".md"))
+    return add, dele
+```
+
+**Validación:** `LOC_no_md + LOC_md_excluido == LOC_total_del_commit` (debe reconciliar exacto).
+Opcional: reportar al final cuántas líneas `.md` se excluyeron y en qué repos.
+
+---
+
+## ⚠️ EXCLUSIÓN DE ARCHIVOS DE TEST EN LOC (OBLIGATORIO)
+
+**Las líneas de código (LOC) NO deben incluir archivos de test.** Una sola batería de tests puede
+inflar el LOC de un autor/repo y distorsionar el ranking (ej. un commit de tests de +6,000 líneas).
+El conteo de LOC (por autor, por repo, KPIs, matriz) se calcula **a nivel de archivo**, excluyendo
+los archivos de test **además** de los `.md` y del ruido de formato/rename.
+
+```
+Regla:
+  - EXCLUIR de additions/deletions todo archivo cuyo path sea de test (case-insensitive), detectado por:
+      • Carpetas:  /test/  /tests/  /__tests__/  /e2e/  /spec/  /cypress/  /playwright/  (y *playwright*)
+      • Sufijos de archivo:  *.test.*  *.spec.*  *.cy.*
+      • Prefijo/sufijo Python/Go:  test_*  *_test.*  conftest.py
+  - El conteo de COMMITS NO cambia: un commit "solo-test" sigue contando (su aporte de LOC es 0).
+  - Igual que .md: el commit cuenta, pero sus líneas de test no suman al LOC.
+  - Reportar opcionalmente cuántas líneas de test se excluyeron y en qué repos/autores.
+```
+
+**Regex sugerido (path, case-insensitive):**
+```
+(^|/)(tests?|__tests__|e2e|cypress|playwright|spec)(/|$)  |  \.(test|spec|cy)\.  |  (^|/)test_  |  _test\.  |  (^|/)conftest\.py$
+```
+
+**Pseudocódigo (combinado con `.md` y formato):**
+```python
+def es_test(path):
+    import re
+    return bool(re.search(r'(^|/)(tests?|__tests__|e2e|cypress|playwright|spec)(/|$)|\.(test|spec|cy)\.|(^|/)test_|_test\.|(^|/)conftest\.py$', path, re.I))
+
+def loc_real(files):
+    add = dele = 0
+    for f in files:
+        if f.filename.lower().endswith(".md"): continue      # regla .md
+        if es_test(f.filename):                continue      # regla TEST
+        if rename_o_formato_puro(f):           continue      # regla formato/rename
+        add += f.additions; dele += f.deletions
+    return add, dele
+```
+
+**Validación:** `LOC_real + LOC_md + LOC_test + LOC_formato == LOC_total_del_commit` (debe reconciliar).
+Reportar al final cuántas líneas de test se excluyeron, por repo y por autor.
+
+---
+
+## ⚠️ EXCLUSIÓN DE CAMBIOS DE FORMATO Y RENAMES EN LOC (OBLIGATORIO)
+
+**Las LOC NO deben contar cambios que no son código real.** Un cambio de fin de línea
+(CRLF de Windows ↔ LF de Mac/Unix), de encoding, de espacios, o un rename/move, hace que
+el diff marque **todo el archivo como modificado** (miles de `+`/`-`) sin que cambie ni una
+línea de lógica. Esto se excluye del conteo de LOC.
+
+```
+EXCLUIR del conteo de additions/deletions (NO es código real):
+  - Cambios de fin de línea (EOL): CRLF ↔ LF ↔ CR  (paso Windows ⇆ Mac/Unix).
+  - Cambios de encoding (ej. añadir/quitar BOM UTF-8, latin1 → utf-8).
+  - Cambios SOLO de espacios/tabs/indentación (whitespace-only, reformat/prettier sin cambio lógico).
+  - Renames/moves de archivos sin cambio de contenido (status "renamed"/"copied", contenido idéntico).
+
+El COMMIT sigue contando (igual que con .md); solo se neutraliza su aporte de LOC inflado.
+```
+
+**Detección correcta (SOLO remoto, vía API/patch):**
+```bash
+# gh API: usar el patch por archivo y descartar el archivo si,
+# al comparar cada línea '-' contra su '+' ignorando CR/espacios, NO hay diferencia real.
+gh api "repos/<owner>/<repo>/commits/<sha>" \
+  --jq '.files[] | {f:.filename, status:.status, prev:.previous_filename, patch:.patch}'
+#  - status == "renamed" y patch vacío/idéntico  → excluir (rename puro).
+#  - todas las líneas cambian pero al normalizar (strip CR + rstrip espacios) coinciden → EOL/whitespace, excluir.
+```
+
+**Pseudocódigo (heurística file-level):**
+```python
+def loc_real(files):
+    add = dele = 0
+    for f in files:
+        if f.filename.lower().endswith(".md"):       # regla .md
+            continue
+        if f.status in ("renamed", "copied") and contenido_identico(f):
+            continue                                  # rename/move puro
+        a, d = additions_sin_eol_ni_whitespace(f)     # normaliza CR/espacios línea a línea
+        add += a; dele += d
+    return add, dele
+```
+
+**Nota de fiabilidad:** la API de GitHub/GitLab cuenta el EOL/whitespace como líneas
+modificadas. Como el análisis es **solo remoto** (no se clonan repos), aplicar la heurística
+de normalización del patch por archivo (strip CR + rstrip espacios; descartar renames puros)
+y **reportar** que el filtrado de formato fue aproximado.
+
+**Validación / reporte:** indicar cuántas líneas se excluyeron por formato (EOL/encoding/
+whitespace/rename) y en qué archivos/repos, igual que con `.md`.
+
+---
+
 ## ⏱️ TIEMPO DE EJECUCIÓN (OBLIGATORIO)
 
 Registrar timestamp al inicio, calcular duración al final.
@@ -502,7 +643,7 @@ Mostrar en footer: `⏱️ Generado en {X} min {Y} seg`
 
 ```
 Antes de recolectar, detectar para Linear / GitLab / GitHub qué fuente está disponible
-(ver "ESTRATEGIA DE FUENTES DE DATOS"). Usar la primera que funcione: MCP → CLI → API → git local.
+(ver "ESTRATEGIA DE FUENTES DE DATOS"). Usar la primera que funcione: MCP → CLI → API (SOLO remoto, NUNCA git local).
 Imprimir un resumen tipo:
   Linear: MCP ✓   | GitHub: gh CLI ✓ (sin MCP) | GitLab: API token ✓ (sin MCP/CLI)
 Si un sistema NO tiene ninguna fuente → su sección se marca "Sin datos disponibles", NO se inventa.
@@ -785,7 +926,7 @@ Reglas:
 | Linear Projects | `#linear-projects` | KPIs, tabla proyectos, progreso, gráfico `chart-linear-projects` |
 | Commits por Proyecto | `#commits-proyecto` | Tablas GitLab y GitHub |
 | Commits por Autor | `#commits-autor` | Tabla con GL, GH, Total, % |
-| LOC por Autor | `#loc-autor` | KPIs, tabla autores, tabla repos, gráfico `chart-loc` |
+| LOC por Autor | `#loc-autor` | KPIs, tabla autores, tabla repos, tabla matriz repo×persona (sin gráfico) |
 | Claude Code | `#claude` | KPIs y tabla por fuente |
 | Sentry | `#sentry` | KPIs errores, tabla por proyecto, issues críticos, gráfico `chart-sentry` |
 | Issues Completados | `#completados` | KPIs y link a Linear |
@@ -1391,25 +1532,31 @@ El solicitante es el **primer label que tenga exactamente DOS palabras** (nunca 
 - El gráfico donut usa los MISMOS valores de la columna "Completados"
 - Los labels del gráfico = nombres de la columna "Solicitante"
 
-**Tabla de Análisis:**
+**⚠️ NUNCA agrupar en "Otros": mostrar TODOS los solicitantes**
+- La tabla y el donut listan **cada** solicitante individualmente (una fila/segmento por solicitante),
+  sin importar cuántos sean ni qué tan pocos issues tengan.
+- **Prohibido** crear una fila/segmento "Otros" que agrupe solicitantes pequeños.
+- `scope xs/s/m/l/xl` NO son solicitantes (son labels de tamaño): excluirlos al detectar el primer
+  label de 2 palabras; si no hay otro label de 2 palabras, el issue va a "Sin solicitante".
+- Extender la paleta de colores tanto como haga falta para que cada segmento del donut tenga color.
+
+**Tabla de Análisis (una fila por solicitante, TODAS):**
 | Solicitante | Issues Asignados | Completados | Pendientes | % Completado | % del Total |
 |-------------|------------------|-------------|------------|--------------|-------------|
-| Patio Digital | X | X | X | X% | X% |
-| BBVA | X | X | X | X% | X% |
-| Bug Report | X | X | X | X% | X% |
-| Mejora Interna | X | X | X | X% | X% |
-| Otros | X | X | X | X% | X% |
+| {solicitante 1} | X | X | X | X% | X% |
+| {solicitante 2} | X | X | X | X% | X% |
+| … (todos, sin "Otros") | … | … | … | … | … |
+| Sin solicitante | X | X | X | X% | X% |
 | **TOTAL** | **X** | **X** | **X** | **X%** | **100%** |
 
-**Gráfico Donut (DEBE COINCIDIR con tabla):**
+**Gráfico Donut (DEBE COINCIDIR con tabla — un segmento por solicitante, sin "Otros"):**
 ```javascript
-// Los valores de 'series' deben ser EXACTAMENTE los de columna "Completados"
-// Los valores de 'labels' deben ser EXACTAMENTE los de columna "Solicitante"
+// series/labels tienen UNA entrada por solicitante (todas las filas de la tabla)
 var options = {
-  series: [X, X, X, X, X],  // ← Valores de "Completados" por solicitante
-  labels: ['Patio Digital', 'BBVA', 'Bug Report', 'Mejora Interna', 'Otros'],
+  series: [/* Completados por cada solicitante, en el mismo orden que la tabla */],
+  labels: [/* nombre de cada solicitante, mismo orden; NUNCA 'Otros' */],
   chart: { type: 'donut', height: 300 },
-  colors: ['#262877', '#4F46E5', '#7C3AED', '#EC4899', '#F59E0B'],
+  colors: [/* paleta extendida con tantos colores como solicitantes */],
   legend: { position: 'bottom' }
 };
 ```
@@ -1620,7 +1767,9 @@ Mostrar resumen de líneas de código totales del ciclo (GitLab + GitHub):
 ```
 Para cada commit en rango del ciclo:
   mcp__gitlab__get_commit_diff (project_id, sha)
-  → Sumar additions, deletions de cada archivo en el diff
+  → Sumar additions/deletions por archivo, EXCLUYENDO archivos .md y
+    cambios de formato/rename (EOL CRLF↔LF, encoding, whitespace, renames).
+    Ver reglas "EXCLUSIÓN DE ARCHIVOS .md", "EXCLUSIÓN DE ARCHIVOS DE TEST" y "EXCLUSIÓN DE CAMBIOS DE FORMATO Y RENAMES".
 
 Sumar por proyecto y calcular totales
 ```
@@ -1641,7 +1790,10 @@ Sumar por proyecto y calcular totales
 ```
 Para cada commit en rango del ciclo:
   mcp__github__get_commit (sha, include_diff: true)
-  → stats.additions, stats.deletions
+  → Sumar additions/deletions A NIVEL DE ARCHIVO, excluyendo archivos .md, archivos de TEST
+    y cambios de formato/rename (ver reglas "EXCLUSIÓN DE ARCHIVOS .md",
+    "EXCLUSIÓN DE ARCHIVOS DE TEST" y "EXCLUSIÓN DE CAMBIOS DE FORMATO/RENAME").
+  → NO usar stats.additions/deletions del commit completo (incluye .md, tests y renames).
 
 Sumar por repositorio y calcular totales
 ```
@@ -1649,6 +1801,8 @@ Sumar por repositorio y calcular totales
 ### SECCIÓN 13: Líneas de Código por Usuario (GitLab + GitHub)
 
 **⚠️ OBLIGATORIO: Combinar LOC de GitLab y GitHub por cada usuario**
+
+**⚠️ ORDENAR las filas por Neto descendente (de mayor a menor). La fila TOTAL siempre al final.**
 
 #### Tabla Consolidada
 
@@ -1661,14 +1815,10 @@ Sumar por repositorio y calcular totales
 | Marlon | +X | -X | +X | -X | +X | -X | +X | X |
 | **TOTAL** | **+X** | **-X** | **+X** | **-X** | **+X** | **-X** | **+X** | **X** |
 
-#### Gráfico de Barras Apiladas (LOC por Usuario)
-```javascript
-// Stacked bar chart: GitLab vs GitHub por usuario
-series: [
-  { name: 'GitLab +', data: [...], color: '#f59e0b' },
-  { name: 'GitHub +', data: [...], color: '#374151' }
-]
-```
+#### (Sin gráfico) — el card "Líneas de Código por Autor" NO lleva gráfico
+El antiguo "Comparación por Autor" (stacked bar `chart-loc`) fue **eliminado**. El card solo
+contiene: KPIs + tabla "Por Autor" + tabla "Por Repositorio" + tabla matriz "LOC por Repositorio
+y Persona" (Sección 13.1). No renderizar `chart-loc`.
 
 **Identificación de autor (orden de prioridad):**
 
@@ -1753,7 +1903,13 @@ Thiago y Anderson comparten UNA cuenta de GitLab. La ÚNICA forma de distinguir 
 
 ### SECCIÓN 13.1: LOC por Repositorio y Persona (matriz)
 
-**⚠️ OBLIGATORIO: Va INMEDIATAMENTE debajo de la Sección 13 (LOC por Usuario).**
+**⚠️ UBICACIÓN: va DENTRO del mismo card "Líneas de Código por Autor" (`#loc-autor`), como un
+sub-bloque `<h3>LOC por Repositorio y Persona</h3>` al final de ese card (debajo de "Por Autor"
+y "Por Repositorio"). NO es una sección/card aparte (no usar `id="loc-matriz"`).**
+
+**⚠️ ELIMINADO: el sub-bloque "Comparación por Autor" y su gráfico `chart-loc` ya NO se incluyen.**
+No renderizar `chart-loc` ni dejar su `<div>`/JS. La matriz (tabla) reemplaza a ese gráfico.
+
 Desglose cruzado **persona × repositorio**: cuántas líneas netas aportó cada autor en cada repo
 (GitLab + GitHub juntos). Permite ver en qué repos trabajó cada persona.
 
@@ -1774,6 +1930,8 @@ Desglose cruzado **persona × repositorio**: cuántas líneas netas aportó cada
 - Mostrar neto (`+añadidas −eliminadas`); opción de tooltip con `+add/-del` por celda.
 - Fila y columna **TOTAL** obligatorias; el gran total debe cuadrar con el neto de la Sección 13.
 - `guia` (documentación): solo último commit, igual que en el resto del reporte.
+- ⚠️ **ORDENAR por neto descendente, FILAS y COLUMNAS**: las filas (autores) de mayor a menor neto
+  total, y las columnas (repos) de mayor a menor neto total. La fila/columna TOTAL siempre al final.
 
 **Cálculo:**
 ```python
@@ -2113,9 +2271,10 @@ post_mortem:
 
 **Reglas:**
 - La sección va **después de Sentry** y **antes de Claude Code** en el reporte.
-- Agregar `#post-mortem` al índice flotante (sidebar) bajo el grupo "Calidad".
-- Si el equipo no reporta temas en el ciclo, mostrar: "Sin temas de post-mortem registrados este ciclo" (no inventar).
 - El contenido es **provisto por el equipo** (no se deduce de commits/issues); el comando solo lo formatea.
+- ⚠️ **Si el equipo NO reporta temas, NO se muestra la sección**: eliminar el `<section id="post-mortem">`
+  y su entrada del sidebar (ver regla `OCULTAR_SECCIONES_VACIAS`). NO usar empty-states. Lo mismo aplica
+  a la sección de **Acuerdos** y a cualquier otra sin datos en el ciclo.
 
 ---
 
