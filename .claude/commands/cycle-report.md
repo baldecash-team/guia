@@ -34,6 +34,41 @@ Commit_Push:
 
 ---
 
+## 🔢 ORDEN DE SECCIONES DEL REPORTE (OBLIGATORIO)
+
+El reporte se muestra **SIEMPRE** en este orden (coincide con `modelo.html` y su sidebar).
+Primero el bloque de **Linear (proyectos e issues)**, luego **Observaciones**, luego **Sentry**,
+y al final el bloque de **Código / Actividad**:
+
+```
+1.  KPIs                                   (#kpis)
+2.  Resumen Ejecutivo                      (#resumen)
+--- Bloque Linear (proyectos e issues) — VAN PRIMERO ---
+3.  Issues por Proyecto Linear             (#linear-projects)
+4.  Desglose por Owner                     (#desglose-owner)
+5.  Issues Completados por Owner/Prioridad (#owner-prioridad)
+6.  Distribución por Prioridad             (sin id)
+7.  Issues Completados                     (#completados)
+8.  Análisis por Solicitante               (#solicitante)
+9.  Issues Pendientes                      (#no-completados)
+--- Observaciones (mejoras / puntos medios y débiles) ---
+10. Observaciones y Recomendaciones        (sin id)
+--- Calidad — Sentry va DESPUÉS de Observaciones y ENCIMA del bloque de Código ---
+11. Sentry - Monitoreo de Errores          (#sentry)
+    └─ Post-Mortem (si hay datos) va inmediatamente DESPUÉS de Sentry y ANTES de Commits
+--- Bloque Código / Actividad (commits por semana) — VA AL FINAL ---
+12. Commits por Proyecto                   (#commits-proyecto)
+13. Commits por Autor                      (#commits-autor)
+14. LOC por Autor                          (#loc-autor)
+15. Claude Code                            (#claude)
+```
+
+> ⚠️ Este orden es la **fuente de verdad**. `modelo.html` ya está ordenado así; al generar el
+> reporte **NO** reordenar hacia el layout anterior (no mover Sentry/commits arriba de Linear).
+> La numeración de la tabla "Detalle de cada sección" más abajo es referencia de **contenido**, NO de orden.
+
+---
+
 ## 📋 CHECKLIST OBLIGATORIO DE SECCIONES (modelo.html)
 
 **⚠️ CRÍTICO: TODAS estas secciones DEBEN ser actualizadas con datos reales. NO puede haber placeholder data.**
@@ -42,17 +77,21 @@ Commit_Push:
 |---|------------|--------|-----------------|-----------|
 | 1 | `#kpis` | KPIs Cards (6 tarjetas) | Linear + GitLab + GitHub | ☐ |
 | 2 | `#resumen` | Resumen Ejecutivo | Linear + GitLab + GitHub | ☐ |
-| 3 | `#desglose-owner` | Desglose por Owner | Linear (issues por assignee) | ☐ |
-| 4 | `#owner-prioridad` | Owner × Prioridad | Linear (matriz owner/priority) | ☐ |
-| 5 | `#linear-projects` | Proyectos Linear | Linear (issues por project) | ☐ |
-| 6 | `#commits-proyecto` | Commits por Proyecto | GitLab + GitHub commits | ☐ |
-| 7 | `#commits-autor` | Commits por Autor | GitLab + GitHub commits | ☐ |
-| 8 | `#loc-autor` | LOC por Autor | GitLab commit stats | ☐ |
-| 9 | `#claude` | Claude Code (AI-Assisted) | GitLab + GitHub commits | ☐ |
-| 10 | `#sentry` | Sentry - Monitoreo de Errores | Sentry API | ☐ |
-| 11 | `#completados` | Issues Completados | Linear (state=completed) | ☐ |
-| 12 | `#solicitante` | Por Solicitante | Linear (creator/requester) | ☐ |
-| 13 | `#no-completados` | Issues No Completados/Pendientes | Linear (state!=completed) | ☐ |
+| 3 | `#linear-projects` | Proyectos Linear | Linear (issues por project) | ☐ |
+| 4 | `#desglose-owner` | Desglose por Owner | Linear (issues por assignee) | ☐ |
+| 5 | `#owner-prioridad` | Owner × Prioridad | Linear (matriz owner/priority) | ☐ |
+| 6 | `#completados` | Issues Completados | Linear (state=completed) | ☐ |
+| 7 | `#solicitante` | Por Solicitante | Linear (creator/requester) | ☐ |
+| 8 | `#no-completados` | Issues No Completados/Pendientes | Linear (state!=completed) | ☐ |
+| 9 | `#sentry` | Sentry - Monitoreo de Errores | Sentry API | ☐ |
+| 10 | `#commits-proyecto` | Commits por Proyecto | GitLab + GitHub commits | ☐ |
+| 11 | `#commits-autor` | Commits por Autor | GitLab + GitHub commits | ☐ |
+| 12 | `#loc-autor` | LOC por Autor | GitLab commit stats | ☐ |
+| 13 | `#claude` | Claude Code (AI-Assisted) | GitLab + GitHub commits | ☐ |
+
+> Nota: `Distribución por Prioridad` y `Observaciones y Recomendaciones` no tienen `id` propio;
+> su posición en el render está definida en **ORDEN DE SECCIONES** (arriba): Prioridad dentro del
+> bloque Linear, y Observaciones justo antes de Sentry.
 
 ### Detalle de cada sección:
 
@@ -319,6 +358,30 @@ glab api "/projects/<id>/repository/commits/<sha>"   # campos stats.additions / 
 
 ---
 
+## ⚠️ CUENTA COMPARTIDA GITHUB `baldecash-team` (ATRIBUCIÓN DE AUTOR REAL)
+
+**`baldecash-team` es una cuenta COMPARTIDA de GitHub (Claude Code).** Por DEFECTO su trabajo se
+acredita a **Leonardo** (confirmado por el equipo). Pero si una rama tiene ticket BAL cuyo owner en
+Linear es otra persona, se reasigna a esa persona.
+
+```yaml
+Resolucion_de_autor (orden de prioridad):
+  1. Autor real del commit:  si el login/email es de una persona (Emilio012, emiliobaldecashdev,
+     leonardomedinabaldecash, AndersonPalomino23, marlon..., etc.) → usar esa persona. En repos como
+     `baldecash` los commits llevan autor real (Emilio commitea directo) → respetarlo.
+  2. Si autor == baldecash-team (compartida):
+     a. Si la rama/PR tiene ticket BAL-XXXX y su owner en Linear ≠ Leonardo → asignar a ese owner.
+     b. En cualquier otro caso (sin ticket, o ticket de Leonardo) → asignar a **Leonardo** (default).
+  3. Identidades de una misma persona se fusionan (p.ej. Emilio = {Emilio012, emiliobaldecashdev,
+     emilio.gonzales@baldecash.com, "Emilio Gonzales"}).
+```
+
+> Nota: la cuenta compartida `baldecash-team` es análoga a la cuenta compartida Thiago/Anderson en
+> GitLab; la diferencia es que su default es Leonardo salvo que el ticket de la rama indique otro owner.
+> Ante duda con LOC grandes, desglosar por rama (headRefName del PR) para validación manual.
+
+---
+
 ## CONFIGURACIÓN
 
 ```yaml
@@ -491,6 +554,92 @@ def es_commit_productivo(mensaje):
     # INCLUIR - todo lo demás es productivo
     return True
 ```
+
+---
+
+## ⚠️ SQUASH MERGE: CONTAR LOS COMMITS ORIGINALES (OBLIGATORIO)
+
+**Cuando una rama se mergea con SQUASH, el reporte cuenta los N commits ORIGINALES de la rama,
+NO el commit del squash.** El squash es un artefacto de integración (como un merge commit), no
+trabajo productivo: colapsa N commits reales en 1 y subrepresenta el esfuerzo del autor.
+
+```yaml
+Regla:
+  - INCLUIR: los N commits originales de la rama (los que hizo la persona).
+  - EXCLUIR: el commit del squash en main/master (es el artefacto, no el trabajo).
+  - NUNCA contar ambos → sería doble conteo de commits Y de LOC.
+  - Aplica igual a commits, LOC, atribución por autor y detección de Claude Code
+    (los marcadores "Co-Authored-By: Claude" se leen de los commits ORIGINALES).
+  - Si por cualquier motivo NO se pueden recuperar los originales (rama purgada, PR inaccesible),
+    fallback: contar el commit del squash como 1 y DEJAR NOTA de transparencia en el reporte.
+```
+
+> ⚠️ Esto **revierte** la regla del ciclo 60, que deduplicaba rama→squash quedándose con 1 commit.
+> A partir de ahora manda el conteo de los originales.
+
+### Cómo obtener los commits originales (SOLO REMOTO)
+
+El historial de `main` tras un squash solo tiene 1 commit, así que hay que ir al PR/MR.
+GitHub y GitLab conservan los commits de la rama aunque la rama se haya borrado.
+
+```bash
+# --- GitHub ---
+# 1) Identificar el squash: commit en main con 1 solo parent cuyo mensaje trae "(#123)"
+#    o cuyo sha coincide con .merge_commit_sha de un PR con .merged_by + squash.
+gh api "repos/<owner>/<repo>/pulls?state=closed&per_page=100" --paginate \
+  --jq '.[] | select(.merged_at != null) | {n:.number, sha:.merge_commit_sha, head:.head.ref, merged:.merged_at}'
+
+# 2) Traer los commits ORIGINALES de ese PR (existen aunque la rama esté borrada)
+gh api "repos/<owner>/<repo>/pulls/<N>/commits" --paginate \
+  --jq '.[] | {sha:.sha, msg:.commit.message, author:.commit.author.name, date:.commit.author.date}'
+
+# 3) LOC: pedir .files[] de CADA commit original (no del squash), aplicando las
+#    exclusiones normales (.md, tests, formato/rename, lockfiles, assets).
+
+# --- GitLab ---
+glab api "/projects/<id>/merge_requests?state=merged&per_page=100" --paginate   # → iid, squash, merge_commit_sha, sha
+glab api "/projects/<id>/merge_requests/<iid>/commits" --paginate               # → commits ORIGINALES
+```
+
+**Pseudocódigo:**
+```python
+def resolver_squashes(commits_main, prs_mergeados):
+    """Sustituye cada commit de squash por los commits originales de su PR/MR."""
+    squash_shas = {pr.merge_commit_sha: pr for pr in prs_mergeados if pr.squash_or_single_parent}
+    resultado = []
+    for c in commits_main:
+        pr = squash_shas.get(c.sha)
+        if not pr:
+            resultado.append(c)                      # commit normal
+            continue
+        originales = api_pr_commits(pr)              # /pulls/<N>/commits  o  /merge_requests/<iid>/commits
+        if originales:
+            resultado.extend(originales)             # ← cuentan los N originales
+            # el commit del squash NO se agrega
+        else:
+            resultado.append(c)                      # fallback: 1 commit + nota de transparencia
+    return resultado
+```
+
+### Interacción con el dedup por contenido
+
+El dedup rama→squash **sigue existiendo**, pero cambia de dirección: cuando el barrido trae
+tanto los commits de la rama como el squash (p.ej. GitLab `all=true`, o sweep por ramas en
+GitHub), el que se descarta es **el squash**, no la rama.
+
+```
+ANTES (ciclo 60):  rama (N commits)  →  descartar N, quedarse con el squash (1)
+AHORA:             rama (N commits)  →  descartar el squash (1), quedarse con los N
+```
+
+Detección (misma heurística, decisión invertida): si el set de archivos añadidos de un commit
+—ignorando `.md`, tests y lockfiles— es **subconjunto** del de otro commit del mismo repo, ese
+otro commit es el squash que lo subsume → **excluir el superconjunto (squash)**, conservar los
+subconjuntos (commits de rama). Esto también aplica a merges tipo `Merge BAL-XXXX:`.
+
+**Validación:** reportar cuántos squashes se expandieron, cuántos commits originales aportaron,
+y cuántos no se pudieron resolver (fallback a 1). `commits_totales` no debe contener ningún
+`merge_commit_sha` de un PR/MR ya expandido.
 
 ---
 
@@ -919,19 +1068,19 @@ Reglas:
 | Header | - | Número de ciclo, fechas, tiempo de ejecución |
 | KPIs | `#kpis` | Issues completados, ratio, commits GL/GH, total, Claude Code |
 | Resumen | `#resumen` | Tablas de issues, commits GitLab, commits GitHub |
-| Observaciones | - | Aspectos positivos, áreas mejora, acciones sugeridas |
-| Distribución Prioridad | - | Tabla + gráfico `chart-priority` |
+| Linear Projects | `#linear-projects` | KPIs, tabla proyectos, progreso, gráfico `chart-linear-projects` |
 | Desglose Owner | `#desglose-owner` | Tabla (Done/Todo/Blocked/Total) + gráfico `chart-owner` |
 | Owner × Prioridad | `#owner-prioridad` | Matriz de completados por owner y prioridad |
-| Linear Projects | `#linear-projects` | KPIs, tabla proyectos, progreso, gráfico `chart-linear-projects` |
+| Distribución Prioridad | - | Tabla + gráfico `chart-priority` |
+| Issues Completados | `#completados` | KPIs y link a Linear |
+| Solicitante | `#solicitante` | Tabla + gráfico `chart-solicitante` |
+| No Completados | `#no-completados` | KPIs de pendientes |
+| Observaciones | - | Aspectos positivos, áreas mejora, acciones sugeridas |
+| Sentry | `#sentry` | KPIs errores, tabla por proyecto, issues críticos, gráfico `chart-sentry` |
 | Commits por Proyecto | `#commits-proyecto` | Tablas GitLab y GitHub |
 | Commits por Autor | `#commits-autor` | Tabla con GL, GH, Total, % |
 | LOC por Autor | `#loc-autor` | KPIs, tabla autores, tabla repos, tabla matriz repo×persona (sin gráfico) |
 | Claude Code | `#claude` | KPIs y tabla por fuente |
-| Sentry | `#sentry` | KPIs errores, tabla por proyecto, issues críticos, gráfico `chart-sentry` |
-| Issues Completados | `#completados` | KPIs y link a Linear |
-| Solicitante | `#solicitante` | Tabla + gráfico `chart-solicitante` |
-| No Completados | `#no-completados` | KPIs de pendientes |
 
 ### Mapeo de datos MCP → HTML:
 
@@ -2270,7 +2419,7 @@ post_mortem:
 ```
 
 **Reglas:**
-- La sección va **después de Sentry** y **antes de Claude Code** en el reporte.
+- La sección va **después de Sentry** y **antes de Commits por Proyecto** (inicio del bloque de Código) en el reporte.
 - El contenido es **provisto por el equipo** (no se deduce de commits/issues); el comando solo lo formatea.
 - ⚠️ **Si el equipo NO reporta temas, NO se muestra la sección**: eliminar el `<section id="post-mortem">`
   y su entrada del sidebar (ver regla `OCULTAR_SECCIONES_VACIAS`). NO usar empty-states. Lo mismo aplica
@@ -2776,7 +2925,8 @@ commit_y_push(ciclo_numero, metricas_calculadas)
 
 ```html
 <!-- Índice flotante fijo a la izquierda -->
-<!-- ⚠️ IMPORTANTE: El orden del menú DEBE coincidir con el orden de secciones en el HTML -->
+<!-- ⚠️ IMPORTANTE: El orden del menú DEBE coincidir con el orden de secciones (ver ORDEN DE SECCIONES). -->
+<!-- ⚠️ La navegación REAL vive en modelo.html (ya ordenada: Linear → Calidad/Sentry → Código). Este bloque es referencia. -->
 <nav id="sidebar-nav" class="fixed left-0 top-1/4 z-40 hidden lg:block">
   <div class="bg-white/95 backdrop-blur-sm shadow-xl rounded-r-2xl border border-gray-100 overflow-hidden">
     <!-- Header del nav -->
@@ -2787,29 +2937,28 @@ commit_y_push(ciclo_numero, metricas_calculadas)
     <ul class="p-3 space-y-1 text-sm max-h-[60vh] overflow-y-auto scrollbar-thin">
       <li><a href="#kpis" class="nav-link">📊 KPIs</a></li>
       <li><a href="#resumen" class="nav-link">📋 Resumen</a></li>
-      <li><a href="#observaciones" class="nav-link">💡 Observaciones</a></li>
-      <li class="nav-separator">OWNER</li>
+      <li class="nav-separator">ISSUES (LINEAR)</li>
+      <li><a href="#linear-projects" class="nav-link">📁 Por Proyecto</a></li>
       <li><a href="#desglose-owner" class="nav-link">👥 Por Owner</a></li>
       <li><a href="#owner-prioridad" class="nav-link">📈 Owner × Prioridad</a></li>
-      <li><a href="#solicitante" class="nav-link">🏷️ Solicitante</a></li>
-      <li><a href="#matriz" class="nav-link">🎯 Matriz</a></li>
-      <li><a href="#no-completados" class="nav-link">⏳ No Completados</a></li>
       <li><a href="#prioridad" class="nav-link">🎨 Por Prioridad</a></li>
-      <li class="nav-separator">COMMITS</li>
+      <li><a href="#completados" class="nav-link">✅ Completados</a></li>
+      <li><a href="#solicitante" class="nav-link">🏷️ Solicitante</a></li>
+      <li><a href="#no-completados" class="nav-link">⏳ No Completados</a></li>
+      <li class="nav-separator">OBSERVACIONES</li>
+      <li><a href="#observaciones" class="nav-link">💡 Observaciones</a></li>
+      <li class="nav-separator">CALIDAD</li>
+      <li><a href="#sentry" class="nav-link">🛡️ Sentry</a></li>
+      <li><a href="#hotfixes" class="nav-link">🔥 Hotfixes</a></li>
+      <li><a href="#sin-review" class="nav-link">⚠️ Sin Review</a></li>
+      <li class="nav-separator">CÓDIGO / ACTIVIDAD</li>
+      <li><a href="#commits-proyecto" class="nav-link">📁 Commits/Proyecto</a></li>
+      <li><a href="#commits-autor" class="nav-link">👤 Commits/Autor</a></li>
       <li><a href="#actividad" class="nav-link">📅 Actividad</a></li>
-      <li><a href="#commits-autor" class="nav-link">👤 Por Autor</a></li>
-      <li><a href="#commits-proyecto" class="nav-link">📁 Por Proyecto</a></li>
-      <li class="nav-separator">LOC</li>
       <li><a href="#loc-total" class="nav-link">📏 LOC Total</a></li>
       <li><a href="#loc-usuario" class="nav-link">👤 LOC Usuario</a></li>
       <li><a href="#loc-proyecto" class="nav-link">📁 LOC Proyecto</a></li>
-      <li class="nav-separator">CALIDAD</li>
-      <li><a href="#hotfixes" class="nav-link">🔥 Hotfixes</a></li>
       <li><a href="#claude" class="nav-link">🤖 Claude Code</a></li>
-      <li><a href="#sin-review" class="nav-link">⚠️ Sin Review</a></li>
-      <li class="nav-separator">ISSUES</li>
-      <li><a href="#completados" class="nav-link">✅ Completados</a></li>
-      <li><a href="#mal-registrados" class="nav-link">❌ Mal Registrados</a></li>
     </ul>
   </div>
 </nav>
